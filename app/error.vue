@@ -7,10 +7,13 @@ defineProps({
 </script>
 
 <template>
-  <div>
-    <h1>{{ error?.statusCode }}</h1>
-    <NuxtLink to="/">
-      返回主页
-    </NuxtLink>
-  </div>
+  <UError
+    :error="{
+      statusMessage: error?.statusCode?.toString(),
+      message: '对不起，你访问的页面不存在。',
+    }"
+    :clear="{
+      label: '返回首页',
+    }"
+  />
 </template>
