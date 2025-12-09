@@ -2,288 +2,288 @@ import type { OriginToolMenu } from '#shared/types/tool'
 
 export const tools: OriginToolMenu[] = [
   {
-    type: 'JSON工具',
+    label: 'JSON工具',
     icon: '',
     children: [
       {
-        name: 'JSON编辑器',
-        link: '/jsonEditor',
+        label: 'JSON编辑器',
+        name: '/jsonEditor',
       },
       {
-        name: 'GeoJSON.io',
-        link: '/geoJson',
+        label: 'GeoJSON.io',
+        name: '/geoJson',
       },
     ],
   },
   {
-    type: '编辑器',
+    label: '编辑器',
     icon: 'i-icon-park-outline-editor',
     children: [
       {
-        name: 'TinyEditor',
-        link: '/tinyEditor',
+        label: 'TinyEditor',
+        name: '/tinyEditor',
       },
       {
-        name: '简易白板',
-        link: '/tlDraw',
+        label: '简易白板',
+        name: '/tlDraw',
       },
       {
-        name: '在线流程图',
-        link: 'https://app.diagrams.net/',
+        label: '在线流程图',
+        name: 'https://app.diagrams.net/',
       },
     ],
   },
   {
-    type: 'GIS工具',
+    label: 'GIS工具',
     icon: 'i-icon-park-solid-map-draw',
     children: [
       {
-        name: '经纬度查询',
-        link: '/latLng',
+        label: '经纬度查询',
+        name: '/latLng',
       },
       {
-        name: '切片方案计算',
-        link: '/lodCalculator',
+        label: '切片方案计算',
+        name: '/lodCalculator',
       },
       {
-        name: '行政区数据',
-        link: 'https://datav.aliyun.com/tools/atlas/index.html',
+        label: '行政区数据',
+        name: 'https://datav.aliyun.com/tools/atlas/index.html',
       },
     ],
   },
   {
-    type: '加密工具',
+    label: '加密工具',
     icon: 'i-icon-park-solid-file-lock',
     children: [
       {
-        name: '文本HASH',
-        link: '/hashText',
+        label: '文本HASH',
+        name: '/hashText',
       },
       {
-        name: '文件HASH',
-        link: '/hashFile',
+        label: '文件HASH',
+        name: '/hashFile',
       },
       {
-        name: '在线JWT解密',
-        link: '/jwt',
+        label: '在线JWT解密',
+        name: '/jwt',
       },
       {
-        name: 'GeoHash编解码',
-        link: '/geohash',
+        label: 'GeoHash编解码',
+        name: '/geohash',
       },
       {
-        name: 'UUID生成器',
-        link: '/uuid',
+        label: 'UUID生成器',
+        name: '/uuid',
       },
     ],
   },
   {
-    type: '转换工具',
+    label: '转换工具',
     icon: 'i-icon-park-outline-transform',
     children: [
       {
-        name: '颜色转换器',
-        link: '/colorTransform',
+        label: '颜色转换器',
+        name: '/colorTransform',
       },
       {
-        name: 'Base64字符串编解码',
-        link: '/base64',
+        label: 'Base64字符串编解码',
+        name: '/base64',
       },
       {
-        name: 'Base64转文件',
-        link: '/base64ToFile',
+        label: 'Base64转文件',
+        name: '/base64ToFile',
       },
       {
-        name: 'Base64图片编码',
-        link: '/imageBase64',
+        label: 'Base64图片编码',
+        name: '/imageBase64',
       },
       {
-        name: '二维码生成/识别',
-        link: '/qrcode',
+        label: '二维码生成/识别',
+        name: '/qrcode',
       },
       {
-        name: '哔哩哔哩AV、BV号转换',
-        link: '/bilibiliBv2av',
+        label: '哔哩哔哩AV、BV号转换',
+        name: '/bilibiliBv2av',
       },
       {
-        name: '数字中文转换',
-        link: '/nzh',
+        label: '数字中文转换',
+        name: '/nzh',
       },
       {
-        name: '亲戚关系计算器',
-        link: '/relationship',
+        label: '亲戚关系计算器',
+        name: '/relationship',
       },
     ],
   },
   {
-    type: '网页工具',
+    label: '网页工具',
     icon: 'i-icon-park-outline-browser-chrome',
     children: [
       {
-        name: 'URL编解码',
-        link: '/urlEncode',
+        label: 'URL编解码',
+        name: '/urlEncode',
       },
       {
-        name: 'UserAgent解析',
-        link: '/userAgent',
+        label: 'UserAgent解析',
+        name: '/userAgent',
       },
       {
-        name: 'WHOIS查询',
-        link: '/whois',
+        label: 'WHOIS查询',
+        name: '/whois',
       },
       {
-        name: '随机数生成',
-        link: '/random',
+        label: '随机数生成',
+        name: '/random',
       },
       {
-        name: '渐变色生成器',
-        link: '/gradientColor',
+        label: '渐变色生成器',
+        name: '/gradientColor',
       },
     ],
   },
   {
-    type: '图像和视频',
+    label: '图像和视频',
     icon: 'i-icon-park-solid-picture-one',
     children: [
       {
-        name: '极简图床',
-        link: '/imgHosting',
+        label: '极简图床',
+        name: '/imgHosting',
       },
       {
-        name: '图片加水印',
-        link: '/watermark',
+        label: '图片加水印',
+        name: '/watermark',
       },
       {
-        name: '屏幕录制',
-        link: '/screenRecord',
+        label: '屏幕录制',
+        name: '/screenRecord',
       },
     ],
   },
   {
-    type: '开发工具',
+    label: '开发工具',
     icon: 'i-icon-park-outline-code',
     children: [
       {
-        name: 'CSS格式化',
-        link: '/cssFormatter',
+        label: 'CSS格式化',
+        name: '/cssFormatter',
       },
       {
-        name: 'XML格式化',
-        link: '/xmlEditor',
+        label: 'XML格式化',
+        name: '/xmlEditor',
       },
       {
-        name: '时间计算',
-        link: '/timeCompute',
+        label: '时间计算',
+        name: '/timeCompute',
       },
       {
-        name: '在线ASCII码对照表',
-        link: '/ascii',
+        label: '在线ASCII码对照表',
+        name: '/ascii',
       },
       {
-        name: '查看网页源码',
-        link: '/viewSourceCode',
+        label: '查看网页源码',
+        name: '/viewSourceCode',
       },
       {
-        name: '正则大全',
-        link: '/anyRule',
+        label: '正则大全',
+        name: '/anyRule',
       },
       {
-        name: '前端CDN搜索',
-        link: '/cdnQuery',
+        label: '前端CDN搜索',
+        name: '/cdnQuery',
       },
       {
-        name: '中国色',
-        link: '/chineseColor',
+        label: '中国色',
+        name: '/chineseColor',
       },
       {
-        name: '资源包',
-        link: 'https://libview.iszy.xyz',
+        label: '资源包',
+        name: 'https://libview.iszy.xyz',
       },
     ],
   },
   {
-    type: '数据工具',
+    label: '数据工具',
     icon: 'i-icon-park-outline-data-user',
     children: [
       {
-        name: '身份证解析',
-        link: '/idChinese',
+        label: '身份证解析',
+        name: '/idChinese',
       },
       {
-        name: 'glTF模型浏览',
-        link: '/3dView',
+        label: 'glTF模型浏览',
+        name: '/3dView',
       },
       {
-        name: '这是什么动漫',
-        link: '/whatAnimeIsThis',
+        label: '这是什么动漫',
+        name: '/whatAnimeIsThis',
       },
     ],
   },
   {
-    type: '运维',
+    label: '运维',
     icon: 'i-icon-park-outline-computer',
     children: [
       {
-        name: 'WebSSH',
-        link: '/webssh',
+        label: 'WebSSH',
+        name: '/webssh',
       },
       {
-        name: 'Linux命令查询',
-        link: '/linuxCommand',
+        label: 'Linux命令查询',
+        name: '/linuxCommand',
       },
     ],
   },
   {
-    type: '理财',
+    label: '理财',
     icon: 'i-icon-park-solid-financing-one',
     children: [
       {
-        name: '多次提前还贷计算器',
-        link: '/mtqLoans',
+        label: '多次提前还贷计算器',
+        name: '/mtqLoans',
       },
       {
-        name: '基金股票信息查询',
-        link: 'http://www.zodiacn.ltd',
+        label: '基金股票信息查询',
+        name: 'http://www.zodiacn.ltd',
       },
     ],
   },
   {
-    type: '游戏',
+    label: '游戏',
     icon: 'i-icon-park-solid-game',
     children: [
       {
-        name: '塞尔达荒野之息地图',
-        link: '/zeldaBotwMap',
+        label: '塞尔达荒野之息地图',
+        name: '/zeldaBotwMap',
       },
       {
-        name: '2048',
-        link: '/2048',
+        label: '2048',
+        name: '/2048',
       },
       {
-        name: '俄罗斯方块',
-        link: '/tetris',
+        label: '俄罗斯方块',
+        name: '/tetris',
       },
       {
-        name: '奥利奥生成器',
-        link: '/oreooo',
+        label: '奥利奥生成器',
+        name: '/oreooo',
       },
       {
-        name: 'PalWorld服务器设置',
-        link: '/palServerSettings',
+        label: 'PalWorld服务器设置',
+        name: '/palServerSettings',
       },
     ],
   },
   {
-    type: '其他',
+    label: '其他',
     icon: 'i-icon-park-solid-all-application',
     children: [
       {
-        name: 'Chromium下载',
-        link: 'https://chromium.cypress.io/',
+        label: 'Chromium下载',
+        name: 'https://chromium.cypress.io/',
       },
       {
-        name: '淘宝优惠券精选',
-        link: 'https://shop.iszy.xyz',
+        label: '淘宝优惠券精选',
+        name: 'https://shop.iszy.xyz',
       },
     ],
   },
