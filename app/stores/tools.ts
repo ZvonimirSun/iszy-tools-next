@@ -19,8 +19,7 @@ export const useToolsStore = defineStore('toolsStore', {
       }
       else {
         tmp = [{
-          label: '工具',
-          icon: 'i-icon-park-solid-all-application',
+          label: '全部工具',
           children: oriToolItems,
         }]
       }
@@ -28,14 +27,12 @@ export const useToolsStore = defineStore('toolsStore', {
       if (settings.showMost && this.most().length > 0) {
         tmp.unshift({
           label: '最常访问',
-          icon: 'i-icon-park-solid-concern',
           children: this.most(count),
         })
       }
       if (this.favorite.length > 0) {
         tmp.unshift({
           label: '收藏',
-          icon: 'i-icon-park-solid-folder-focus',
           children: this.favorite,
         })
       }

@@ -9,8 +9,8 @@ const toolMenus = computed(() => {
   return toolsStore.toolMenusFilter(searchStr.value)
 })
 const settings = settingsStore.general
-const isFav = toolsStore.isFav
-const updateFav = toolsStore.updateFav
+// const isFav = toolsStore.isFav
+// const updateFav = toolsStore.updateFav
 
 definePageMeta({
   layout: 'home',
@@ -42,7 +42,29 @@ onMounted(() => {
         <UKbd value="/" />
       </template>
     </UInput>
-    <div class="overflow-y-auto w-full" />
+    <div class="w-full flex flex-col gap-4">
+      <template
+        v-for="(item, index) in toolMenus"
+        :key="index"
+      >
+        <div class="grid grid-cols-24 gap-4">
+          <div class="col-span-24 text-toned">
+            {{ item.label }}
+          </div>
+          <div
+            v-for="(tool) in item.children"
+            :key="tool.name"
+            class="col-span-12 sm:col-span-8 md:col-span-6"
+          >
+            <UPageCard
+              :title="tool.label"
+              :to="tool.name"
+              :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
+            />
+          </div>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 

@@ -3,7 +3,6 @@ import type { OriginToolMenu } from '#shared/types/tool'
 export const tools: OriginToolMenu[] = [
   {
     label: 'JSON工具',
-    icon: '',
     children: [
       {
         label: 'JSON编辑器',
@@ -17,7 +16,6 @@ export const tools: OriginToolMenu[] = [
   },
   {
     label: '编辑器',
-    icon: 'i-icon-park-outline-editor',
     children: [
       {
         label: 'TinyEditor',
@@ -35,7 +33,6 @@ export const tools: OriginToolMenu[] = [
   },
   {
     label: 'GIS工具',
-    icon: 'i-icon-park-solid-map-draw',
     children: [
       {
         label: '经纬度查询',
@@ -53,7 +50,6 @@ export const tools: OriginToolMenu[] = [
   },
   {
     label: '加密工具',
-    icon: 'i-icon-park-solid-file-lock',
     children: [
       {
         label: '文本HASH',
@@ -79,7 +75,6 @@ export const tools: OriginToolMenu[] = [
   },
   {
     label: '转换工具',
-    icon: 'i-icon-park-outline-transform',
     children: [
       {
         label: '颜色转换器',
@@ -117,7 +112,6 @@ export const tools: OriginToolMenu[] = [
   },
   {
     label: '网页工具',
-    icon: 'i-icon-park-outline-browser-chrome',
     children: [
       {
         label: 'URL编解码',
@@ -143,7 +137,6 @@ export const tools: OriginToolMenu[] = [
   },
   {
     label: '图像和视频',
-    icon: 'i-icon-park-solid-picture-one',
     children: [
       {
         label: '极简图床',
@@ -161,7 +154,6 @@ export const tools: OriginToolMenu[] = [
   },
   {
     label: '开发工具',
-    icon: 'i-icon-park-outline-code',
     children: [
       {
         label: 'CSS格式化',
@@ -203,7 +195,6 @@ export const tools: OriginToolMenu[] = [
   },
   {
     label: '数据工具',
-    icon: 'i-icon-park-outline-data-user',
     children: [
       {
         label: '身份证解析',
@@ -221,7 +212,6 @@ export const tools: OriginToolMenu[] = [
   },
   {
     label: '运维',
-    icon: 'i-icon-park-outline-computer',
     children: [
       {
         label: 'WebSSH',
@@ -235,7 +225,6 @@ export const tools: OriginToolMenu[] = [
   },
   {
     label: '理财',
-    icon: 'i-icon-park-solid-financing-one',
     children: [
       {
         label: '多次提前还贷计算器',
@@ -249,7 +238,6 @@ export const tools: OriginToolMenu[] = [
   },
   {
     label: '游戏',
-    icon: 'i-icon-park-solid-game',
     children: [
       {
         label: '塞尔达荒野之息地图',
@@ -270,20 +258,6 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'PalWorld服务器设置',
         name: '/palServerSettings',
-      },
-    ],
-  },
-  {
-    label: '其他',
-    icon: 'i-icon-park-solid-all-application',
-    children: [
-      {
-        label: 'Chromium下载',
-        name: 'https://chromium.cypress.io/',
-      },
-      {
-        label: '淘宝优惠券精选',
-        name: 'https://shop.iszy.xyz',
       },
     ],
   },

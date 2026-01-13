@@ -5,7 +5,7 @@ export const useSettingsStore = defineStore('settings', {
       showRecent: false,
 
       showSearch: true,
-      showType: true,
+      showType: false,
       openInNewTab: false,
     },
   }),

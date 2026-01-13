@@ -5,7 +5,6 @@ export interface OriginToolItem {
 
 export interface OriginToolMenu {
   label: string
-  icon?: string
   children: OriginToolItem[]
 }
 
