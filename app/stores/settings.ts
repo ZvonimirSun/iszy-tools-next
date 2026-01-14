@@ -5,8 +5,12 @@ export const useSettingsStore = defineStore('settings', {
       showRecent: false,
 
       showSearch: true,
-      showType: false,
+      showType: true,
       openInNewTab: false,
+
+      theme: {
+        mode: 'system' as 'dark' | 'light' | 'system',
+      },
     },
   }),
 })

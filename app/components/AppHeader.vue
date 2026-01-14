@@ -9,7 +9,7 @@ const { public: { siteTitle } } = useRuntimeConfig()
       {{ siteTitle }}
     </template>
     <template #right>
-      <UColorModeButton v-if="header?.colorMode" />
+      <ColorModeButtonExtend />
     </template>
   </UHeader>
 </template>
