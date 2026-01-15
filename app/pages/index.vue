@@ -48,7 +48,7 @@ onMounted(() => {
         :key="index"
       >
         <div class="grid grid-cols-24 gap-4">
-          <div class="col-span-24 text-toned">
+          <div class="col-span-24 text-muted">
             {{ item.label }}
           </div>
           <div
@@ -57,6 +57,7 @@ onMounted(() => {
             class="col-span-12 sm:col-span-8 md:col-span-6"
           >
             <UPageCard
+              class="bg-elevated text-highlighted"
               :title="tool.label"
               :to="tool.name"
               :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"

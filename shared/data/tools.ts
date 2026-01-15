@@ -6,11 +6,11 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: 'JSON编辑器',
-        name: '/jsonEditor',
+        name: 'jsonEditor',
       },
       {
         label: 'GeoJSON.io',
-        name: '/geoJson',
+        name: 'geoJson',
       },
     ],
   },
@@ -19,11 +19,11 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: 'TinyEditor',
-        name: '/tinyEditor',
+        name: 'tinyEditor',
       },
       {
         label: '简易白板',
-        name: '/tlDraw',
+        name: 'tlDraw',
       },
       {
         label: '在线流程图',
@@ -36,11 +36,11 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: '经纬度查询',
-        name: '/latLng',
+        name: 'latLng',
       },
       {
         label: '切片方案计算',
-        name: '/lodCalculator',
+        name: 'lodCalculator',
       },
       {
         label: '行政区数据',
@@ -53,23 +53,23 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: '文本HASH',
-        name: '/hashText',
+        name: 'hashText',
       },
       {
         label: '文件HASH',
-        name: '/hashFile',
+        name: 'hashFile',
       },
       {
         label: '在线JWT解密',
-        name: '/jwt',
+        name: 'jwt',
       },
       {
         label: 'GeoHash编解码',
-        name: '/geohash',
+        name: 'geohash',
       },
       {
         label: 'UUID生成器',
-        name: '/uuid',
+        name: 'uuid',
       },
     ],
   },
@@ -78,35 +78,35 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: '颜色转换器',
-        name: '/colorTransform',
+        name: 'colorTransform',
       },
       {
         label: 'Base64字符串编解码',
-        name: '/base64',
+        name: 'base64',
       },
       {
         label: 'Base64转文件',
-        name: '/base64ToFile',
+        name: 'base64ToFile',
       },
       {
         label: 'Base64图片编码',
-        name: '/imageBase64',
+        name: 'imageBase64',
       },
       {
         label: '二维码生成/识别',
-        name: '/qrcode',
+        name: 'qrcode',
       },
       {
         label: '哔哩哔哩AV、BV号转换',
-        name: '/bilibiliBv2av',
+        name: 'bilibiliBv2av',
       },
       {
         label: '数字中文转换',
-        name: '/nzh',
+        name: 'nzh',
       },
       {
         label: '亲戚关系计算器',
-        name: '/relationship',
+        name: 'relationship',
       },
     ],
   },
@@ -115,23 +115,23 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: 'URL编解码',
-        name: '/urlEncode',
+        name: 'urlEncode',
       },
       {
         label: 'UserAgent解析',
-        name: '/userAgent',
+        name: 'userAgent',
       },
       {
         label: 'WHOIS查询',
-        name: '/whois',
+        name: 'whois',
       },
       {
         label: '随机数生成',
-        name: '/random',
+        name: 'random',
       },
       {
         label: '渐变色生成器',
-        name: '/gradientColor',
+        name: 'gradientColor',
       },
     ],
   },
@@ -140,15 +140,15 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: '极简图床',
-        name: '/imgHosting',
+        name: 'imgHosting',
       },
       {
         label: '图片加水印',
-        name: '/watermark',
+        name: 'watermark',
       },
       {
         label: '屏幕录制',
-        name: '/screenRecord',
+        name: 'screenRecord',
       },
     ],
   },
@@ -157,35 +157,35 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: 'CSS格式化',
-        name: '/cssFormatter',
+        name: 'cssFormatter',
       },
       {
         label: 'XML格式化',
-        name: '/xmlEditor',
+        name: 'xmlEditor',
       },
       {
         label: '时间计算',
-        name: '/timeCompute',
+        name: 'timeCompute',
       },
       {
         label: '在线ASCII码对照表',
-        name: '/ascii',
+        name: 'ascii',
       },
       {
         label: '查看网页源码',
-        name: '/viewSourceCode',
+        name: 'viewSourceCode',
       },
       {
         label: '正则大全',
-        name: '/anyRule',
+        name: 'anyRule',
       },
       {
         label: '前端CDN搜索',
-        name: '/cdnQuery',
+        name: 'cdnQuery',
       },
       {
         label: '中国色',
-        name: '/chineseColor',
+        name: 'chineseColor',
       },
       {
         label: '资源包',
@@ -198,15 +198,15 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: '身份证解析',
-        name: '/idChinese',
+        name: 'idChinese',
       },
       {
         label: 'glTF模型浏览',
-        name: '/3dView',
+        name: '3dView',
       },
       {
         label: '这是什么动漫',
-        name: '/whatAnimeIsThis',
+        name: 'whatAnimeIsThis',
       },
     ],
   },
@@ -215,11 +215,11 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: 'WebSSH',
-        name: '/webssh',
+        name: 'webssh',
       },
       {
         label: 'Linux命令查询',
-        name: '/linuxCommand',
+        name: 'linuxCommand',
       },
     ],
   },
@@ -228,7 +228,7 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: '多次提前还贷计算器',
-        name: '/mtqLoans',
+        name: 'mtqLoans',
       },
       {
         label: '基金股票信息查询',
@@ -241,23 +241,23 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: '塞尔达荒野之息地图',
-        name: '/zeldaBotwMap',
+        name: 'zeldaBotwMap',
       },
       {
         label: '2048',
-        name: '/2048',
+        name: '2048',
       },
       {
         label: '俄罗斯方块',
-        name: '/tetris',
+        name: 'tetris',
       },
       {
         label: '奥利奥生成器',
-        name: '/oreooo',
+        name: 'oreooo',
       },
       {
         label: 'PalWorld服务器设置',
-        name: '/palServerSettings',
+        name: 'palServerSettings',
       },
     ],
   },

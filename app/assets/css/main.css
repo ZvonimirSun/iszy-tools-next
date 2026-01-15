@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-:root {
-    --ui-radius: 0.125rem;
+@theme {
+    --font-sans: Inter, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 微软雅黑, Arial, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
 }

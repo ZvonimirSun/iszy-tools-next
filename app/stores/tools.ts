@@ -7,6 +7,13 @@ export const useToolsStore = defineStore('toolsStore', {
     statistics: [] as Statistic[],
   }),
   getters: {
+    toolItemsMap(): Record<string, ToolItem> {
+      const map: Record<string, ToolItem> = {}
+      useOriginToolsStore().toolItems.forEach((item: ToolItem) => {
+        map[item.name] = item
+      })
+      return map
+    },
     toolMenus(): ToolMenu[] {
       const settings = useSettingsStore().general
       const oriToolMenus = useOriginToolsStore().toolMenus
