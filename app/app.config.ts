@@ -18,6 +18,11 @@ export default defineAppConfig({
         title: 'text-base text-pretty font-semibold text-highlighted w-full whitespace-nowrap truncate',
       },
     },
+    formField: {
+      slots: {
+        container: 'w-full',
+      },
+    },
   },
   header: {
     to: '/',
