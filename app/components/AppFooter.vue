@@ -6,21 +6,22 @@ const { public: { beian } } = useRuntimeConfig()
 <template>
   <UFooter>
     <template #left>
-      <div class="text-muted text-sm whitespace-nowrap flex items-center gap-2">
-        Copyright © {{ new Date().getFullYear() }}
-        <template v-if="beian">
-          |
+      <div class="text-muted text-sm flex flex-col gap-2">
+        <span>Copyright © {{ new Date().getFullYear() }}</span>
+        <template v-if="beian?.icp">
           <ULink to="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank">
             {{ beian.icp }}
           </ULink>
         </template>
-        <template v-if="beian?.gonganNum">
-          |
+        <div
+          v-if="beian?.gonganNum"
+          class="flex items-center gap-2 whitespace-nowrap"
+        >
           <img class="w-4" src="/images/beian.png">
           <ULink :to="`https://beian.mps.gov.cn/#/query/webSearch?code=${beian.gonganId}`" target="_blank">
             {{ beian.gonganNum }}
           </ULink>
-        </template>
+        </div>
       </div>
     </template>
     <template #right>

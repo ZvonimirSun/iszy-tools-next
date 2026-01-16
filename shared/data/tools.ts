@@ -22,10 +22,6 @@ export const tools: OriginToolMenu[] = [
         name: 'tinyEditor',
       },
       {
-        label: '简易白板',
-        name: 'tlDraw',
-      },
-      {
         label: '在线流程图',
         name: 'https://app.diagrams.net/',
       },

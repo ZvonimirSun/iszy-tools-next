@@ -1,5 +1,12 @@
 export default defineAppConfig({
   ui: {
+    header: {
+      slots: {
+        toggle: 'hidden',
+        content: 'hidden',
+        overlay: 'hidden',
+      },
+    },
     colors: {
       primary: 'sky',
     },
