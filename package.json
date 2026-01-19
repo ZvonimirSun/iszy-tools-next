@@ -25,7 +25,7 @@
     "@vueuse/integrations": "^14.1.0",
     "@vueuse/nuxt": "^14.1.0",
     "@vueuse/router": "^14.1.0",
-    "@zvonimirsun/iszy-common": "^1.0.12",
+    "@zvonimirsun/iszy-common": "^1.1.0",
     "lodash-es": "^4.17.21",
     "nanoid": "^5.1.6",
     "nuxt": "^4.2.2",
