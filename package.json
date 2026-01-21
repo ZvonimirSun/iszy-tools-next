@@ -34,12 +34,12 @@
     "pinia": "^3.0.4",
     "tailwindcss": "^4.1.18",
     "uuid": "^13.0.0",
-    "vue": "^3.5.26",
+    "vue": "^3.5.27",
     "vue-router": "^4.6.4",
     "zod": "^4.3.5"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^6.7.3",
+    "@antfu/eslint-config": "^7.1.0",
     "@eslint/config-inspector": "^1.4.2",
     "@nuxt/eslint": "^1.12.1",
     "@tiptap/core": "^3.16.0",
