@@ -1,6 +1,6 @@
-# Nuxt Minimal Starter
+# ISZY Tools Next
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+一个基于 Nuxt 4 的前端工具集应用。
 
 ## Setup
 

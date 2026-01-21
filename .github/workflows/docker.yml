@@ -41,6 +41,7 @@ jobs:
           tags: |
             type=semver,pattern={{version}},value=${{ steps.package-version.outputs.version }}
             type=semver,pattern={{major}}.{{minor}},value=${{ steps.package-version.outputs.version }}
+            type=semver,pattern={{major}},value=${{ steps.package-version.outputs.version }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
