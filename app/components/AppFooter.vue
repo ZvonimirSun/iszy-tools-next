@@ -1,6 +1,20 @@
 <script setup lang="ts">
-const { footer } = useAppConfig()
-const { public: { beian } } = useRuntimeConfig()
+import type { NavigationMenuItem } from '@nuxt/ui'
+
+const { beian, friendLinks } = usePublicConfig()
+
+const links = ref<NavigationMenuItem[]>([])
+if (friendLinks) {
+  try {
+    const tmp = JSON.parse(friendLinks)
+    if (Array.isArray(tmp)) {
+      links.value = tmp
+    }
+  }
+  catch (e) {
+    console.error('Failed to parse friendLinks:', e)
+  }
+}
 </script>
 
 <template>
@@ -25,8 +39,8 @@ const { public: { beian } } = useRuntimeConfig()
       </div>
     </template>
     <template #right>
-      <template v-if="footer?.links">
-        <UNavigationMenu :items="footer.links" variant="link" />
+      <template v-if="links.length">
+        <UNavigationMenu :items="links" variant="link" />
       </template>
     </template>
   </UFooter>

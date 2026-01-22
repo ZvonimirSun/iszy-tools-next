@@ -8,6 +8,7 @@ export default defineNuxtConfig({
         gonganNum: '',
         gonganId: '',
       },
+      friendLinks: '',
     },
   },
   compatibilityDate: '2025-07-15',

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-const { header } = useAppConfig()
-const { public: { siteTitle } } = useRuntimeConfig()
+const { siteTitle } = usePublicConfig()
 const route = useRoute()
 const toolsStore = useToolsStore()
 
@@ -14,7 +13,7 @@ const tool = computed(() => {
     <template #left>
       <div class="flex gap-1.5 items-center">
         <ULink
-          :to="header?.to || '/'"
+          to="/"
           class="font-bold text-xl text-highlighted"
         >
           {{ siteTitle }}
