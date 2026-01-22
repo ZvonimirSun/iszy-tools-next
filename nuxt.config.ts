@@ -2,7 +2,11 @@
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      siteTitle: 'Nuxt 3 Starter',
+      site: {
+        lang: 'zh-CN',
+        title: 'ISZY Tools Next',
+        description: 'ISZY Tools Next',
+      },
       beian: {
         icp: '',
         gonganNum: '',

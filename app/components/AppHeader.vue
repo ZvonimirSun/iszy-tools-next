@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { siteTitle } = usePublicConfig()
+const { site: { title: siteTitle } } = usePublicConfig()
 const route = useRoute()
 const toolsStore = useToolsStore()
 
