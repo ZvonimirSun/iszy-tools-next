@@ -57,7 +57,7 @@ onMounted(() => {
             class="col-span-12 sm:col-span-8 md:col-span-6"
           >
             <UPageCard
-              class="bg-elevated text-highlighted"
+              class="bg-elevated border text-base font-semibold"
               :title="tool.label"
               :to="tool.name"
               :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
