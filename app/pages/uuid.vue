@@ -68,7 +68,7 @@ function copy() {
       >
         <USelect
           v-model="formState.version"
-          class="w-full"
+          class="max-w-full w-32"
           :items="[
             {
               label: 'Version 1',
@@ -93,6 +93,7 @@ function copy() {
       >
         <UInputNumber
           v-model="formState.count"
+          class="max-w-full w-16"
           orientation="vertical"
           :max="500"
           :min="1"
