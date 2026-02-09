@@ -60,9 +60,8 @@ function copy() {
 
 <template>
   <div class="w-full flex flex-col gap-4">
-    <UForm>
-      <span>基础信息</span>
-      <ContainerToolItem class="flex flex-col gap-4">
+    <ContainerToolItem label="基础信息">
+      <UForm class="flex flex-col gap-4">
         <UFormField
           label="版本"
           orientation="horizontal"
@@ -109,8 +108,8 @@ function copy() {
         >
           <USwitch v-model="formState.hasHyphen" />
         </UFormField>
-      </ContainerToolItem>
-    </UForm>
+      </UForm>
+    </ContainerToolItem>
     <div class="flex gap-2">
       <UButton
         label="生成"
