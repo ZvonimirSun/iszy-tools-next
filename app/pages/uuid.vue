@@ -62,7 +62,7 @@ function copy() {
   <div class="w-full flex flex-col gap-4">
     <UForm>
       <span>基础信息</span>
-      <ToolItemContainer class="flex flex-col gap-4">
+      <ContainerToolItem class="flex flex-col gap-4">
         <UFormField
           label="版本"
           orientation="horizontal"
@@ -109,7 +109,7 @@ function copy() {
         >
           <USwitch v-model="formState.hasHyphen" />
         </UFormField>
-      </ToolItemContainer>
+      </ContainerToolItem>
     </UForm>
     <div class="flex gap-2">
       <UButton
@@ -121,7 +121,7 @@ function copy() {
         @click="copy"
       />
     </div>
-    <ToolItemContainer>
+    <ContainerToolItem>
       <UTextarea
         v-model="result"
         class="w-full"
@@ -130,7 +130,7 @@ function copy() {
         :rows="10"
         :readonly="true"
       />
-    </ToolItemContainer>
+    </ContainerToolItem>
   </div>
 </template>
 
