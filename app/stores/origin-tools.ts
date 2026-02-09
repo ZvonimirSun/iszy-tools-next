@@ -1,5 +1,4 @@
 import type { ToolMenu } from '#shared/types/tool'
-import { flatten } from 'lodash-es'
 
 export const useOriginToolsStore = defineStore('originTools', {
   state: () => ({
@@ -7,9 +6,9 @@ export const useOriginToolsStore = defineStore('originTools', {
   }),
   getters: {
     toolItems(): ToolItem[] {
-      return flatten(this.toolMenus.map((item: ToolMenu) => {
+      return this.toolMenus.map((item: ToolMenu) => {
         return item.children
-      }))
+      }).flat()
     },
   },
   actions: {
