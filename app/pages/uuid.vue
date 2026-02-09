@@ -60,55 +60,57 @@ function copy() {
 
 <template>
   <div class="w-full flex flex-col gap-4">
-    <UForm class="flex flex-col gap-4">
-      <UFormField
-        label="版本"
-        orientation="horizontal"
-        class="grid grid-cols-[3rem_1fr]"
-      >
-        <USelect
-          v-model="formState.version"
-          class="max-w-full w-32"
-          :items="[
-            {
-              label: 'Version 1',
-              value: 'v1',
-            },
-            {
-              label: 'Version 4',
-              value: 'v4',
-            },
-            {
-              label: 'NIL',
-              value: 'nil',
-            },
-          ]"
-        />
-      </UFormField>
-      <UFormField
-        v-show="formState.version !== 'nil'"
-        class="grid grid-cols-[3rem_1fr]"
-        label="数量"
-        orientation="horizontal"
-      >
-        <UInputNumber
-          v-model="formState.count"
-          class="max-w-full w-16"
-          orientation="vertical"
-          :max="500"
-          :min="1"
-          :step="1"
-        />
-      </UFormField>
-      <UFormField
-        label="连字符"
-        orientation="horizontal"
-        class="grid grid-cols-[3rem_1fr]"
-      >
-        <USwitch v-model="formState.hasHyphen" />
-      </UFormField>
+    <UForm>
+      <span>基础信息</span>
+      <ToolItemContainer class="flex flex-col gap-4">
+        <UFormField
+          label="版本"
+          orientation="horizontal"
+          class="grid grid-cols-[3rem_1fr]"
+        >
+          <USelect
+            v-model="formState.version"
+            class="max-w-full w-32"
+            :items="[
+              {
+                label: 'Version 1',
+                value: 'v1',
+              },
+              {
+                label: 'Version 4',
+                value: 'v4',
+              },
+              {
+                label: 'NIL',
+                value: 'nil',
+              },
+            ]"
+          />
+        </UFormField>
+        <UFormField
+          v-show="formState.version !== 'nil'"
+          class="grid grid-cols-[3rem_1fr]"
+          label="数量"
+          orientation="horizontal"
+        >
+          <UInputNumber
+            v-model="formState.count"
+            class="max-w-full w-16"
+            orientation="vertical"
+            :max="500"
+            :min="1"
+            :step="1"
+          />
+        </UFormField>
+        <UFormField
+          label="连字符"
+          orientation="horizontal"
+          class="grid grid-cols-[3rem_1fr]"
+        >
+          <USwitch v-model="formState.hasHyphen" />
+        </UFormField>
+      </ToolItemContainer>
     </UForm>
-    <USeparator />
     <div class="flex gap-2">
       <UButton
         label="生成"
@@ -119,14 +121,16 @@ function copy() {
         @click="copy"
       />
     </div>
-    <UTextarea
-      v-model="result"
-      class="w-full"
-      placeholder="结果栏"
-      :maxrows="20"
-      :rows="10"
-      :readonly="true"
-    />
+    <ToolItemContainer>
+      <UTextarea
+        v-model="result"
+        class="w-full"
+        placeholder="结果栏"
+        :maxrows="20"
+        :rows="10"
+        :readonly="true"
+      />
+    </ToolItemContainer>
   </div>
 </template>
 

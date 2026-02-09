@@ -166,17 +166,18 @@ function generate() {
 </script>
 
 <template>
-  <div class="h-full w-full flex flex-col gap-2">
+  <div class="h-full w-full flex flex-col gap-4 items-start">
     <UForm class="w-full flex flex-col gap-2 items-start">
       <span>基础信息</span>
-      <div class="w-full grid grid-cols-24 gap-2">
+      <ContainerToolItem class="w-full grid grid-cols-24 gap-2">
         <UFormField
           label="坐标单位"
-          class="col-span-4 grid grid-cols-[5rem_1fr]"
+          class="col-span-12 sm:col-span-8 lg:col-span-4 grid grid-cols-[5rem_1fr]"
           orientation="horizontal"
         >
           <USelect
             v-model="formInfo.unit"
+            class="w-full"
             :items="[
               { label: '度', value: 'degree' },
               { label: '米', value: 'meter' },
@@ -186,7 +187,7 @@ function generate() {
         </UFormField>
         <UFormField
           label="当前层级"
-          class="col-span-4 grid grid-cols-[5rem_1fr]"
+          class="col-span-12 sm:col-span-8 lg:col-span-4 grid grid-cols-[5rem_1fr]"
           orientation="horizontal"
         >
           <UInputNumber
@@ -199,7 +200,7 @@ function generate() {
         </UFormField>
         <UFormField
           label="切片层级数"
-          class="col-span-4 grid grid-cols-[5rem_1fr]"
+          class="col-span-12 sm:col-span-8 lg:col-span-4 grid grid-cols-[5rem_1fr]"
           orientation="horizontal"
         >
           <UInputNumber
@@ -210,12 +211,14 @@ function generate() {
             @change="changeCount"
           />
         </UFormField>
-      </div>
+      </ContainerToolItem>
+    </UForm>
+    <UForm class="w-full flex flex-col gap-2 items-start">
       <span>参数设置</span>
-      <div class="w-full grid grid-cols-24 gap-2">
+      <ContainerToolItem class="w-full grid grid-cols-24 gap-2">
         <UFormField
           label="地图分辨率"
-          class="col-span-8 grid grid-cols-[5rem_1fr]"
+          class="col-span-24 sm:col-span-12 lg:col-span-8 grid grid-cols-[7rem_1fr]"
           orientation="horizontal"
         >
           <UInput
@@ -227,7 +230,7 @@ function generate() {
         </UFormField>
         <UFormField
           label="地图比例尺"
-          class="col-span-8 grid grid-cols-[5rem_1fr]"
+          class="col-span-24 sm:col-span-12 lg:col-span-8 grid grid-cols-[7rem_1fr]"
           orientation="horizontal"
         >
           <UInput
@@ -239,7 +242,7 @@ function generate() {
         </UFormField>
         <UFormField
           label="屏幕分辨率(ppi)"
-          class="col-span-4 grid grid-cols-[7rem_1fr]"
+          class="col-span-24 sm:col-span-12 lg:col-span-4 grid grid-cols-[7rem_1fr]"
           orientation="horizontal"
         >
           <UInput
@@ -251,7 +254,7 @@ function generate() {
         </UFormField>
         <UFormField
           label="像元大小(mm)"
-          class="col-span-4 grid grid-cols-[6rem_1fr]"
+          class="col-span-24 sm:col-span-12 lg:col-span-4 grid grid-cols-[7rem_1fr]"
           orientation="horizontal"
         >
           <UInput
@@ -261,17 +264,17 @@ function generate() {
             @change="changePixelSize"
           />
         </UFormField>
-      </div>
-      <UButton label="生成" @click="generate" />
+      </ContainerToolItem>
     </UForm>
-    <div class="flex flex-1 gap-2 overflow-auto">
-      <div class="h-full flex-1 overflow-auto">
-        <pre>{{ lodsStr }}</pre>
-      </div>
-      <div class="h-full flex-1 overflow-auto">
-        <pre>{{ resolutionStr }}</pre>
-      </div>
-    </div>
+    <UButton label="生成" @click="generate" />
+    <ContainerToolItem v-if="lodsStr" class="w-full flex-1 overflow-auto grid grid-cols-2 gap-4 min-h-64">
+      <ContainerInputLike class="overflow-auto col-span-2 md:col-span-1">
+        <pre class="overflow-auto w-full h-full">{{ lodsStr }}</pre>
+      </ContainerInputLike>
+      <ContainerInputLike class="overflow-auto col-span-2 md:col-span-1">
+        <pre class="overflow-auto w-full h-full">{{ resolutionStr }}</pre>
+      </ContainerInputLike>
+    </ContainerToolItem>
   </div>
 </template>
 
