@@ -7,3 +7,7 @@ ignoredBuiltDependencies:
 
 onlyBuiltDependencies:
   - vue-demi
+
+override:
+  'citty':
+    version: '0.2.0'

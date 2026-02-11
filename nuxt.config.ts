@@ -17,6 +17,7 @@ export default defineNuxtConfig({
         gonganNum: '',
         gonganId: '',
       },
+      cdnOrigin: '',
       friendLinks: '',
     },
   },

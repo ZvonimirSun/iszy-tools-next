@@ -15,6 +15,15 @@ export const tools: OriginToolMenu[] = [
     ],
   },
   {
+    label: '文档工具',
+    children: [
+      {
+        label: 'PDF合并',
+        name: 'pdfMerge',
+      },
+    ],
+  },
+  {
     label: '编辑器',
     children: [
       {
