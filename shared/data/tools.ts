@@ -25,6 +25,10 @@ export const tools: OriginToolMenu[] = [
         label: 'PDF拆分',
         name: 'pdfSplit',
       },
+      {
+        label: 'PDF转JPG',
+        name: 'pdfToJpg',
+      },
     ],
   },
   {

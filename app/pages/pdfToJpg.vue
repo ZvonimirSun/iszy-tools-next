@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import draggable from 'vuedraggable'
+import JSZip from 'jszip'
 
 interface FileItem {
   id: string
@@ -11,6 +12,8 @@ interface FileItem {
 }
 
 const fileList = ref<FileItem[]>([])
+const quality = ref(0.9)
+const isProcessing = ref(false)
 
 function addFiles(files: File[] | null | undefined) {
   if (!files) {
@@ -37,45 +40,80 @@ function rotateFile(item: FileItem) {
   item.status.rotate = ((item.status.rotate || 0) + 90) % 360
 }
 
-async function merge() {
-  if (fileList.value.length === 0) {
+async function convert() {
+  if (fileList.value.length === 0 || isProcessing.value) {
     return
   }
-  const { PDFDocument, degrees } = await usePdfLib()
-  const mergedPdf = await PDFDocument.create()
-  for (const item of fileList.value) {
-    const arrayBuffer = await item.file.arrayBuffer()
-    const pdf = await PDFDocument.load(arrayBuffer)
-    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices())
-    copiedPages.forEach((page) => {
-      if (item.status?.rotate) {
-        const rotate = item.status.rotate
-        page.setRotation(degrees(rotate))
+
+  isProcessing.value = true
+
+  try {
+    const { getDocument } = await usePdfJs()
+    const zip = new JSZip()
+
+    for (const item of fileList.value) {
+      const arrayBuffer = await item.file.arrayBuffer()
+      const pdf = await getDocument({ data: arrayBuffer }).promise
+      const baseName = item.name.replace(/\.pdf$/i, '')
+      const rotation = item.status?.rotate || 0
+
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i)
+        const scale = 2
+        const viewport = page.getViewport({ scale, rotation })
+        const canvas = document.createElement('canvas')
+        canvas.width = viewport.width
+        canvas.height = viewport.height
+        await page.render({ canvas, viewport }).promise
+        const blob = await new Promise<Blob>((resolve) => {
+          canvas.toBlob((b) => {
+            resolve(b!)
+          }, 'image/jpeg', quality.value)
+        })
+        const fileName = pdf.numPages > 1
+          ? `${baseName}_${String(i).padStart(String(pdf.numPages).length, '0')}.jpg`
+          : `${baseName}.jpg`
+        zip.file(fileName, blob)
       }
-      mergedPdf.addPage(page)
-    })
+
+      pdf.destroy()
+    }
+
+    const zipBlob = await zip.generateAsync({ type: 'blob' })
+    const url = URL.createObjectURL(zipBlob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'pdf_to_jpg.zip'
+    a.click()
+    URL.revokeObjectURL(url)
   }
-  const mergedPdfBytes = await mergedPdf.save()
-  const blob = new Blob([new Uint8Array(mergedPdfBytes)], { type: 'application/pdf' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'merged.pdf'
-  a.click()
-  URL.revokeObjectURL(url)
+  finally {
+    isProcessing.value = false
+  }
 }
 </script>
 
 <template>
   <div class="w-full h-full flex flex-col items-start gap-4">
-    <div class="flex gap-2">
-      <UFileUpload v-slot="{ open }" :reset="true" :model-value="[]" multiple accept=".pdf" @update:model-value="addFiles">
+    <div class="flex flex-wrap gap-2 items-center">
+      <UFileUpload v-slot="{ open }" :model-value="[]" :reset="true" multiple accept=".pdf" @update:model-value="addFiles">
         <UButton @click="open()">
           选择PDF文件
         </UButton>
       </UFileUpload>
-      <UButton @click="merge">
-        合并PDF
+      <div class="flex items-center gap-2">
+        <span class="text-sm whitespace-nowrap">质量:</span>
+        <USlider
+          v-model="quality"
+          :min="0.1"
+          :max="1"
+          :step="0.1"
+          class="w-32"
+        />
+        <span class="text-sm w-8">{{ quality }}</span>
+      </div>
+      <UButton :disabled="!fileList.length" :loading="isProcessing" @click="convert">
+        {{ isProcessing ? '转换中...' : '转换并下载' }}
       </UButton>
     </div>
     <ContainerToolItem class="flex-1 w-full h-full" content-class="overflow-auto h-full">
