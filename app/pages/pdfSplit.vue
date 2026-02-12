@@ -113,6 +113,7 @@ async function splitPdfByRange() {
     const pdfResults: { name: string, bytes: Uint8Array }[] = []
 
     // 按范围拆分
+    let count = 1
     for (const range of ranges.value) {
       const newPdf = await PDFDocument.create()
       const pageIndices = Array.from({ length: range.end - range.start + 1 }, (_, i) => range.start - 1 + i)
@@ -120,9 +121,10 @@ async function splitPdfByRange() {
       copiedPages.forEach(page => newPdf.addPage(page))
       const pdfBytes = await newPdf.save()
       pdfResults.push({
-        name: `${pdfName.value}_${range.start}-${range.end}.pdf`,
+        name: `${pdfName.value}_${count}.pdf`,
         bytes: pdfBytes,
       })
+      count++
     }
 
     // 下载结果
