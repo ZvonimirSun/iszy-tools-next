@@ -29,6 +29,10 @@ export const tools: OriginToolMenu[] = [
         label: 'PDF转JPG',
         name: 'pdfToJpg',
       },
+      {
+        label: 'JPG转PDF',
+        name: 'jpgToPdf',
+      },
     ],
   },
   {
