@@ -21,6 +21,10 @@ export const tools: OriginToolMenu[] = [
         label: 'PDF合并',
         name: 'pdfMerge',
       },
+      {
+        label: 'PDF拆分',
+        name: 'pdfSplit',
+      },
     ],
   },
   {
