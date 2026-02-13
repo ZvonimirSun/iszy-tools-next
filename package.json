@@ -4,7 +4,7 @@
   "author": "ZvonimirSun",
   "license": "Apache-2.0",
   "private": true,
-  "version": "1.4.2",
+  "version": "1.4.3",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
