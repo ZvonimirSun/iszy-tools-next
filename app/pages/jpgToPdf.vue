@@ -106,12 +106,7 @@ async function convert() {
 
   const pdfBytes = await pdf.save()
   const blob = new Blob([new Uint8Array(pdfBytes)], { type: 'application/pdf' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'images.pdf'
-  a.click()
-  URL.revokeObjectURL(url)
+  downloadBlob(blob, 'images.pdf')
 }
 
 onBeforeUnmount(() => {

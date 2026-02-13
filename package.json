@@ -30,7 +30,7 @@
     "@vueuse/router": "^14.2.0",
     "@zvonimirsun/iszy-common": "^1.1.0",
     "crypto-js": "^4.2.0",
-    "jszip": "^3.10.1",
+    "fflate": "^0.8.2",
     "lodash-es": "^4.17.23",
     "mustache": "^4.2.0",
     "nanoid": "^5.1.6",
@@ -60,5 +60,10 @@
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.4"
   },
-  "packageManager": "pnpm@10.28.1"
+  "packageManager": "pnpm@10.28.1",
+  "pnpm": {
+    "overrides": {
+      "citty": "^0.2.0"
+    }
+  }
 }

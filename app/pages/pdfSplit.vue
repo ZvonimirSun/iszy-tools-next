@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import JSZip from 'jszip'
-
 // PDF 文件状态
 const pdfFile = shallowRef<File | null>(null)
 const pdfName = ref('')
@@ -110,7 +108,7 @@ async function splitPdfByRange() {
     const arrayBuffer = await pdfFile.value.arrayBuffer()
     const sourcePdf = await PDFDocument.load(arrayBuffer)
 
-    const pdfResults: { name: string, bytes: Uint8Array }[] = []
+    const pdfResults: { name: string, data: Uint8Array }[] = []
 
     // 按范围拆分
     let count = 1
@@ -122,7 +120,7 @@ async function splitPdfByRange() {
       const pdfBytes = await newPdf.save()
       pdfResults.push({
         name: `${pdfName.value}_${count}.pdf`,
-        bytes: pdfBytes,
+        data: pdfBytes,
       })
       count++
     }
@@ -174,7 +172,7 @@ async function splitPdfByPage() {
     const arrayBuffer = await pdfFile.value.arrayBuffer()
     const sourcePdf = await PDFDocument.load(arrayBuffer)
 
-    const pdfResults: { name: string, bytes: Uint8Array }[] = []
+    const pdfResults: { name: string, data: Uint8Array }[] = []
 
     if (mergeSelection.value) {
       const newPdf = await PDFDocument.create()
@@ -184,7 +182,7 @@ async function splitPdfByPage() {
       const pdfBytes = await newPdf.save()
       pdfResults.push({
         name: `${pdfName.value}_selected.pdf`,
-        bytes: pdfBytes,
+        data: pdfBytes,
       })
     }
     else {
@@ -195,7 +193,7 @@ async function splitPdfByPage() {
         const pdfBytes = await newPdf.save()
         pdfResults.push({
           name: `${pdfName.value}_page${pageNum}.pdf`,
-          bytes: pdfBytes,
+          data: pdfBytes,
         })
       }
     }
@@ -208,7 +206,7 @@ async function splitPdfByPage() {
 }
 
 // 下载结果
-async function downloadResults(results: { name: string, bytes: Uint8Array }[]) {
+async function downloadResults(results: { name: string, data: Uint8Array }[]) {
   if (results.length === 0) {
     return
   }
@@ -216,27 +214,12 @@ async function downloadResults(results: { name: string, bytes: Uint8Array }[]) {
   if (results.length === 1) {
     // 单个文件直接下载
     const result = results[0]!
-    const blob = new Blob([new Uint8Array(result.bytes)], { type: 'application/pdf' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = result.name
-    a.click()
-    URL.revokeObjectURL(url)
+    const blob = new Blob([new Uint8Array(result.data)], { type: 'application/pdf' })
+    downloadBlob(blob, result.name)
   }
   else {
-    // 多个文件打包成 ZIP 下载
-    const zip = new JSZip()
-    for (const result of results) {
-      zip.file(result.name, result.bytes)
-    }
-    const zipBlob = await zip.generateAsync({ type: 'blob' })
-    const url = URL.createObjectURL(zipBlob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${pdfName.value}_split.zip`
-    a.click()
-    URL.revokeObjectURL(url)
+    const blob = await createZip(results)
+    downloadBlob(blob, `${pdfName.value}_split.zip`)
   }
 }
 </script>

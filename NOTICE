@@ -1,0 +1,12 @@
+NOTICE for Third-Party Libraries
+
+This project "iszy-tools-next" is licensed under the Apache License, Version 2.0.
+Copyright 2026 [ZvonimirSun]
+
+Third-party libraries used:
+
+1. pdfjs-dist
+   - License: MPL-2.0
+   - Source: https://www.npmjs.com/package/pdfjs-dist
+   - Usage: Loaded via CDN as worker (unmodified)
+   - Note: MPL-2.0 requires that modified files be open-sourced; no modifications were made.

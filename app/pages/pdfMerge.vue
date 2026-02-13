@@ -57,12 +57,7 @@ async function merge() {
   }
   const mergedPdfBytes = await mergedPdf.save()
   const blob = new Blob([new Uint8Array(mergedPdfBytes)], { type: 'application/pdf' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'merged.pdf'
-  a.click()
-  URL.revokeObjectURL(url)
+  downloadBlob(blob, 'merged.pdf')
 }
 </script>
 

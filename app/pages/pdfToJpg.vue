@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import draggable from 'vuedraggable'
-import JSZip from 'jszip'
 
 interface FileItem {
   id: string
@@ -49,7 +48,7 @@ async function convert() {
 
   try {
     const { getDocument } = await usePdfJs()
-    const zip = new JSZip()
+    const results: { name: string, data: Blob }[] = []
 
     for (const item of fileList.value) {
       const arrayBuffer = await item.file.arrayBuffer()
@@ -73,19 +72,14 @@ async function convert() {
         const fileName = pdf.numPages > 1
           ? `${baseName}_${String(i).padStart(String(pdf.numPages).length, '0')}.jpg`
           : `${baseName}.jpg`
-        zip.file(fileName, blob)
+        results.push({ name: fileName, data: blob })
       }
 
       pdf.destroy()
     }
 
-    const zipBlob = await zip.generateAsync({ type: 'blob' })
-    const url = URL.createObjectURL(zipBlob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'pdf_to_jpg.zip'
-    a.click()
-    URL.revokeObjectURL(url)
+    const zipBlob = await createZip(results)
+    downloadBlob(zipBlob, 'pdf_to_jpg.zip')
   }
   finally {
     isProcessing.value = false
