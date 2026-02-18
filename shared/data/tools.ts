@@ -178,7 +178,7 @@ export const tools: OriginToolMenu[] = [
       },
       {
         label: 'XML格式化',
-        name: 'xmlEditor',
+        name: 'xmlFormatter',
       },
       {
         label: '时间计算',
@@ -246,10 +246,6 @@ export const tools: OriginToolMenu[] = [
       {
         label: '多次提前还贷计算器',
         name: 'mtqLoans',
-      },
-      {
-        label: '基金股票信息查询',
-        name: 'http://www.zodiacn.ltd',
       },
     ],
   },
