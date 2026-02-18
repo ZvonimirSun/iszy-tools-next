@@ -23,7 +23,7 @@ const emits = defineEmits<{
   (e: 'change', v: string): void
 }>()
 
-const isDark = useDark()
+const colorMode = useColorMode()
 
 defineExpose({
   getView,
@@ -39,8 +39,8 @@ const extensions = [
   mini.extensions,
   props.plugin ? props.plugin.miniExtensions || props.plugin.extensions : [],
   EditorView.updateListener.of(onChange),
-  themeCompartment.of(isDark.value ? oneDarkTheme : EditorView.theme({}, { dark: false })),
-  highLightCompartment.of(isDark.value ? syntaxHighlighting(oneDarkHighlightStyle, { fallback: true }) : syntaxHighlighting(defaultHighlightStyle)),
+  themeCompartment.of(colorMode.value === 'dark' ? oneDarkTheme : EditorView.theme({}, { dark: false })),
+  highLightCompartment.of(colorMode.value === 'dark' ? syntaxHighlighting(oneDarkHighlightStyle, { fallback: true }) : syntaxHighlighting(defaultHighlightStyle)),
 ]
 if (props.placeholder) {
   extensions.push(PlaceHolder(props.placeholder))
@@ -63,11 +63,11 @@ onUnmounted(() => {
   cm?.destroy()
 })
 
-watch(isDark, (val) => {
+watch(colorMode, (val) => {
   cm.dispatch({
     effects: [
-      themeCompartment.reconfigure(val ? oneDarkTheme : EditorView.theme({}, { dark: false })),
-      highLightCompartment.reconfigure(val ? syntaxHighlighting(oneDarkHighlightStyle, { fallback: true }) : syntaxHighlighting(defaultHighlightStyle)),
+      themeCompartment.reconfigure(val.value === 'dark' ? oneDarkTheme : EditorView.theme({}, { dark: false })),
+      highLightCompartment.reconfigure(val.value === 'dark' ? syntaxHighlighting(oneDarkHighlightStyle, { fallback: true }) : syntaxHighlighting(defaultHighlightStyle)),
     ],
   })
 })
