@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { zh_cn } from '@nuxt/ui/locale'
+
 const { site } = usePublicConfig()
 
 const route = useRoute()
@@ -14,7 +16,8 @@ const seoTitle = computed(() => {
 
 useHead({
   htmlAttrs: {
-    lang: site.lang,
+    lang: zh_cn.code,
+    dir: zh_cn.dir,
   },
 })
 
@@ -27,7 +30,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <UApp>
+  <UApp :locale="zh_cn">
     <NuxtLoadingIndicator />
 
     <AppHeader />
