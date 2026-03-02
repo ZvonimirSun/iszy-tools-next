@@ -8,9 +8,11 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       site: {
-        lang: 'zh-CN',
         title: 'ISZY Tools Next',
         description: 'ISZY Tools Next',
+      },
+      auth: {
+        publicRegister: false,
       },
       beian: {
         icp: '',
@@ -42,5 +44,11 @@ export default defineNuxtConfig({
         return mustache.render(iconRemoteUrl, { name })
       },
     },
+    customCollections: [
+      {
+        prefix: 'custom',
+        dir: './app/assets/icons',
+      },
+    ],
   },
 })
