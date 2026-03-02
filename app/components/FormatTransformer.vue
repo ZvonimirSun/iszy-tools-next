@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { EditorPlugin } from '#shared/types/editor'
-import type { FormError } from '#ui/types'
+import type { FormError } from '@nuxt/ui'
 import { EditorMini } from '#components'
 import { identity } from 'lodash-es'
 
