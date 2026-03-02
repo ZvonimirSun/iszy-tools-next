@@ -1,10 +1,11 @@
 {
   "name": "iszy-tools-next",
   "type": "module",
+  "version": "1.5.1",
+  "private": true,
+  "packageManager": "pnpm@10.30.3",
   "author": "ZvonimirSun",
   "license": "Apache-2.0",
-  "private": true,
-  "version": "1.5.1",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -74,17 +75,10 @@
     "@types/node": "^25.3.3",
     "baseline-browser-mapping": "^2.10.0",
     "eslint": "^10.0.2",
+    "ofetch": "^1.5.1",
     "sass": "^1.97.3",
     "taze": "^19.9.2",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.5"
-  },
-  "packageManager": "pnpm@10.30.3",
-  "pnpm": {
-    "overrides": {
-      "citty": "^0.2.1",
-      "eslint": "^10.0.2",
-      "jsonc-eslint-parser": "^3.1.0"
-    }
   }
 }

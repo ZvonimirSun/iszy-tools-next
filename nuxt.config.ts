@@ -22,6 +22,16 @@ export default defineNuxtConfig({
       cdnOrigin: '',
       friendLinks: '',
     },
+    apiOrigin: '',
+    redis: {
+      host: '',
+      port: 6379,
+      password: undefined,
+    },
+    session: {
+      cookieName: 'NUXT_SESSION_ID',
+      maxAge: '7d',
+    },
   },
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
