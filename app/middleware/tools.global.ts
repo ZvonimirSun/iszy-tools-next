@@ -1,6 +1,4 @@
 export default defineNuxtRouteMiddleware(async (_to, _from) => {
-  const originToolsStore = useOriginToolsStore()
-  await originToolsStore.init()
   const toolsStore = useToolsStore()
   const currentTool = toolsStore.toolItemsMap[_to.path.slice(1)]
   if (currentTool?.noAccess) {

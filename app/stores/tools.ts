@@ -143,3 +143,7 @@ export const useToolsStore = defineStore('toolsStore', {
     },
   },
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useToolsStore, import.meta.hot))
+}
