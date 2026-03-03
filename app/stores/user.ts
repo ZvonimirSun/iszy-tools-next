@@ -66,9 +66,7 @@ export const useUserStore = defineStore('user', {
             if (res.data!.logged) {
               profilePulled = true
             }
-            else {
-              this.updateProfile(res.data?.profile)
-            }
+            this.updateProfile(res.data?.profile)
           }
         })
       }
