@@ -31,7 +31,7 @@ export const useUserStore = defineStore('user', {
           })
           if (res.success) {
             profilePulled = true
-            this.updateProfile(res.data)
+            await this.updateProfile(res.data)
             return
           }
           else {
@@ -74,7 +74,7 @@ export const useUserStore = defineStore('user', {
             if (res.data!.logged) {
               profilePulled = true
             }
-            this.updateProfile(res.data?.profile)
+            return this.updateProfile(res.data?.profile)
           }
         })
       }
@@ -96,12 +96,12 @@ export const useUserStore = defineStore('user', {
         return false
       }
     },
-    updateProfile(data?: MinimalUser) {
+    async updateProfile(data?: MinimalUser) {
       this.profile = data
-      useOriginToolsStore().fetchTools()
+      return useOriginToolsStore().fetchTools()
     },
-    removeProfile() {
-      this.updateProfile()
+    async removeProfile() {
+      return this.updateProfile()
     },
   },
 })
