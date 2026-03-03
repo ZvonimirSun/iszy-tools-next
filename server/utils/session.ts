@@ -29,7 +29,7 @@ export async function getRedisSession(event: H3Event): Promise<SessionData | nul
   return await storage.getItem(getSessionKey(sessionId))
 }
 
-export async function setRedisSession(event: H3Event, data: Optional<SessionData, 'id'> | undefined) {
+export async function setRedisSession(event: H3Event, data?: Optional<SessionData, 'id'> | null) {
   const { session: sessionConfig } = useRuntimeConfig()
 
   const cookieName = sessionConfig.cookieName
