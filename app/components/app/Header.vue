@@ -1,11 +1,6 @@
 <script setup lang="ts">
 const { site: { title: siteTitle } } = usePublicConfig()
-const route = useRoute()
-const toolsStore = useToolsStore()
-
-const tool = computed(() => {
-  return toolsStore.toolItemsMap[route.path.slice(1)]
-})
+const tool = useCurrentTool()
 </script>
 
 <template>

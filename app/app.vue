@@ -2,13 +2,7 @@
 import { zh_cn } from '@nuxt/ui/locale'
 
 const { site } = usePublicConfig()
-
-const route = useRoute()
-const toolsStore = useToolsStore()
-
-const tool = computed(() => {
-  return toolsStore.toolItemsMap[route.path.slice(1)]
-})
+const tool = useCurrentTool()
 
 const seoTitle = computed(() => {
   return `${tool.value ? `${tool.value.label} - ` : ''}${site.title}`

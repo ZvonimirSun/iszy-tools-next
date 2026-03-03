@@ -92,6 +92,7 @@ export const useUserStore = defineStore('user', {
     },
     updateProfile(data?: MinimalUser) {
       this.profile = data
+      useOriginToolsStore().fetchTools()
     },
     removeProfile() {
       this.updateProfile()
