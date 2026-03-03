@@ -50,7 +50,15 @@ export const useUserStore = defineStore('user', {
       throw new Error(error)
     },
     async logout() {
-
+      const data = await $fetch<ResultDto<void>>(`/api/auth/logout`, {
+        method: 'POST',
+      })
+      if (data && data.success) {
+        this.removeProfile()
+      }
+      else {
+        throw new Error(data?.message || '登出失败')
+      }
     },
     async pullProfile(force?: boolean) {
       if (profilePulled && !force) {
