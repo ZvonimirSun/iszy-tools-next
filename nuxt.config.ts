@@ -1,8 +1,3 @@
-import process from 'node:process'
-import mustache from 'mustache'
-
-const iconRemoteUrl = process.env.NUXT_ICON_REMOTE_URL || 'https://cdn.jsdelivr.net/npm/@iconify-json/{{name}}/icons.json'
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   runtimeConfig: {
@@ -51,12 +46,6 @@ export default defineNuxtConfig({
     },
   },
   icon: {
-    serverBundle: {
-      mode: 'auto',
-      remote: (name: string) => {
-        return mustache.render(iconRemoteUrl, { name })
-      },
-    },
     customCollections: [
       {
         prefix: 'custom',
