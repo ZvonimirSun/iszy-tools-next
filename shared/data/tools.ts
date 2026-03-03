@@ -131,6 +131,11 @@ export const tools: OriginToolMenu[] = [
     label: '网页工具',
     children: [
       {
+        label: '短网址',
+        name: 'urls',
+        requiresAuth: true,
+      },
+      {
         label: 'URL编解码',
         name: 'urlEncode',
       },
@@ -172,6 +177,11 @@ export const tools: OriginToolMenu[] = [
   {
     label: '开发工具',
     children: [
+      {
+        label: 'Mock工具',
+        name: 'mock',
+        requiresAuth: true,
+      },
       {
         label: 'CSS格式化',
         name: 'cssFormatter',

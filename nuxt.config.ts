@@ -23,6 +23,9 @@ export default defineNuxtConfig({
       friendLinks: '',
     },
     apiOrigin: '',
+    site: {
+      showAllTools: false,
+    },
     redis: {
       host: '',
       port: 6379,

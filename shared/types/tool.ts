@@ -5,13 +5,15 @@ export interface OriginToolItem {
 
 export interface OriginToolMenu {
   label: string
-  children: OriginToolItem[]
+  children: (OriginToolItem | ToolItem)[]
 }
 
 interface ToolMeta {
   tags?: string[]
   requiresAuth?: boolean
   online?: boolean
+
+  noAccess?: boolean
 }
 
 export interface ToolItem extends OriginToolItem, ToolMeta {
