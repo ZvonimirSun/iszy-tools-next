@@ -5,6 +5,7 @@ overrides:
   citty: ^0.2.1
   eslint: ^10.0.2
   jsonc-eslint-parser: ^3.1.0
+  vue-router: ^5.0.3
 
 ignoredBuiltDependencies:
   - '@parcel/watcher'
