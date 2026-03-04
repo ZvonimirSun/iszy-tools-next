@@ -110,7 +110,7 @@ if (props.plugin?.formatter) {
       }
       catch (e) {}
     },
-    icon: 'i-iszy-editor-format',
+    icon: 'i-custom:format',
   })
 }
 if (props.plugin?.compactor) {
@@ -130,7 +130,7 @@ if (props.plugin?.compactor) {
       }
       catch (e) {}
     },
-    icon: 'i-iszy-editor-compact',
+    icon: 'i-custom:compact',
   })
 }
 if (formatControls.length) {
@@ -157,7 +157,7 @@ if (formatControls.length) {
           }"
           @click="btn.event"
         >
-          <span :class="btn.icon" />
+          <UIcon :name="btn.icon" class="size-6" />
         </div>
       </template>
     </div>
