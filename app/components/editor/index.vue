@@ -78,7 +78,7 @@ const controls: Control[][] = [
           return
         undo(cm)
       },
-      icon: 'i-fa6-solid-arrow-rotate-left',
+      icon: 'i-fa6-solid:arrow-rotate-left',
     },
     {
       title: '重做',
@@ -88,7 +88,7 @@ const controls: Control[][] = [
           return
         redo(cm)
       },
-      icon: 'i-fa6-solid-arrow-rotate-right',
+      icon: 'i-fa6-solid:arrow-rotate-right',
     },
   ],
 ]

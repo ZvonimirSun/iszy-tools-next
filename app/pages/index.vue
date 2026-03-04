@@ -34,7 +34,7 @@ onMounted(() => {
       ref="input"
       v-model="searchStr"
       size="xl"
-      icon="i-icon-park-outline-search"
+      icon="i-icon-park-outline:search"
       placeholder="搜索工具..."
       class="w-full"
     >

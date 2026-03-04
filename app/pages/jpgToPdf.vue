@@ -146,7 +146,7 @@ onBeforeUnmount(() => {
             <div class="absolute hidden group-hover:flex gap-2 right-2 top-2">
               <UButton
                 class="rounded-full cursor-pointer"
-                icon="i-icon-park-outline-rotating-forward"
+                icon="i-icon-park-outline:rotating-forward"
                 variant="outline"
                 size="xs"
                 color="neutral"
@@ -154,7 +154,7 @@ onBeforeUnmount(() => {
               />
               <UButton
                 class="rounded-full cursor-pointer"
-                icon="i-icon-park-outline-close"
+                icon="i-icon-park-outline:close"
                 variant="outline"
                 size="xs"
                 color="neutral"

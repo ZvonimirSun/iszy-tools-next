@@ -34,14 +34,14 @@ const fields: AuthFormField[] = [{
 const providers: ButtonProps[] = [
   {
     label: 'GitHub',
-    icon: 'i-simple-icons-github',
+    icon: 'i-simple-icons:github',
     onClick: () => {
       toast.add({ title: 'GitHub', description: 'Login with GitHub' })
     },
   },
   {
     label: 'Linux Do',
-    icon: 'i-custom-linuxdo',
+    icon: 'i-custom:linuxdo',
     onClick: () => {
       toast.add({ title: 'Linux Do', description: 'Login with Linux Do' })
     },
@@ -93,7 +93,7 @@ function _getOtherQuery(query: LocationQuery) {
       <UAuthForm
         :schema="schema"
         title="欢迎回来！"
-        icon="i-lucide-lock"
+        icon="i-lucide:lock"
         :fields="fields"
         :providers="providers"
         :loading-auto="true"
@@ -109,7 +109,7 @@ function _getOtherQuery(query: LocationQuery) {
           </ULink>.
         </template>
         <template v-if="error" #validation>
-          <UAlert color="error" icon="i-lucide-info" :title="error" />
+          <UAlert color="error" icon="i-lucide:info" :title="error" />
         </template>
       </UAuthForm>
     </UPageCard>

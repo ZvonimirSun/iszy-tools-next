@@ -264,7 +264,7 @@ async function downloadResults(results: { name: string, data: Uint8Array }[]) {
           <div v-if="ranges.length > 0" class="flex flex-wrap gap-2 items-center">
             <UBadge v-for="range in ranges" :key="range.id" color="primary" variant="soft" class="flex items-center gap-1">
               第 {{ range.start }} - {{ range.end }} 页
-              <UIcon name="i-lucide-x" class="cursor-pointer size-4" @click="removeRange(range.id)" />
+              <UIcon name="i-lucide:x" class="cursor-pointer size-4" @click="removeRange(range.id)" />
             </UBadge>
           </div>
           <div>
@@ -344,7 +344,7 @@ async function downloadResults(results: { name: string, data: Uint8Array }[]) {
               v-if="page.selected"
               class="absolute top-1 right-1 size-5 bg-primary rounded-full flex items-center justify-center"
             >
-              <UIcon name="i-lucide-check" class="size-3 text-white" />
+              <UIcon name="i-lucide:check" class="size-3 text-white" />
             </div>
             <!-- 页面预览 -->
             <div class="w-full h-full flex justify-center items-center">
@@ -361,7 +361,7 @@ async function downloadResults(results: { name: string, data: Uint8Array }[]) {
     <!-- 空状态 -->
     <ContainerToolItem v-else class="flex-1 w-full h-full" content-class="flex items-center justify-center h-full">
       <div class="text-center text-muted">
-        <UIcon name="i-icon-park-outline-file-pdf-one" class="size-24 text-red-300 mb-4" />
+        <UIcon name="i-icon-park-outline:file-pdf-one" class="size-24 text-red-300 mb-4" />
         <p>请选择一个 PDF 文件开始拆分</p>
       </div>
     </ContainerToolItem>

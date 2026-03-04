@@ -9,13 +9,13 @@ if (colorMode.preference !== settingsStore.general.theme.mode) {
 const colorButtonIcon = computed(() => {
   switch (colorMode.preference) {
     case 'light':
-      return 'i-lucide-sun'
+      return 'i-lucide:sun'
     case 'dark':
-      return 'i-lucide-moon'
+      return 'i-lucide:moon'
     case 'system':
-      return 'i-lucide-monitor'
+      return 'i-lucide:monitor'
   }
-  return 'i-lucide-monitor'
+  return 'i-lucide:monitor'
 })
 
 const targetMode = computed(() => {
@@ -60,13 +60,17 @@ function getAlias(mode: 'light' | 'dark' | 'system'): string {
 
 <template>
   <ClientOnly v-if="!colorMode?.forced">
-    <UButton
-      :icon="colorButtonIcon"
-      color="neutral"
-      variant="ghost"
-      :aria-label="colorAriaLabel"
-      @click="switchMode"
-    />
+    <UTooltip
+      :text="colorAriaLabel"
+    >
+      <UButton
+        :icon="colorButtonIcon"
+        color="neutral"
+        variant="ghost"
+        :aria-label="colorAriaLabel"
+        @click="switchMode"
+      />
+    </UTooltip>
   </ClientOnly>
 </template>
 

@@ -24,7 +24,7 @@ onMounted(() => {
       <div data-slot="root" class="w-full space-y-6">
         <div data-slot="header" class="flex flex-col text-center">
           <div data-slot="leading" class="mb-2">
-            <UIcon name="i-lucide-lock" data-slot="leadingIcon" class="size-8 shrink-0 inline-block" />
+            <UIcon name="i-lucide:lock" data-slot="leadingIcon" class="size-8 shrink-0 inline-block" />
           </div>
           <div data-slot="title" class="text-xl text-pretty font-semibold text-highlighted">
             登出中...

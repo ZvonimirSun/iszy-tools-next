@@ -45,7 +45,7 @@ async function getPreview() {
     }"
   >
   <div v-else class="w-full h-full flex justify-center items-center">
-    <UIcon name="i-icon-park-outline-file-pdf-one" class="size-24 text-red-400" />
+    <UIcon name="i-icon-park-outline:file-pdf-one" class="size-24 text-red-400" />
   </div>
 </template>
 
