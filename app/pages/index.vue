@@ -13,7 +13,7 @@ const settings = settingsStore.general
 // const updateFav = toolsStore.updateFav
 
 definePageMeta({
-  layout: 'home',
+  layout: 'full',
 })
 
 defineShortcuts({
