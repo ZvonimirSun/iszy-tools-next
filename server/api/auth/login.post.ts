@@ -1,7 +1,6 @@
-import type { MinimalUser, PublicUser, ResultDto } from '@zvonimirsun/iszy-common'
-import { toMinimalUser } from '@zvonimirsun/iszy-common'
+import type { ResultDto } from '@zvonimirsun/iszy-common'
 
-export default defineEventHandler(async (event): Promise<ResultDto<MinimalUser>> => {
+export default defineEventHandler(async (event): Promise<ResultDto<PublicSimpleUser>> => {
   const body = await readBody<{
     userName: string
     password: string
@@ -17,7 +16,7 @@ export default defineEventHandler(async (event): Promise<ResultDto<MinimalUser>>
     const res = await authFetch<ResultDto<{
       access_token: string
       refresh_token: string
-      profile: PublicUser
+      profile: PublicSimpleUser
     }>>(event, `/auth/login`, {
       method: 'POST',
       body: {
@@ -33,7 +32,7 @@ export default defineEventHandler(async (event): Promise<ResultDto<MinimalUser>>
     }
     return {
       ...res,
-      data: res.data?.profile ? toMinimalUser(res.data.profile) : undefined,
+      data: res.data?.profile ? toPublicSimpleUser(res.data.profile) : undefined,
     }
   }
   catch (e) {

@@ -1,6 +1,11 @@
 <script setup lang="ts">
 const { site: { title: siteTitle } } = usePublicConfig()
 const tool = useCurrentTool()
+
+const route = useRoute()
+const settingsPath = computed(() => {
+  return route.path === '/settings' ? '/' : '/settings'
+})
 </script>
 
 <template>
@@ -21,6 +26,18 @@ const tool = useCurrentTool()
     </template>
     <template #right>
       <ColorModeButtonExtend />
+      <UTooltip
+        text="个人中心"
+      >
+        <ULink :to="settingsPath">
+          <UButton
+            icon="icon-park-outline:setting-two"
+            color="neutral"
+            variant="ghost"
+            aria-label="个人中心"
+          />
+        </ULink>
+      </UTooltip>
     </template>
   </UHeader>
 </template>

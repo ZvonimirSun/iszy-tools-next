@@ -1,17 +1,17 @@
-import type { MinimalUser, ResultDto } from '@zvonimirsun/iszy-common'
+import type { ResultDto } from '@zvonimirsun/iszy-common'
 
 let pullProfilePromise: Promise<ResultDto<{
   logged: boolean
-  profile?: MinimalUser
+  profile?: PublicSimpleUser
 }>> | null = null
-let pullProfileResolve: ((value: ResultDto<{ logged: boolean, profile?: MinimalUser }>) => void) | null
+let pullProfileResolve: ((value: ResultDto<{ logged: boolean, profile?: PublicSimpleUser }>) => void) | null
 let pullProfileReject: ((value: unknown) => void) | null
 let pullProfileAbortController: AbortController | null = null // 用于中断请求
 
 export const useUserStore = defineStore('user', {
   state: () => ({
     profilePulled: false,
-    profile: undefined as MinimalUser | undefined,
+    profile: undefined as PublicSimpleUser | undefined,
   }),
   getters: {
     logged: (state) => {
@@ -26,7 +26,7 @@ export const useUserStore = defineStore('user', {
       let error = ''
       try {
         if (userName && password) {
-          const res = await $fetch<ResultDto<MinimalUser>>(`/api/auth/login`, {
+          const res = await $fetch<ResultDto<PublicSimpleUser>>(`/api/auth/login`, {
             method: 'post',
             body: {
               userName: userName.trim(),
@@ -91,7 +91,7 @@ export const useUserStore = defineStore('user', {
       // 4. 创建新的 Promise 并发起请求
       pullProfilePromise = new Promise<ResultDto<{
         logged: boolean
-        profile?: MinimalUser
+        profile?: PublicSimpleUser
       }>>((resolve, reject) => {
         pullProfileResolve = resolve
         pullProfileReject = reject
@@ -101,7 +101,7 @@ export const useUserStore = defineStore('user', {
         pullProfileAbortController = new AbortController()
         const res = await $fetch<ResultDto<{
           logged: boolean
-          profile?: MinimalUser
+          profile?: PublicSimpleUser
         }>>(`/api/auth/check`, {
           headers,
           signal: pullProfileAbortController.signal, // 关联中断信号
@@ -137,7 +137,7 @@ export const useUserStore = defineStore('user', {
       }
       return pullProfilePromise
     },
-    async updateProfile(data?: MinimalUser, headers?: any) {
+    async updateProfile(data?: PublicSimpleUser, headers?: any) {
       this.profile = data
       return useOriginToolsStore().fetchTools(headers)
     },

@@ -1,8 +1,8 @@
-import type { MinimalUser, PublicUser, ResultDto } from '@zvonimirsun/iszy-common'
+import type { ResultDto } from '@zvonimirsun/iszy-common'
 
 export default defineEventHandler(async (event): Promise<ResultDto<{
   logged: boolean
-  profile?: MinimalUser
+  profile?: PublicSimpleUser
 }>> => {
   const session = await getRedisSession(event)
   if (!session) {
@@ -16,13 +16,13 @@ export default defineEventHandler(async (event): Promise<ResultDto<{
   }
   else {
     try {
-      const res = await authFetch<ResultDto<PublicUser>>(event, '/user/me')
+      const res = await authFetch<ResultDto<PublicSimpleUser>>(event, '/user/me')
       if (res.success) {
         return {
           success: true,
           data: {
             logged: true,
-            profile: res.data!,
+            profile: toPublicSimpleUser(res.data!),
           },
           message: '已登录',
         }
