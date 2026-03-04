@@ -168,10 +168,10 @@ function generate() {
 <template>
   <div class="h-full w-full flex flex-col gap-4 items-start">
     <UForm class="w-full flex flex-col gap-4 items-start">
-      <ContainerToolItem class="w-full" label="基础信息" content-class="grid grid-cols-24 gap-2">
+      <ContainerToolItem class="w-full" label="基础信息" content-class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
         <UFormField
           label="坐标单位"
-          class="col-span-12 sm:col-span-8 lg:col-span-4 grid grid-cols-[5rem_1fr]"
+          class="grid grid-cols-[7rem_1fr] gap-2"
           orientation="horizontal"
         >
           <USelect
@@ -186,7 +186,7 @@ function generate() {
         </UFormField>
         <UFormField
           label="当前层级"
-          class="col-span-12 sm:col-span-8 lg:col-span-4 grid grid-cols-[5rem_1fr]"
+          class="grid grid-cols-[7rem_1fr] gap-2"
           orientation="horizontal"
         >
           <UInputNumber
@@ -199,7 +199,7 @@ function generate() {
         </UFormField>
         <UFormField
           label="切片层级数"
-          class="col-span-12 sm:col-span-8 lg:col-span-4 grid grid-cols-[5rem_1fr]"
+          class="grid grid-cols-[7rem_1fr] gap-2"
           orientation="horizontal"
         >
           <UInputNumber
@@ -211,10 +211,10 @@ function generate() {
           />
         </UFormField>
       </ContainerToolItem>
-      <ContainerToolItem class="w-full" label="参数设置" content-class="grid grid-cols-24 gap-2">
+      <ContainerToolItem class="w-full" label="参数设置" content-class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-2">
         <UFormField
           label="地图分辨率"
-          class="col-span-24 sm:col-span-12 lg:col-span-8 grid grid-cols-[7rem_1fr]"
+          class="lg:col-span-2 grid grid-cols-[7rem_1fr]"
           orientation="horizontal"
         >
           <UInput
@@ -226,7 +226,7 @@ function generate() {
         </UFormField>
         <UFormField
           label="地图比例尺"
-          class="col-span-24 sm:col-span-12 lg:col-span-8 grid grid-cols-[7rem_1fr]"
+          class="lg:col-span-2 grid grid-cols-[7rem_1fr]"
           orientation="horizontal"
         >
           <UInput
@@ -238,7 +238,7 @@ function generate() {
         </UFormField>
         <UFormField
           label="屏幕分辨率(ppi)"
-          class="col-span-24 sm:col-span-12 lg:col-span-4 grid grid-cols-[7rem_1fr]"
+          class="lg:col-span-1 grid grid-cols-[7rem_1fr]"
           orientation="horizontal"
         >
           <UInput
@@ -250,7 +250,7 @@ function generate() {
         </UFormField>
         <UFormField
           label="像元大小(mm)"
-          class="col-span-24 sm:col-span-12 lg:col-span-4 grid grid-cols-[7rem_1fr]"
+          class="lg:col-span-1 grid grid-cols-[7rem_1fr]"
           orientation="horizontal"
         >
           <UInput
@@ -263,7 +263,7 @@ function generate() {
       </ContainerToolItem>
     </UForm>
     <UButton label="生成" @click="generate" />
-    <ContainerToolItem v-if="lodsStr" class="w-full flex-1" content-class="overflow-auto grid grid-cols-2 gap-4 min-h-64">
+    <ContainerToolItem v-if="lodsStr" class="w-full flex-1" content-class="overflow-auto grid grid-cols-2 gap-4 min-h-60">
       <ContainerInputLike class="overflow-auto col-span-2 md:col-span-1">
         <pre class="overflow-auto w-full h-full">{{ lodsStr }}</pre>
       </ContainerInputLike>

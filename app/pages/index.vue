@@ -47,14 +47,13 @@ onMounted(() => {
         v-for="(item, index) in toolMenus"
         :key="index"
       >
-        <div class="grid grid-cols-24 gap-4">
-          <div class="col-span-24 text-muted">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <div class="col-span-full text-muted">
             {{ item.label }}
           </div>
           <div
             v-for="(tool) in item.children"
             :key="tool.name"
-            class="col-span-12 sm:col-span-8 md:col-span-6"
           >
             <UPageCard
               class="bg-elevated border text-base font-semibold"
