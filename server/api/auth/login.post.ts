@@ -15,11 +15,11 @@ export default defineEventHandler(async (event): Promise<ResultDto<MinimalUser>>
     })
   }
   try {
-    const res = await $fetch<ResultDto<{
+    const res = await authFetch<ResultDto<{
       access_token: string
       refresh_token: string
       profile: PublicUser
-    }>>(`${apiOrigin}/auth/login`, {
+    }>>(event, `${apiOrigin}/auth/login`, {
       method: 'POST',
       body: {
         username: body.userName.trim(),

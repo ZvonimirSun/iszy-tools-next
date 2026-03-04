@@ -88,7 +88,12 @@ export async function authFetch<T = unknown>(event: H3Event, ...params: Paramete
 
   const { apiOrigin } = useRuntimeConfig()
   const [url, opts = {}] = params
-  const headers: any = opts.headers || {}
+  const headers: any = {
+    ...getProxyRequestHeaders(event),
+    ...opts.headers,
+  }
+  delete headers.cookie
+  delete headers.host
   // 传递真实IP
   headers['x-forwarded-for'] = xForwardedFor
   opts.headers = headers

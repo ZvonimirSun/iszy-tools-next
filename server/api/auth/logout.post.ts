@@ -10,7 +10,7 @@ export default defineEventHandler(async (event): Promise<ResultDto<void>> => {
     }
   }
   const { apiOrigin } = useRuntimeConfig()
-  await $fetch(`${apiOrigin}/auth/logout`, {
+  await authFetch(event, `${apiOrigin}/auth/logout`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${session.access_token}`,
