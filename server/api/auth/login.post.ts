@@ -2,7 +2,6 @@ import type { MinimalUser, PublicUser, ResultDto } from '@zvonimirsun/iszy-commo
 import { toMinimalUser } from '@zvonimirsun/iszy-common'
 
 export default defineEventHandler(async (event): Promise<ResultDto<MinimalUser>> => {
-  const { apiOrigin } = useRuntimeConfig()
   const body = await readBody<{
     userName: string
     password: string
@@ -19,7 +18,7 @@ export default defineEventHandler(async (event): Promise<ResultDto<MinimalUser>>
       access_token: string
       refresh_token: string
       profile: PublicUser
-    }>>(event, `${apiOrigin}/auth/login`, {
+    }>>(event, `/auth/login`, {
       method: 'POST',
       body: {
         username: body.userName.trim(),

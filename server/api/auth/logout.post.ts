@@ -1,4 +1,5 @@
 import type { ResultDto } from '@zvonimirsun/iszy-common'
+import type { FetchError } from 'ofetch'
 
 export default defineEventHandler(async (event): Promise<ResultDto<void>> => {
   const session = await getRedisSession(event)
@@ -9,13 +10,17 @@ export default defineEventHandler(async (event): Promise<ResultDto<void>> => {
       message: '已登出',
     }
   }
-  const { apiOrigin } = useRuntimeConfig()
-  await authFetch(event, `${apiOrigin}/auth/logout`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${session.access_token}`,
-    },
-  })
+  try {
+    await authFetch(event, `/auth/logout`, {
+      method: 'POST',
+    })
+  }
+  catch (error) {
+    const errorCode = (error as FetchError)?.response?.status
+    if (errorCode && errorCode !== 401) {
+      throw error
+    }
+  }
   await destroyRedisSession(event)
   return {
     success: true,

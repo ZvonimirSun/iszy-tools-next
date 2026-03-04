@@ -84,18 +84,17 @@ export async function proxyFetch(event: H3Event) {
 
 export async function authFetch<T = unknown>(event: H3Event, ...params: Parameters<typeof $fetch>): Promise<TypedInternalResponse<NitroFetchRequest, T>> {
   const sessionId = getSessionId(event)
-  const xForwardedFor = event.node.req.headers['x-forwarded-for'] ?? event.node.req.socket.remoteAddress
+  const originalHeaders = getProxyRequestHeaders(event)
+  const xForwardedFor = originalHeaders['x-forwarded-for'] ?? event.node.req.socket.remoteAddress
+  console.log(originalHeaders['x-forwarded-for'])
 
   const { apiOrigin } = useRuntimeConfig()
   const [url, opts = {}] = params
-  const headers: any = {
-    ...getProxyRequestHeaders(event),
-    ...opts.headers,
-  }
-  delete headers.cookie
-  delete headers.host
+  const headers: any = opts.headers || {}
   // 传递真实IP
   headers['x-forwarded-for'] = xForwardedFor
+  headers['user-agent'] = originalHeaders['user-agent'] || 'Mozilla/5.0 (compatible; authFetch/1.0)'
+  headers.referer = originalHeaders.referer
   opts.headers = headers
   opts.baseURL = apiOrigin
 
