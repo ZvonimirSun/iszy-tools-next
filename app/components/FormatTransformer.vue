@@ -2,7 +2,6 @@
 import type { EditorPlugin } from '#shared/types/editor'
 import type { FormError } from '@nuxt/ui'
 import { EditorMini } from '#components'
-import { identity } from 'lodash-es'
 
 const props = withDefaults(
   defineProps<{
