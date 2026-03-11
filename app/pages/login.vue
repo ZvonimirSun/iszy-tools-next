@@ -31,19 +31,21 @@ const fields: AuthFormField[] = [{
   type: 'password',
 }]
 
+const loading = ref(false)
+let pollIndex: number | null = null
 const providers: ButtonProps[] = [
   {
     label: 'GitHub',
     icon: 'i-simple-icons:github',
     onClick: () => {
-      toast.add({ title: 'GitHub', description: 'Login with GitHub' })
+      thirdPartyLogin('/api/oauth/github', 'GitHub 登录')
     },
   },
   {
     label: 'Linux Do',
     icon: 'i-custom:linuxdo',
     onClick: () => {
-      toast.add({ title: 'Linux Do', description: 'Login with Linux Do' })
+      thirdPartyLogin('/api/oauth/linuxdo', 'LINUX DO 登录')
     },
   },
 ]
@@ -62,17 +64,84 @@ onMounted(() => {
   }
 })
 
+onBeforeUnmount(() => {
+  if (pollIndex != null) {
+    clearInterval(pollIndex)
+    pollIndex = null
+  }
+  window.removeEventListener('message', thirdPartyLoginCallback)
+})
+
 async function login(payload: FormSubmitEvent<Schema>) {
+  if (loading.value) {
+    return
+  }
   if (!navigator.onLine) {
     toast.add({ title: '网络异常', description: '请检查您的网络连接', color: 'error' })
     return
   }
   try {
+    loading.value = true
     await userStore.login(payload.data)
     _afterLogin()
   }
   catch (e) {
     error.value = e instanceof Error ? e.message : '登录失败'
+  }
+  finally {
+    loading.value = false
+  }
+}
+
+function thirdPartyLogin(url: string, title = '第三方登录', width = 500, height = 600) {
+  if (loading.value) {
+    toast.add({ title: '登录中', description: '登录进行中，请勿重复点击', color: 'warning' })
+    return
+  }
+  loading.value = true
+  window.addEventListener('message', thirdPartyLoginCallback)
+  const top = (window.screen.height - width) / 2
+  const left = (window.screen.width - height) / 2
+  const page = window.open(url, title, `popup,width=${width},height=${height},top=${top},left=${left}`)
+  if (!page) {
+    loading.value = false
+    toast.add({ title: '登录失败', description: '请允许浏览器弹出窗口！', color: 'error' })
+    return
+  }
+  pollIndex = window.setInterval(() => {
+    if (page.closed) {
+      if (pollIndex != null) {
+        clearInterval(pollIndex)
+        pollIndex = null
+      }
+    }
+  }, 500)
+}
+
+async function thirdPartyLoginCallback(e: MessageEvent<{
+  success: boolean
+  message?: string
+}>) {
+  const page = e.source as Window
+  if (e.origin !== window.location.origin) {
+    return
+  }
+  if (e.data.success == null) {
+    return
+  }
+  loading.value = false
+  window.removeEventListener('message', thirdPartyLoginCallback)
+  if (pollIndex != null) {
+    clearInterval(pollIndex)
+    pollIndex = null
+  }
+  page.close()
+  if (e.data.success) {
+    await userStore.pullProfile(true)
+    _afterLogin()
+  }
+  else {
+    error.value = e.data.message || '登录失败'
   }
 }
 
@@ -96,7 +165,7 @@ function _getOtherQuery(query: LocationQuery) {
         icon="i-lucide:lock"
         :fields="fields"
         :providers="providers"
-        :loading-auto="true"
+        :loading="loading"
         separator="或"
         :submit="{
           label: '登录',
