@@ -53,6 +53,11 @@ export async function proxyFetch(event: H3Event) {
   // 传递真实IP
   headers['x-forwarded-for'] = xForwardedFor
 
+  const body
+    = ['GET', 'HEAD'].includes(event.method)
+      ? undefined
+      : await readRawBody(event)
+
   const doRequest = async () => {
     if (sessionId) {
       const sessionData = await getRedisSession(event)
@@ -63,7 +68,7 @@ export async function proxyFetch(event: H3Event) {
     return fetch(target, {
       method: event.method,
       headers,
-      body: ['GET', 'HEAD'].includes(event.method) ? undefined : (event.node.req as any),
+      body,
     })
   }
 
