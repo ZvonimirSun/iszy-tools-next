@@ -110,6 +110,7 @@ function thirdPartyLogin(url: string, title = '第三方登录', width = 500, he
   }
   pollIndex = window.setInterval(() => {
     if (page.closed) {
+      loading.value = false
       if (pollIndex != null) {
         clearInterval(pollIndex)
         pollIndex = null

@@ -27,13 +27,71 @@ const thirdParties: {
   },
 ]
 
-async function bind(type: 'github' | 'linuxdo', title?: string) {
-  // todo 绑定
-  toast.add({
-    title: `绑定 ${title || type}`,
-    description: '功能正在开发中，敬请期待~',
-    color: 'info',
-  })
+const binding = ref(false)
+let pollIndex: number | null = null
+
+onBeforeUnmount(() => {
+  if (pollIndex != null) {
+    clearInterval(pollIndex)
+    pollIndex = null
+  }
+  window.removeEventListener('message', bindCallback)
+})
+
+async function bind(type: 'github' | 'linuxdo', title = '绑定第三方登录', width = 500, height = 600) {
+  if (userStore.profile![type]) {
+    return
+  }
+  if (binding.value) {
+    toast.add({ title: '绑定中', description: '绑定进行中，请勿重复点击', color: 'warning' })
+    return
+  }
+  binding.value = true
+  window.addEventListener('message', bindCallback)
+  const top = (window.screen.height - width) / 2
+  const left = (window.screen.width - height) / 2
+  const page = window.open(`/api/oauth/${type}/bind`, title, `popup,width=${width},height=${height},top=${top},left=${left}`)
+  if (!page) {
+    binding.value = false
+    toast.add({ title: '登录失败', description: '请允许浏览器弹出窗口！', color: 'error' })
+    return
+  }
+  pollIndex = window.setInterval(() => {
+    if (page.closed) {
+      binding.value = false
+      if (pollIndex != null) {
+        clearInterval(pollIndex)
+        pollIndex = null
+      }
+    }
+  }, 500)
+}
+
+async function bindCallback(e: MessageEvent<{
+  success: boolean
+  message?: string
+}>) {
+  const page = e.source as Window
+  if (e.origin !== window.location.origin) {
+    return
+  }
+  if (e.data.success == null) {
+    return
+  }
+  binding.value = false
+  window.removeEventListener('message', bindCallback)
+  if (pollIndex != null) {
+    clearInterval(pollIndex)
+    pollIndex = null
+  }
+  page.close()
+  if (e.data.success) {
+    await userStore.pullProfile(true)
+    toast.add({ title: '绑定成功', color: 'success' })
+  }
+  else {
+    toast.add({ title: '绑定失败', description: e.data.message, color: 'error' })
+  }
 }
 
 async function unbind(type: 'github' | 'linuxdo') {
