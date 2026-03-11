@@ -144,6 +144,18 @@ export const useUserStore = defineStore('user', {
     async removeProfile(headers?: any) {
       return this.updateProfile(headers)
     },
+
+    async thirdPartyUnbind(type: string) {
+      await $fetch<{
+        success: boolean
+      }>('/api/oauth/unbind', {
+        method: 'POST',
+        body: {
+          provider: type,
+        },
+      })
+      await this.pullProfile(true)
+    },
   },
 })
 

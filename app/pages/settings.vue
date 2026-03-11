@@ -36,13 +36,17 @@ async function bind(type: 'github' | 'linuxdo', title?: string) {
   })
 }
 
-async function unbind(type: 'github' | 'linuxdo', title?: string) {
-  // todo 解绑
-  toast.add({
-    title: `解绑 ${title || type}`,
-    description: '功能正在开发中，敬请期待~',
-    color: 'info',
-  })
+async function unbind(type: 'github' | 'linuxdo') {
+  if (!userStore.profile![type]) {
+    return
+  }
+  try {
+    await userStore.thirdPartyUnbind(type)
+    toast.add({ title: '解绑成功', color: 'success' })
+  }
+  catch (e) {
+    toast.add({ title: '解绑失败', description: (e as Error).message, color: 'error' })
+  }
 }
 </script>
 
@@ -119,7 +123,7 @@ async function unbind(type: 'github' | 'linuxdo', title?: string) {
                 <UIcon :name="item.icon" class="size-5" />
                 <span>:</span>
               </div>
-              <UButton v-if="userStore.profile[item.type]" variant="link" class="p-0 cursor-pointer" @click="unbind(item.type, item.title)">
+              <UButton v-if="userStore.profile[item.type]" variant="link" class="p-0 cursor-pointer" @click="unbind(item.type)">
                 解绑
               </UButton>
               <UButton v-else variant="link" class="p-0 cursor-pointer" @click="bind(item.type, item.title)">
