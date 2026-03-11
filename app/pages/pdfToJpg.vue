@@ -19,7 +19,7 @@ function addFiles(files: File[] | null | undefined) {
     return
   }
   fileList.value.push(...files.map(file => ({
-    id: crypto.randomUUID(),
+    id: uuid(),
     name: file.name,
     file,
   })))

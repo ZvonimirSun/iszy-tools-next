@@ -9,9 +9,9 @@ export default defineEventHandler(async (event) => {
   const code = res.data!
   const { provider } = event.context.params as { provider: string }
   const url = getRequestURL(event)
-  const state = crypto.randomUUID()
+  const state = random()
   await setState(state, {
     isBind: true,
   })
-  return sendRedirect(event, `${apiOrigin}/auth/${provider}/bind?state=${state}&client=${encodeURIComponent(url.origin)}&access_token=${code}`)
+  return sendRedirect(event, `${apiOrigin}/oauth/${provider}/bind?state=${state}&client=${encodeURIComponent(url.origin)}&access_token=${code}`)
 })

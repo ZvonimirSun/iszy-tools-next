@@ -2,7 +2,6 @@ import type { SessionData } from '#server/types/session'
 import type { Optional } from '@zvonimirsun/iszy-common'
 import type { H3Event } from 'h3'
 import type { StringValue } from 'ms'
-import { randomUUID } from 'node:crypto'
 import ms from 'ms'
 
 export function getSessionId(event: H3Event): string | undefined {
@@ -46,7 +45,7 @@ export async function setRedisSession(event: H3Event, data?: Optional<SessionDat
   }
   else {
     if (!sessionId) {
-      sessionId = randomUUID()
+      sessionId = random()
     }
     const sessionData = setSessionId(sessionId, data)
     await storage.setItem(getSessionKey(sessionId), sessionData, {

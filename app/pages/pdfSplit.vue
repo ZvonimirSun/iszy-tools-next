@@ -82,7 +82,7 @@ function addRange() {
     return
   }
   ranges.value.push({
-    id: crypto.randomUUID(),
+    id: uuid(),
     start: newRangeStart.value,
     end: newRangeEnd.value,
   })
