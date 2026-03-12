@@ -31,7 +31,7 @@ const settingsPath = computed(() => {
       >
         <ULink :to="settingsPath">
           <UButton
-            icon="icon-park-outline:setting-two"
+            icon="icon-park-outline:user"
             color="neutral"
             variant="ghost"
             aria-label="个人中心"
