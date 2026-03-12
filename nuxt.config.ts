@@ -38,6 +38,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@pinia/nuxt',
     '@vueuse/nuxt',
+    '@nuxt/scripts',
   ],
   css: ['~/assets/css/main.css'],
   eslint: {
@@ -52,5 +53,10 @@ export default defineNuxtConfig({
         dir: './app/assets/icons',
       },
     ],
+  },
+  scripts: {
+    registry: {
+      cloudflareWebAnalytics: true,
+    },
   },
 })

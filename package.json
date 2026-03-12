@@ -33,6 +33,7 @@
     "@iconify-json/icon-park-outline": "^1.2.4",
     "@iconify-json/icon-park-solid": "^1.2.4",
     "@iconify-json/lucide": "^1.2.95",
+    "@nuxt/scripts": "1.0.0-beta.20",
     "@nuxt/ui": "^4.5.1",
     "@pinia/nuxt": "0.11.3",
     "@vueuse/core": "^14.2.1",
