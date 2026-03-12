@@ -91,7 +91,6 @@ export async function authFetch<T = unknown>(event: H3Event, ...params: Paramete
   const sessionId = getSessionId(event)
   const originalHeaders = getProxyRequestHeaders(event)
   const xForwardedFor = originalHeaders['x-forwarded-for'] ?? event.node.req.socket.remoteAddress
-  console.log(originalHeaders['x-forwarded-for'])
 
   const { apiOrigin } = useRuntimeConfig()
   const [url, opts = {}] = params

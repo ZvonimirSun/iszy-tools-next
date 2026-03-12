@@ -2,6 +2,11 @@ import type { ResultDto } from '@zvonimirsun/iszy-common'
 import type { FetchError } from 'ofetch'
 
 export default defineEventHandler(async (event): Promise<ResultDto<void>> => {
+  const query = getQuery<{
+    deviceId?: string
+    other?: string
+  }>(event)
+
   const session = await getRedisSession(event)
 
   if (!session) {
@@ -13,6 +18,7 @@ export default defineEventHandler(async (event): Promise<ResultDto<void>> => {
   try {
     await authFetch(event, `/auth/logout`, {
       method: 'POST',
+      query,
     })
   }
   catch (error) {
@@ -21,7 +27,9 @@ export default defineEventHandler(async (event): Promise<ResultDto<void>> => {
       throw error
     }
   }
-  await destroyRedisSession(event)
+  if (!query.other && !query.deviceId) {
+    await destroyRedisSession(event)
+  }
   return {
     success: true,
     message: '已登出',

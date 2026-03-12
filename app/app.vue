@@ -25,8 +25,6 @@ useSeoMeta({
 
 <template>
   <UApp :locale="zh_cn">
-    <NuxtLoadingIndicator />
-
     <AppHeader />
     <UMain as="main">
       <NuxtLayout>

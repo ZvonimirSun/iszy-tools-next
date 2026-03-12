@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Device } from '@zvonimirsun/iszy-common'
+
 definePageMeta({
   layout: 'full',
 })
@@ -9,6 +11,8 @@ const { auth: {
 } } = usePublicConfig()
 const settings = useSettingsStore().general
 const toast = useToast()
+
+/** ************** 三方登录绑定 ***************/
 
 const thirdParties: {
   type: 'github' | 'linuxdo'
@@ -106,6 +110,33 @@ async function unbind(type: 'github' | 'linuxdo') {
     toast.add({ title: '解绑失败', description: (e as Error).message, color: 'error' })
   }
 }
+
+/** ************** 登录设备管理 ***************/
+const devices = ref<(Device & {
+  createTime?: string
+  lastLoginTime?: string
+})[]>([])
+
+async function manageDevices() {
+  try {
+    devices.value = await userStore.getDevices()
+  }
+  catch (e) {
+    toast.add({ title: '获取设备列表失败', description: (e as Error).message, color: 'error' })
+  }
+}
+
+async function removeDevice(options: {
+  deviceId?: string
+  other?: boolean
+}) {
+  try {
+    await userStore.removeDevice(options)
+    toast.add({ title: '操作成功', color: 'success' })
+    await manageDevices()
+  }
+  catch (e) {}
+}
 </script>
 
 <template>
@@ -190,6 +221,80 @@ async function unbind(type: 'github' | 'linuxdo') {
             </div>
           </div>
         </div>
+      </div>
+      <div class="flex gap-2">
+        <UModal title="管理登录设备">
+          <UButton
+            class="cursor-pointer"
+            color="neutral"
+            variant="outline"
+            @click="manageDevices"
+          >
+            登录设备管理
+          </UButton>
+          <template #body>
+            <ul class="flex flex-col m-0 gap-2 p-0">
+              <li class="flex items-center gap-2">
+                <UButton
+                  size="sm"
+                  color="neutral"
+                  variant="outline"
+                  @click="removeDevice({ other: true })"
+                >
+                  登出所有
+                </UButton>
+              </li>
+              <li
+                v-for="(item, index) in devices"
+                :key="index"
+                class="w-full flex flex-col"
+              >
+                <div class="w-full inline-flex items-center gap-2">
+                  <span class="flex-1 overflow-hidden font-bold text-ellipsis text-nowrap" :title="item.name || item.id">{{ item.name || item.id }}</span>
+                  <span v-if="item.current">(当前设备)</span>
+                  <UButton
+                    v-else
+                    size="sm"
+                    color="neutral"
+                    variant="outline"
+                    @click="removeDevice({ deviceId: item.id })"
+                  >
+                    登出
+                  </UButton>
+                </div>
+                <div class="w-full pl-6">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td class="text-right">
+                          IP:
+                        </td><td class="underline">
+                          {{ item.ip }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-right">
+                          首次登录时间:
+                        </td>
+                        <td class="underline">
+                          {{ item.createTime }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-right">
+                          最后登录时间:
+                        </td>
+                        <td class="underline">
+                          {{ item.lastLoginTime }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            </ul>
+          </template>
+        </UModal>
       </div>
     </template>
     <USeparator />

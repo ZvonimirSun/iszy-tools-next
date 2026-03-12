@@ -1,4 +1,5 @@
-import type { ResultDto } from '@zvonimirsun/iszy-common'
+import type { Device, ResultDto } from '@zvonimirsun/iszy-common'
+import dayjs from 'dayjs'
 
 let pullProfilePromise: Promise<ResultDto<{
   logged: boolean
@@ -64,6 +65,7 @@ export const useUserStore = defineStore('user', {
         throw new Error(data?.message || '登出失败')
       }
     },
+
     async pullProfile(force?: boolean, headers?: any) {
       // 1. 非强制刷新且已拉取成功，直接返回
       if (this.profilePulled && !force) {
@@ -155,6 +157,52 @@ export const useUserStore = defineStore('user', {
         },
       })
       await this.pullProfile(true)
+    },
+
+    async getDevices(): Promise<(Device & {
+      createTime?: string
+      lastLoginTime?: string
+    })[]> {
+      const res = await $fetch<ResultDto<Device[]>>(`/api/auth/devices`)
+      return res.data!.map((device: Device & {
+        createTime?: string
+        lastLoginTime?: string
+      }) => {
+        const ip = device.ip
+        if (!ip) {
+          device.ip = '未知'
+        }
+        else {
+          const tmp = ip.split('.')
+          device.ip = `${tmp[0]}.${tmp[1]}.***.***`
+        }
+        device.createTime = dayjs(device.createdAt!).format('YYYY年MM月DD日 HH:mm')
+        device.lastLoginTime = dayjs(device.updatedAt!).format('YYYY年MM月DD日 HH:mm')
+        return device
+      })
+    },
+    async removeDevice({ deviceId, other }: {
+      deviceId?: string
+      all?: boolean
+      other?: boolean
+    }) {
+      if (other) {
+        await $fetch(`/api/auth/logout`, {
+          method: 'POST',
+          query: {
+            other,
+          },
+        })
+        return
+      }
+      if (deviceId) {
+        await $fetch(`/api/auth/logout`, {
+          method: 'POST',
+          query: {
+            deviceId,
+          },
+        })
+      }
     },
   },
 })
