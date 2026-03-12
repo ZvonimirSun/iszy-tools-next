@@ -1,6 +1,6 @@
 export default defineNuxtPlugin({
   async setup() {
-    const headers = useRequestHeaders(['cookie'])
+    const headers = useRequestHeaders()
     await useUserStore().pullProfile(false, headers)
     await useOriginToolsStore().init(headers)
   },
