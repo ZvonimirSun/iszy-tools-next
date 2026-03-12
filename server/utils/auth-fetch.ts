@@ -26,6 +26,7 @@ async function refresh(event: H3Event) {
   }>>(`${apiOrigin}/auth/refresh`, {
     method: 'POST',
     headers: {
+      ...getRealHeader(event),
       Authorization: `Bearer ${sessionData.refresh_token}`,
     },
   })
@@ -40,18 +41,14 @@ async function refresh(event: H3Event) {
 
 export async function proxyFetch(event: H3Event) {
   const sessionId = getSessionId(event)
-  const xForwardedFor = event.node.req.headers['x-forwarded-for'] ?? event.node.req.socket.remoteAddress
 
   const { apiOrigin } = useRuntimeConfig()
   const target = apiOrigin + event.path.slice(4)
 
-  const headers = getProxyRequestHeaders(event)
+  const headers = getProxyRequestHeaders(event, { host: false })
   delete headers.cookie
-  delete headers.host
   // 禁用后端压缩
   headers['accept-encoding'] = 'identity'
-  // 传递真实IP
-  headers['x-forwarded-for'] = xForwardedFor
 
   const body
     = ['GET', 'HEAD'].includes(event.method)
@@ -89,16 +86,13 @@ export async function proxyFetch(event: H3Event) {
 
 export async function authFetch<T = unknown>(event: H3Event, ...params: Parameters<typeof $fetch>): Promise<TypedInternalResponse<NitroFetchRequest, T>> {
   const sessionId = getSessionId(event)
-  const originalHeaders = getProxyRequestHeaders(event)
-  const xForwardedFor = originalHeaders['x-forwarded-for'] ?? event.node.req.socket.remoteAddress
 
   const { apiOrigin } = useRuntimeConfig()
   const [url, opts = {}] = params
-  const headers: any = opts.headers || {}
-  // 传递真实IP
-  headers['x-forwarded-for'] = xForwardedFor
-  headers['user-agent'] = originalHeaders['user-agent'] || 'Mozilla/5.0 (compatible; authFetch/1.0)'
-  headers.referer = originalHeaders.referer
+  const headers: any = {
+    ...getRealHeader(event),
+    ...opts.headers,
+  }
   opts.headers = headers
   opts.baseURL = apiOrigin
 
