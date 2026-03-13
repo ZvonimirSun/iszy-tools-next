@@ -1,5 +1,5 @@
 import type { ResultDto } from '@zvonimirsun/iszy-common'
-import { setState } from '#server/utils/state-data'
+import { setState } from '#server/utils/stateStore'
 
 export default defineEventHandler(async (event) => {
   const { apiOrigin } = useRuntimeConfig()
