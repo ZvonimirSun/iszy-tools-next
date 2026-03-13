@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { site: { title: siteTitle } } = usePublicConfig()
 const tool = useCurrentTool()
+const userStore = useUserStore()
 
 const route = useRoute()
 const settingsPath = computed(() => {
@@ -27,14 +28,22 @@ const settingsPath = computed(() => {
     <template #right>
       <ColorModeButtonExtend />
       <UTooltip
-        text="个人中心"
+        :text="userStore.logged ? '个人中心' : '网站设置'"
       >
         <ULink :to="settingsPath">
           <UButton
+            v-if="userStore.logged"
             icon="icon-park-outline:user"
             color="neutral"
             variant="ghost"
             aria-label="个人中心"
+          />
+          <UButton
+            v-else
+            icon="icon-park-outline:setting-two"
+            color="neutral"
+            variant="ghost"
+            aria-label="网站设置"
           />
         </ULink>
       </UTooltip>
