@@ -67,12 +67,12 @@ export const useToolsStore = defineStore('toolsStore', {
       return state.favorite.filter(item => (item.label === label)).length > 0
     },
     recent: state => (count?: number): Statistic[] => {
-      return [...state.statistics].sort((a, b) => {
+      return state.statistics.toSorted((a, b) => {
         return b.lastAccessTime - a.lastAccessTime
       }).slice(0, count)
     },
     most: state => (count?: number): Statistic[] => {
-      return [...state.statistics].sort((a, b) => {
+      return state.statistics.toSorted((a, b) => {
         return b.times - a.times
       }).slice(0, count)
     },
@@ -100,7 +100,7 @@ export const useToolsStore = defineStore('toolsStore', {
       const tmp = this.statistics.find(item => (item.label === label))
       if (tmp) {
         tmp.times++
-        tmp.lastAccessTime = new Date().getTime()
+        tmp.lastAccessTime = Date.now()
         tmp.name = name
       }
       else {
@@ -108,7 +108,7 @@ export const useToolsStore = defineStore('toolsStore', {
           label,
           name,
           times: 1,
-          lastAccessTime: new Date().getTime(),
+          lastAccessTime: Date.now(),
         })
       }
     },
