@@ -1,4 +1,4 @@
-import type { Favorite, Statistic, ToolMenu } from '#shared/types/tool'
+import type { Favorite, Statistic, ToolMenu, ToolRecord } from '#shared/types/tool'
 import type { OptionalExcept } from '@zvonimirsun/iszy-common'
 
 export const useToolsStore = defineStore('toolsStore', {
@@ -18,7 +18,6 @@ export const useToolsStore = defineStore('toolsStore', {
       const settings = useSettingsStore().general
       const oriToolMenus = useOriginToolsStore().toolMenus
       const oriToolItems = useOriginToolsStore().toolItems
-      const count = 6
 
       let tmp: ToolMenu[] = []
       if (settings.showType) {
@@ -31,18 +30,6 @@ export const useToolsStore = defineStore('toolsStore', {
         }]
       }
 
-      if (settings.showMost && this.most().length > 0) {
-        tmp.unshift({
-          label: '最常访问',
-          children: this.most(count),
-        })
-      }
-      if (this.favorite.length > 0) {
-        tmp.unshift({
-          label: '收藏',
-          children: this.favorite,
-        })
-      }
       return tmp.filter((item: ToolMenu) => {
         return item.children.length
       })
@@ -96,7 +83,7 @@ export const useToolsStore = defineStore('toolsStore', {
         this.favorite = this.favorite.filter(item => (item.label !== label))
       }
     },
-    access({ label, name }: Favorite) {
+    access({ label, name }: ToolRecord) {
       const tmp = this.statistics.find(item => (item.label === label))
       if (tmp) {
         tmp.times++
@@ -142,6 +129,7 @@ export const useToolsStore = defineStore('toolsStore', {
       }
     },
   },
+  persist: true,
 })
 
 if (import.meta.hot) {

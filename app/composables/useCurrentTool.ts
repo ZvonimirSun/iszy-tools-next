@@ -1,11 +1,7 @@
 export function useCurrentTool() {
+  const toolsStore = useToolsStore()
+  const route = useRoute()
   return computed(() => {
-    if (!import.meta.client) {
-      return undefined
-    }
-    const toolsStore = useToolsStore()
-    if (!toolsStore.toolMenus.length)
-      return undefined
-    return toolsStore.toolItemsMap[useRoute().path.slice(1)]
+    return getCurrentTool(toolsStore, route)
   })
 }
