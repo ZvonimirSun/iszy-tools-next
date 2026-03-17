@@ -29,6 +29,7 @@ export default defineNuxtConfig({
     session: {
       cookieName: 'NUXT_SESSION_ID',
       maxAge: '7d',
+      domain: '',
     },
   },
   compatibilityDate: '2025-07-15',
@@ -39,6 +40,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@vueuse/nuxt',
     '@nuxt/scripts',
+    '@zvonimirsun/pinia-plugin-persistedstate/nuxt',
   ],
   css: ['~/assets/css/main.css'],
   eslint: {
@@ -57,6 +59,18 @@ export default defineNuxtConfig({
   scripts: {
     registry: {
       cloudflareWebAnalytics: true,
+    },
+  },
+  piniaPluginPersistedstate: {
+    storage: 'indexedDB',
+    indexedDBOptions: {
+      name: 'ovooo_tools',
+      storeName: 'state',
+    },
+  },
+  vite: {
+    optimizeDeps: {
+      include: ['dayjs'],
     },
   },
 })

@@ -13,6 +13,9 @@ export const useSettingsStore = defineStore('settings', {
       },
     },
   }),
+  persist: {
+    storage: piniaPluginPersistedstate.cookies(),
+  },
 })
 
 if (import.meta.hot) {

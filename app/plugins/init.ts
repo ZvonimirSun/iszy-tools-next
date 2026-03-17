@@ -1,7 +1,11 @@
 export default defineNuxtPlugin({
   async setup() {
     const headers = useRequestHeaders()
-    await useUserStore().pullProfile(false, headers)
-    await useOriginToolsStore().init(headers)
+
+    const userStore = useUserStore()
+    const originToolsStore = useOriginToolsStore()
+
+    await userStore.pullProfile(false, headers)
+    await originToolsStore.init(headers)
   },
 })
