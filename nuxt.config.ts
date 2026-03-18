@@ -70,7 +70,14 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      include: ['dayjs'],
+      include: [
+        'dayjs', // CJS
+        'nanoid',
+        'fflate',
+        'pdfjs-dist',
+        'pdf-lib',
+        'vuedraggable', // CJS
+      ],
     },
   },
 })
