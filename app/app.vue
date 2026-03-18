@@ -3,6 +3,7 @@ import { zh_cn } from '@nuxt/ui/locale'
 
 const { site } = usePublicConfig()
 const tool = useCurrentTool()
+const route = useRoute()
 
 const seoTitle = computed(() => {
   return `${tool.value ? `${tool.value.label} - ` : ''}${site.title}`
@@ -18,6 +19,7 @@ useHead({
 useSeoMeta({
   title: () => seoTitle.value,
   ogTitle: () => seoTitle.value,
+  ogUrl: () => `${site.origin}${route.path}`,
   description: site.description,
   ogDescription: site.description,
 })

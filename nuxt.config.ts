@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       site: {
+        origin: 'http://localhost:3000',
         title: 'ISZY Tools Next',
         description: 'ISZY Tools Next',
       },
