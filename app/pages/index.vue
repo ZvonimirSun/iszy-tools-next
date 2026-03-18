@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { OriginToolMenu } from '#shared/types/tool'
+
 const input = useTemplateRef('input')
 
 const searchStr = ref('')
@@ -12,6 +14,45 @@ const settings = settingsStore.general
 // const isFav = toolsStore.isFav
 // const updateFav = toolsStore.updateFav
 
+const showUserToolMenus = ref(false)
+const userToolMenus = computed<OriginToolMenu[]>(() => {
+  if (!showUserToolMenus.value) {
+    return []
+  }
+  const tmp: OriginToolMenu[] = []
+  if (toolsStore.favorite.length) {
+    tmp.push({
+      label: '收藏',
+      children: toolsStore.favorite,
+    })
+  }
+  if (toolsStore.statistics.length) {
+    if (settings.showMost) {
+      tmp.push({
+        label: '最常访问',
+        children: toolsStore.most(6),
+      })
+    }
+    if (settings.showRecent) {
+      tmp.push({
+        label: '最近访问',
+        children: toolsStore.recent(6),
+      })
+    }
+  }
+  const keyword = searchStr.value.trim().toLowerCase()
+  return tmp.map((item) => {
+    return {
+      ...item,
+      children: item.children.filter((child) => {
+        return child.label.toLowerCase().includes(keyword) || child.name.toLowerCase().includes(keyword)
+      }),
+    }
+  }).filter((item) => {
+    return item.children.length
+  })
+})
+
 definePageMeta({
   layout: 'full',
 })
@@ -24,6 +65,9 @@ defineShortcuts({
 
 onMounted(() => {
   toolsStore.fixFavorite()
+  requestAnimationFrame(() => {
+    showUserToolMenus.value = true
+  })
 })
 </script>
 
@@ -44,58 +88,30 @@ onMounted(() => {
     </UInput>
     <div class="w-full flex flex-col gap-4">
       <ClientOnly>
-        <template v-if="toolsStore.favorite.length">
-          <div v-if="settings.showRecent" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            <div class="col-span-full text-muted">
-              收藏
-            </div>
-            <div
-              v-for="(tool) in toolsStore.favorite"
-              :key="tool.name"
-            >
-              <UPageCard
-                class="bg-elevated border text-base font-semibold"
-                :title="tool.label"
-                :to="tool.name"
-                :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
-              />
-            </div>
-          </div>
-        </template>
-        <template v-if="toolsStore.statistics.length">
-          <div v-if="settings.showRecent" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            <div class="col-span-full text-muted">
-              最常访问
-            </div>
-            <div
-              v-for="(tool) in toolsStore.most(6)"
-              :key="tool.name"
-            >
-              <UPageCard
-                class="bg-elevated border text-base font-semibold"
-                :title="tool.label"
-                :to="tool.name"
-                :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
-              />
+        <TransitionGroup name="fade">
+          <div
+            v-for="(item, index) in userToolMenus"
+            :key="index"
+            class="w-full flex flex-col gap-4"
+          >
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              <div class="col-span-full text-muted">
+                {{ item.label }}
+              </div>
+              <div
+                v-for="(tool) in item.children"
+                :key="tool.name"
+              >
+                <UPageCard
+                  class="bg-elevated border text-base font-semibold"
+                  :title="tool.label"
+                  :to="tool.name"
+                  :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
+                />
+              </div>
             </div>
           </div>
-          <div v-if="settings.showRecent" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            <div class="col-span-full text-muted">
-              最近访问
-            </div>
-            <div
-              v-for="(tool) in toolsStore.recent(6)"
-              :key="tool.name"
-            >
-              <UPageCard
-                class="bg-elevated border text-base font-semibold"
-                :title="tool.label"
-                :to="tool.name"
-                :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
-              />
-            </div>
-          </div>
-        </template>
+        </TransitionGroup>
       </ClientOnly>
       <template
         v-for="(item, index) in toolMenus"
@@ -122,6 +138,19 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s ease;
+}
 
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(6px);
+}
 </style>
