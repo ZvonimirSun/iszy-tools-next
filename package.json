@@ -42,7 +42,7 @@
     "@vueuse/nuxt": "^14.2.1",
     "@vueuse/router": "^14.2.1",
     "@zvonimirsun/iszy-common": "^1.1.4",
-    "@zvonimirsun/pinia-plugin-persistedstate": "^1.0.0",
+    "@zvonimirsun/pinia-plugin-persistedstate": "^1.0.1",
     "codemirror": "^6.0.2",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.20",

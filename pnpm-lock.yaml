@@ -90,8 +90,8 @@ importers:
         specifier: ^1.1.4
         version: 1.1.4
       '@zvonimirsun/pinia-plugin-persistedstate':
-        specifier: ^1.0.0
-        version: 1.0.0(@nuxt/kit@4.4.2(magicast@0.5.2))(@pinia/nuxt@0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.30(typescript@5.9.3))))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.30(typescript@5.9.3)))
+        specifier: ^1.0.1
+        version: 1.0.1(@nuxt/kit@4.4.2(magicast@0.5.2))(@pinia/nuxt@0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.30(typescript@5.9.3))))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.30(typescript@5.9.3)))
       codemirror:
         specifier: ^6.0.2
         version: 6.0.2
@@ -2821,8 +2821,8 @@ packages:
   '@zvonimirsun/iszy-common@1.1.4':
     resolution: {integrity: sha512-+yDi/A5hYp9+maAxbNOz+M4RfWoiN8yNPwenD9FXAYF3QqRONKIKprjxLrpMtm/TDHmjO4iCFMAILCnQ7U+dtg==}
 
-  '@zvonimirsun/pinia-plugin-persistedstate@1.0.0':
-    resolution: {integrity: sha512-9VL0Ko2FZZ+rUY6wXTl1Er4qK3PNr45wcE9STrWs6jDhHj1fRP6zNqopno94Gysd4dIUwsRcTgEaAhIVEmX1MA==}
+  '@zvonimirsun/pinia-plugin-persistedstate@1.0.1':
+    resolution: {integrity: sha512-cMNv8w8iWQ8lMN1EPEgzY75RkvP0h0Rz3frnpaA+EVR6jv/kye1oPtLniD5JFtzl5v//iDdtlTxOJCshXoNbQg==}
     peerDependencies:
       '@nuxt/kit': '>=3.0.0'
       '@pinia/nuxt': '>=0.10.0'
@@ -9075,7 +9075,7 @@ snapshots:
     dependencies:
       uuid: 13.0.0
 
-  '@zvonimirsun/pinia-plugin-persistedstate@1.0.0(@nuxt/kit@4.4.2(magicast@0.5.2))(@pinia/nuxt@0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.30(typescript@5.9.3))))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.30(typescript@5.9.3)))':
+  '@zvonimirsun/pinia-plugin-persistedstate@1.0.1(@nuxt/kit@4.4.2(magicast@0.5.2))(@pinia/nuxt@0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.30(typescript@5.9.3))))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.30(typescript@5.9.3)))':
     dependencies:
       deep-pick-omit: 1.2.1
       defu: 6.1.4
