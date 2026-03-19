@@ -12,7 +12,7 @@ const options = reactive({
 <template>
   <div class="code-container">
     <div
-      class="w-full flex flex-col items-center gap-4"
+      class="w-full h-full overflow-auto flex flex-col items-center gap-4"
     >
       <div
         class="flex items-center gap-4"
@@ -37,7 +37,7 @@ const options = reactive({
         />
       </div>
       <FormatTransformer
-        class="w-full"
+        class="w-full flex-1 overflow-auto"
         :plugin="xml"
         :options="options"
         :input-default="value"

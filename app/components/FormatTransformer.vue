@@ -85,7 +85,7 @@ function validate(): FormError[] {
     :state="state"
     :validate="validate"
   >
-    <UFormField :label="_inputLabel" name="input" class="flex-1 w-[calc(50%-.5rem)]">
+    <UFormField :label="_inputLabel" name="input" class="w-1/2">
       <UTextarea
         v-model="state.input"
         class="w-full"
@@ -95,7 +95,7 @@ function validate(): FormError[] {
     </UFormField>
     <UFormField
       :label="_outputLabel"
-      class="flex-1 flex flex-col w-[calc(50%-.5rem)]"
+      class="flex flex-col w-1/2"
       :ui="{
         container: 'flex-1 overflow-auto',
       }"
