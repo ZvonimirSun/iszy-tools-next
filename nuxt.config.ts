@@ -7,6 +7,13 @@ export default defineNuxtConfig({
         title: 'ISZY Tools Next',
         description: 'ISZY Tools Next',
       },
+      favicon: {
+        small: '',
+        medium: '',
+        appleTouchIcon: '',
+        safariPinnedTab: '',
+        androidManifest: '',
+      },
       auth: {
         publicRegister: false,
       },
