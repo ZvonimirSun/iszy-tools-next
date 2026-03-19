@@ -113,7 +113,6 @@ function getView(): EditorView {
 
 .editor {
   border: 1px solid var(--ui-primary);
-  height: calc(100% - 3rem);
   overflow: auto;
   display: block;
   box-sizing: border-box;

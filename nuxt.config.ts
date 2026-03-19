@@ -78,6 +78,7 @@ export default defineNuxtConfig({
         'pdfjs-dist',
         'pdf-lib',
         'vuedraggable', // CJS
+        'crypto-js', // CJS
       ],
     },
   },
