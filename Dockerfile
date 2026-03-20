@@ -38,6 +38,7 @@ server {
     listen 80;
     server_name _;
 
+    include mime.types;
     types {
         application/manifest+json webmanifest;
         application/wasm wasm;
