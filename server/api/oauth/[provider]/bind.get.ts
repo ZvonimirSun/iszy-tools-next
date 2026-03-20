@@ -2,7 +2,7 @@ import type { ResultDto } from '@zvonimirsun/iszy-common'
 import { setState } from '#server/utils/stateStore'
 
 export default defineEventHandler(async (event) => {
-  const { apiOrigin } = useRuntimeConfig()
+  const { apiOrigin } = usePublicConfig()
   const res = await authFetch<ResultDto<string>>(event, '/oauth/code', {
     method: 'POST',
   })

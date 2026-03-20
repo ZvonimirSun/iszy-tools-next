@@ -8,7 +8,7 @@ import { getProxyRequestHeaders } from 'h3'
 export async function proxyFetch(event: H3Event) {
   const sessionId = getSessionId(event)
 
-  const { apiOrigin } = useRuntimeConfig()
+  const { apiOrigin } = usePublicConfig()
   const target = apiOrigin + event.path.slice(4)
 
   const headers = getProxyRequestHeaders(event, { host: false })
@@ -95,7 +95,7 @@ async function _refreshToken(event: H3Event) {
   if (!sessionData) {
     throw new Error('REFRESH_FAILED')
   }
-  const { apiOrigin } = useRuntimeConfig()
+  const { apiOrigin } = usePublicConfig()
   const res = await $fetch<ResultDto<{
     access_token: string
     refresh_token: string
