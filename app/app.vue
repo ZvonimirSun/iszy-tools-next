@@ -50,6 +50,12 @@ useSeoMeta({
   description: site.description,
   ogDescription: site.description,
 })
+
+if (site.image) {
+  useSeoMeta({
+    ogImage: () => `${site.origin}${site.image}`,
+  })
+}
 </script>
 
 <template>

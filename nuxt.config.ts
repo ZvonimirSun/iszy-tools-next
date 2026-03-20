@@ -8,6 +8,7 @@ export default defineNuxtConfig({
         origin: 'http://localhost:3000',
         title: 'ISZY Tools Next',
         description: 'ISZY Tools Next',
+        image: '',
       },
       favicon: {
         small: '',
