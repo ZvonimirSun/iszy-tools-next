@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import ms from 'ms'
+
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
@@ -71,6 +73,11 @@ export default defineNuxtConfig({
   },
   piniaPluginPersistedstate: {
     storage: 'indexedDB',
+    cookieOptions: {
+      maxAge: ms('10y'),
+      refresh: true,
+      sameSite: 'lax',
+    },
     indexedDBOptions: {
       name: 'ovooo_tools',
       storeName: 'state',
