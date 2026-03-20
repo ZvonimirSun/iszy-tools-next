@@ -5,8 +5,7 @@ export default withNuxt(antfu(
   {},
   {
     rules: {
-      'no-console': 'off',
-      'unicorn/consistent-function-scoping': 'off',
+      'pnpm/yaml-enforce-settings': 'off',
       'unused-imports/no-unused-vars': [
         'error',
         {

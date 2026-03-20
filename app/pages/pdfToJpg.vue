@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import draggable from 'vuedraggable'
 
+const PDF_REGEX = /\.pdf$/i
+
 interface FileItem {
   id: string
   name: string
@@ -53,7 +55,7 @@ async function convert() {
     for (const item of fileList.value) {
       const arrayBuffer = await item.file.arrayBuffer()
       const pdf = await getDocument({ data: arrayBuffer }).promise
-      const baseName = item.name.replace(/\.pdf$/i, '')
+      const baseName = item.name.replace(PDF_REGEX, '')
       const rotation = item.status?.rotate || 0
 
       for (let i = 1; i <= pdf.numPages; i++) {

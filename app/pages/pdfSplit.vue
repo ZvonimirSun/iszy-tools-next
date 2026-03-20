@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const PDF_REGEX = /\.pdf$/i
+
 // PDF 文件状态
 const pdfFile = shallowRef<File | null>(null)
 const pdfName = ref('')
@@ -38,7 +40,7 @@ function onUpload(file: File | null | undefined) {
   }
   resetState()
   pdfFile.value = file
-  pdfName.value = file.name.replace(/\.pdf$/i, '')
+  pdfName.value = file.name.replace(PDF_REGEX, '')
   loadPdfInfo()
 }
 
