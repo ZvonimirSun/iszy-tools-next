@@ -54,6 +54,9 @@ export async function setRedisSession(event: H3Event, data?: Optional<SessionDat
     setCookie(event, cookieName, sessionId, {
       maxAge: ttl,
       domain: sessionConfig.domain || undefined,
+      sameSite: 'lax',
+      httpOnly: true,
+      secure: true,
     })
   }
 }
