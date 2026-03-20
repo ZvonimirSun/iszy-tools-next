@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import { zh_cn } from '@nuxt/ui/locale'
 
-const { site, favicon } = usePublicConfig()
+const { url, title, favicon, description, image } = usePublicConfig()
 const tool = useCurrentTool()
 const route = useRoute()
 
-const title = computed(() => {
-  return `${tool.value ? `${tool.value.label} - ` : ''}${site.title}`
+const fullTitle = computed(() => {
+  return `${tool.value ? `${tool.value.label} - ` : ''}${title}`
 })
-const url = computed(() => {
-  return `${site.origin}${route.path}`
+const fullPath = computed(() => {
+  return `${url}${route.path}`
 })
 
 const link = computed(() => {
   const links = []
-  links.push({ rel: 'canonical', href: url.value })
+  links.push({ rel: 'canonical', href: fullPath.value })
   if (favicon) {
     if (favicon.small) {
       links.push({ rel: 'icon', type: 'image/png', sizes: '16x16', href: favicon.small })
@@ -44,16 +44,16 @@ useHead({
 })
 
 useSeoMeta({
-  title: () => title.value,
-  ogTitle: () => title.value,
-  ogUrl: () => url.value,
-  description: site.description,
-  ogDescription: site.description,
+  title: () => fullTitle.value,
+  ogTitle: () => fullTitle.value,
+  ogUrl: () => fullPath.value,
+  description,
+  ogDescription: description,
 })
 
-if (site.image) {
+if (image) {
   useSeoMeta({
-    ogImage: () => `${site.origin}${site.image}`,
+    ogImage: `${url}${image}`,
   })
 }
 </script>

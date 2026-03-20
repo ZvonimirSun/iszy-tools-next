@@ -54,7 +54,7 @@ export async function proxyFetch(event: H3Event) {
 export async function authFetch<T = unknown>(event: H3Event, ...params: Parameters<typeof $fetch>): Promise<TypedInternalResponse<NitroFetchRequest, T>> {
   const sessionId = getSessionId(event)
 
-  const { apiOrigin } = useRuntimeConfig()
+  const { apiOrigin } = usePublicConfig()
   const [url, opts = {}] = params
   const headers: any = {
     ..._getDeviceInfoHeader(event),

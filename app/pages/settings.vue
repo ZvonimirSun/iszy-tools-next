@@ -6,9 +6,7 @@ definePageMeta({
 })
 
 const userStore = useUserStore()
-const { auth: {
-  publicRegister,
-} } = usePublicConfig()
+const { features: { publicRegister } } = usePublicConfig()
 const settings = useSettingsStore().general
 const toast = useToast()
 

@@ -1,7 +1,7 @@
 import type { PublicUser, ResultDto } from '@zvonimirsun/iszy-common'
 
 export default defineEventHandler(async (event) => {
-  const { site: { title } } = usePublicConfig()
+  const { title } = usePublicConfig()
   const url = getRequestURL(event)
   const query = getQuery(event)
   const state = query.state as string

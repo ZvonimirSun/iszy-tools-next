@@ -3,7 +3,7 @@ import type { AuthFormField, ButtonProps, FormSubmitEvent } from '@nuxt/ui'
 import type { LocationQuery } from 'vue-router'
 import * as z from 'zod'
 
-const { auth: { publicRegister } } = usePublicConfig()
+const { features: { publicRegister } } = usePublicConfig()
 const router = useRouter()
 const route = useRoute()
 const toast = useToast()

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { site: { title: siteTitle } } = usePublicConfig()
+const { title } = usePublicConfig()
 const tool = useCurrentTool()
 const userStore = useUserStore()
 
@@ -17,7 +17,7 @@ const settingsPath = computed(() => {
           to="/"
           class="font-bold text-xl text-highlighted"
         >
-          {{ siteTitle }}
+          {{ title }}
         </ULink>
         <template v-if="tool">
           <span>-</span>

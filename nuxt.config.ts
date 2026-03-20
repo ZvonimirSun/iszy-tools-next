@@ -4,12 +4,12 @@ import ms from 'ms'
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      site: {
-        origin: 'http://localhost:3000',
-        title: 'ISZY Tools Next',
-        description: 'ISZY Tools Next',
-        image: '',
-      },
+      url: 'http://localhost:3000',
+      title: 'ISZY Tools Next',
+      description: 'ISZY Tools Next',
+      image: '',
+      cdnOrigin: '',
+      apiOrigin: '',
       favicon: {
         small: '',
         medium: '',
@@ -17,19 +17,21 @@ export default defineNuxtConfig({
         safariPinnedTab: '',
         androidManifest: '',
       },
-      auth: {
+      features: {
         publicRegister: false,
       },
-      beian: {
-        icp: '',
-        gonganNum: '',
-        gonganId: '',
+      footer: {
+        since: '',
+        copyright: '',
+        beian: {
+          enable: false,
+          icp: '',
+          gonganId: '',
+          gonganNum: '',
+        },
       },
-      cdnOrigin: '',
-      friendLinks: '',
     },
-    apiOrigin: '',
-    site: {
+    features: {
       showAllTools: false,
     },
     redis: {

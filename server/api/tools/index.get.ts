@@ -3,7 +3,7 @@ import { tools } from '#shared/data/tools'
 
 export default defineEventHandler(async (event): Promise<ResultDto<OriginToolMenu[]>> => {
   const sessionData = await getRedisSession(event)
-  const { site: { showAllTools } } = useRuntimeConfig()
+  const { features: { showAllTools } } = useRuntimeConfig()
   const logged = !!sessionData
 
   const filteredTools: OriginToolMenu[] = tools.map((tool) => {
