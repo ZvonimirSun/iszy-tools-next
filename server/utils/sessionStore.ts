@@ -57,6 +57,7 @@ export async function setRedisSession(event: H3Event, data?: Optional<SessionDat
       sameSite: 'lax',
       httpOnly: true,
       secure: true,
+      priority: 'high',
     })
   }
 }
