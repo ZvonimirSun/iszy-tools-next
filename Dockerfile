@@ -40,7 +40,7 @@ server {
 
     location / {
         root /app/public;
-        try_files $uri $uri/ @nuxt;
+        try_files $uri @nuxt;
     }
 
     location @nuxt {
