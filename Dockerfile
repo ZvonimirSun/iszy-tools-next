@@ -38,6 +38,11 @@ server {
     listen 80;
     server_name _;
 
+    types {
+        application/manifest+json webmanifest;
+        application/wasm wasm;
+    }
+
     location / {
         root /app/public;
         try_files $uri @nuxt;
@@ -58,7 +63,7 @@ server {
     }
 
     access_log off;
-    error_log /dev/stderr warn;
+    error_log /var/log/nginx/error.log warn;
 }
 EOF
 
