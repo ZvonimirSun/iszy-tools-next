@@ -1,9 +1,9 @@
 <script setup lang="ts">
-const { footer: { beian, since } } = usePublicConfig()
+const { footer: { beian, since, copyright } } = usePublicConfig()
 
 const year = new Date().getFullYear().toString()
-let displayYear = year
-if (since && since !== year) {
+let displayYear: string = year.toString()
+if (since && since.toString() !== year) {
   displayYear = `${since} - ${year}`
 }
 </script>
@@ -12,7 +12,10 @@ if (since && since !== year) {
   <UFooter>
     <template #left>
       <div class="text-muted text-sm flex flex-col gap-2">
-        <span>Copyright © {{ displayYear }}</span>
+        <div class="flex gap-1">
+          <span>Copyright © {{ displayYear }}</span>
+          <span v-if="copyright">{{ copyright }}</span>
+        </div>
         <template v-if="beian?.enable">
           <template v-if="beian.icp">
             <ULink to="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank">
