@@ -1,16 +1,23 @@
-import type { ResultDto } from '@zvonimirsun/iszy-common'
+import type { PublicUser, RawPrivilege, ResultDto } from '@zvonimirsun/iszy-common'
 import { tools } from '#shared/data/tools'
 
 export default defineEventHandler(async (event): Promise<ResultDto<OriginToolMenu[]>> => {
-  const sessionData = await getRedisSession(event)
   const { features: { showAllTools } } = useRuntimeConfig()
-  const logged = !!sessionData
+
+  let user: PublicUser | null = null
+  try {
+    const res = await authFetch<ResultDto<PublicUser>>(event, '/user/me')
+    user = res.data!
+  }
+  catch (e) {}
+  const isSuperAdmin = new Set((user?.roles ?? []).map(role => role.name)).has('superadmin')
+  const privilegeMap = new Set((user?.privileges || []).map(p => p.type))
 
   const filteredTools: OriginToolMenu[] = tools.map((tool) => {
     const filteredChildren = tool.children.filter((child) => {
       if ('requiresAuth' in child && child.requiresAuth) {
         // todo 检查角色权限
-        child.noAccess = !logged
+        child.noAccess = !checkAccess(child, privilegeMap, isSuperAdmin)
 
         if (showAllTools) {
           return true
@@ -36,3 +43,11 @@ export default defineEventHandler(async (event): Promise<ResultDto<OriginToolMen
     message: '获取成功',
   }
 })
+
+function checkAccess(tool: ToolItem, privilegeMap: Set<RawPrivilege['type']>, bypass: boolean) {
+  if (bypass) {
+    return true
+  }
+  const toolName = tool.name
+  return privilegeMap.has(`tool:${toolName}:access`) || privilegeMap.has(`tool:all:access`)
+}

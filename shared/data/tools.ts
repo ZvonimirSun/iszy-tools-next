@@ -216,7 +216,8 @@ export const tools: OriginToolMenu[] = [
       },
       {
         label: '资源包',
-        name: 'https://libview.iszy.xyz',
+        name: 'https://lib.demos.pub',
+        requiresAuth: true,
       },
     ],
   },
