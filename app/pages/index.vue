@@ -103,7 +103,7 @@ onMounted(() => {
                 :key="tool.name"
               >
                 <UPageCard
-                  class="bg-elevated border text-base font-semibold"
+                  class="bg-elevated border border-inverted hover:border-primary text-base font-semibold"
                   :title="tool.label"
                   :to="tool.name"
                   :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
@@ -126,7 +126,7 @@ onMounted(() => {
             :key="tool.name"
           >
             <UPageCard
-              class="bg-elevated border text-base font-semibold"
+              class="bg-elevated border border-inverted hover:border-primary text-base font-semibold"
               :title="tool.label"
               :to="tool.name"
               :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
