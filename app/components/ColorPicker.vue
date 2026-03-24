@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Hsva } from '~/utils/colorTransform'
 import { Primitive } from 'reka-ui'
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, onUnmounted, ref, watch } from 'vue'
 
 const props = withDefaults(defineProps<{
   throttle?: number
@@ -74,6 +74,13 @@ const yToV = (y: number) => 100 - y
 const alphaToY = (a: number) => 100 - a
 const yToAlpha = (y: number) => 100 - y
 
+function isSameHsva(a: Hsva, b: Hsva) {
+  return a.h === b.h
+    && a.s === b.s
+    && a.v === b.v
+    && a.a === b.a
+}
+
 // ─── Refs & draggable instances ─────────────────────────────────────────────
 const isDisabled = computed(() => props.disabled)
 
@@ -109,48 +116,30 @@ const { position: alphaPos } = useColorDraggable(
 )
 
 // ─── Sync: external model → positions ───────────────────────────────────────
-const { pause, resume } = watchPausable(modelValue, (hsva) => {
+const { stop, pause, resume } = watch(() => modelValue.value, (hsva) => {
   svPos.value = { x: hsva.s, y: vToY(hsva.v) }
   huePos.value = { x: 0, y: hueToY(hsva.h) }
   alphaPos.value = { x: 0, y: alphaToY(hsva.a) }
-})
+}, { immediate: true })
+
+onUnmounted(stop)
 
 // ─── Sync: positions → external model (throttled) ───────────────────────────
 watchThrottled([svPos, huePos, alphaPos], () => {
-  pause()
-  modelValue.value = {
+  const nextHsva: Hsva = {
     h: yToHue(huePos.value.y),
     s: svPos.value.x,
     v: yToV(svPos.value.y),
     a: yToAlpha(alphaPos.value.y),
   }
+
+  if (isSameHsva(modelValue.value, nextHsva))
+    return
+
+  pause()
+  modelValue.value = nextHsva
   nextTick(resume)
 }, { throttle: () => props.throttle })
-
-// ─── Pure-hue color for gradients (HSL with S=100%, L=50%) ──────────────────
-function hslToRgbString(hDeg: number): string {
-  hDeg = ((hDeg % 360) + 360) % 360
-  const h = hDeg / 360
-  const q = 0.5 // l < 0.5 ? l*(1+s) : l+s-l*s → 0.5*(1+1)=1 → clamp → just use 1
-  // s=1, l=0.5 → q=1, p=0
-  function hue2rgb(p: number, qq: number, t: number) {
-    if (t < 0)
-      t += 1
-    if (t > 1)
-      t -= 1
-    if (t < 1 / 6)
-      return p + (qq - p) * 6 * t
-    if (t < 1 / 2)
-      return qq
-    if (t < 2 / 3)
-      return p + (qq - p) * (2 / 3 - t) * 6
-    return p
-  }
-  const r = Math.round(hue2rgb(0, q * 2 - 1 > 1 ? 1 : q * 2 - 1, h + 1 / 3) * 255)
-  const g = Math.round(hue2rgb(0, q * 2 - 1 > 1 ? 1 : q * 2 - 1, h) * 255)
-  const b = Math.round(hue2rgb(0, q * 2 - 1 > 1 ? 1 : q * 2 - 1, h - 1 / 3) * 255)
-  return `rgb(${r}, ${g}, ${b})`
-}
 
 // Simpler: use the 6-segment HSV-at-full-saturation formula
 function pureHueColor(hDeg: number): string {
