@@ -96,6 +96,8 @@ export default defineNuxtConfig({
         'pdf-lib',
         'vuedraggable', // CJS
         'crypto-js', // CJS
+        'reka-ui',
+        'culori',
       ],
     },
   },

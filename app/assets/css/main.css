@@ -5,3 +5,17 @@
     --font-sans: Inter, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 微软雅黑, Arial, system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 }
+
+/* Checkerboard pattern – used for alpha channel visualization */
+@utility checkerboard {
+    --checker-size: 10px;
+    background-color: #fff;
+    background-image: conic-gradient(
+        from 45deg,
+        #e0e0e0 25%,
+        transparent 0 50%,
+        #e0e0e0 0 75%,
+        transparent 0
+    );
+    background-size: var(--checker-size) var(--checker-size);
+}
