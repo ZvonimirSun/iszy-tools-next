@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { title } = usePublicConfig()
+const { title, logo } = usePublicConfig()
 const tool = useCurrentTool()
 const userStore = useUserStore()
 
@@ -13,9 +13,10 @@ const settingsPath = computed(() => {
   <UHeader>
     <template #left>
       <div class="flex gap-1.5 items-center">
+        <UAvatar v-if="logo" :src="logo" size="md" />
         <ULink
           to="/"
-          class="font-bold text-xl text-highlighted"
+          class="font-bold text-xl text-primary"
         >
           {{ title }}
         </ULink>

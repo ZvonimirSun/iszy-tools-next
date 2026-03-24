@@ -7,6 +7,7 @@ export default defineNuxtConfig({
       url: 'http://localhost:3000',
       title: 'ISZY Tools Next',
       description: 'ISZY Tools Next',
+      logo: '',
       image: '',
       cdnOrigin: '',
       apiOrigin: '',
