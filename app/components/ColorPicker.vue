@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import type { Hsva } from '~/utils/colorTransform'
-import { useElementBounding, useEventListener, watchPausable, watchThrottled } from '@vueuse/core'
 import { Primitive } from 'reka-ui'
 import { computed, nextTick, ref } from 'vue'
-import { hsvaToRgba } from '~/utils/colorTransform'
 
 const props = withDefaults(defineProps<{
   throttle?: number
@@ -52,7 +50,9 @@ function useColorDraggable(
     position.value = { x, y }
   }
 
-  function end() { pressedDelta.value = undefined }
+  function end() {
+    pressedDelta.value = undefined
+  }
 
   if (import.meta.client) {
     useEventListener(containerRef, 'pointerdown', start)
