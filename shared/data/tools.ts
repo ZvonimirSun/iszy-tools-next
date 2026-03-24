@@ -103,7 +103,7 @@ export const tools: OriginToolMenu[] = [
       },
       {
         label: 'Base64转文件',
-        name: 'base64ToFile',
+        name: 'base64File',
       },
       {
         label: 'Base64图片编码',
