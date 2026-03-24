@@ -98,7 +98,7 @@ export const tools: OriginToolMenu[] = [
         name: 'colorTransform',
       },
       {
-        label: 'Base64字符串编解码',
+        label: 'Base64编解码',
         name: 'base64',
       },
       {

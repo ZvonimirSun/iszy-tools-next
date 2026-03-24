@@ -10,9 +10,13 @@ const settingsPath = computed(() => {
 </script>
 
 <template>
-  <UHeader>
+  <UHeader
+    :ui="{
+      left: 'overflow-hidden',
+    }"
+  >
     <template #left>
-      <div class="flex gap-1.5 items-center">
+      <div class="flex gap-1.5 items-center whitespace-nowrap overflow-hidden">
         <UAvatar v-if="logo" :src="logo" size="md" />
         <ULink
           to="/"
@@ -22,7 +26,7 @@ const settingsPath = computed(() => {
         </ULink>
         <template v-if="tool">
           <span>-</span>
-          <span class="text-default">{{ tool.label }}</span>
+          <span class="text-default overflow-hidden text-ellipsis">{{ tool.label }}</span>
         </template>
       </div>
     </template>
