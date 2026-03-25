@@ -1,7 +1,7 @@
 import type { Favorite, Statistic, ToolMenu, ToolRecord } from '#shared/types/tool'
 import type { OptionalExcept } from '@zvonimirsun/iszy-common'
 
-export const useToolsStore = defineStore('toolsStore', {
+export const useToolsStore = defineStore('tools', {
   state: () => ({
     favorite: [] as Favorite[],
     statistics: [] as Statistic[],
