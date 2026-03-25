@@ -1,5 +1,10 @@
 export default defineAppConfig({
   ui: {
+    modal: {
+      slots: {
+        content: 'modal-container',
+      },
+    },
     header: {
       slots: {
         toggle: 'hidden',
