@@ -263,7 +263,7 @@ function generate() {
       </ContainerToolItem>
     </UForm>
     <UButton label="生成" @click="generate" />
-    <ContainerToolItem v-if="lodsStr" class="w-full flex-1" content-class="overflow-auto grid grid-cols-2 gap-4 min-h-60">
+    <ContainerToolItem v-if="lodsStr" class="w-full flex-1 overflow-auto" content-class="grid grid-cols-2 gap-4 min-h-60">
       <ContainerInputLike class="overflow-auto col-span-2 md:col-span-1">
         <pre class="overflow-auto w-full h-full">{{ lodsStr }}</pre>
       </ContainerInputLike>
