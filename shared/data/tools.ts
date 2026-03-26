@@ -2,19 +2,6 @@ import type { OriginToolMenu } from '#shared/types/tool'
 
 export const tools: OriginToolMenu[] = [
   {
-    label: 'JSON工具',
-    children: [
-      {
-        label: 'JSON编辑器',
-        name: 'jsonEditor',
-      },
-      {
-        label: 'GeoJSON.io',
-        name: 'geoJson',
-      },
-    ],
-  },
-  {
     label: '文档工具',
     children: [
       {
@@ -51,6 +38,10 @@ export const tools: OriginToolMenu[] = [
   {
     label: 'GIS工具',
     children: [
+      {
+        label: 'GeoJSON.io',
+        name: 'geoJson',
+      },
       {
         label: '经纬度查询',
         name: 'latLng',
@@ -177,6 +168,10 @@ export const tools: OriginToolMenu[] = [
   {
     label: '开发工具',
     children: [
+      {
+        label: 'JSON编辑器',
+        name: 'jsonEditor',
+      },
       {
         label: 'Mock工具',
         name: 'mock',
