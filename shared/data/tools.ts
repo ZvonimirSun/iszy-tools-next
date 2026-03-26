@@ -101,7 +101,7 @@ export const tools: OriginToolMenu[] = [
         name: 'imageBase64',
       },
       {
-        label: '二维码生成/识别',
+        label: '二维码编解码',
         name: 'qrcode',
       },
       {

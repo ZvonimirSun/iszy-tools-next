@@ -6,9 +6,9 @@ defineProps<{
 </script>
 
 <template>
-  <div class="flex flex-col gap-2 overflow-auto">
+  <div class="flex flex-col gap-2">
     <span v-if="label">{{ label }}</span>
-    <div class="bg-elevated/50 rounded-lg p-4 sm:p-6 shadow border border-muted w-full" :class="contentClass">
+    <div class="bg-elevated/50 rounded-lg p-4 sm:p-6 shadow border border-muted w-full overflow-auto" :class="contentClass">
       <slot />
     </div>
   </div>

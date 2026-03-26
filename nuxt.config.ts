@@ -99,6 +99,8 @@ export default defineNuxtConfig({
         'crypto-js', // CJS
         'reka-ui',
         'culori',
+        'uqr',
+        'qr-scanner',
       ],
     },
   },
