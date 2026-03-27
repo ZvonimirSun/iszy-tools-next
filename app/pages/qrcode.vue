@@ -355,20 +355,20 @@ onUnmounted(() => {
               <ClientOnly>
                 <div class="flex flex-wrap gap-2">
                   <UButton
-                      color="primary"
-                      icon="i-lucide:camera"
-                      :loading="isStartingCamera || isLoadingScanner"
-                      :disabled="isCameraRunning"
-                      @click="startCameraScan"
+                    color="primary"
+                    icon="i-lucide:camera"
+                    :loading="isStartingCamera || isLoadingScanner"
+                    :disabled="isCameraRunning"
+                    @click="startCameraScan"
                   >
                     开始识别
                   </UButton>
                   <UButton
-                      color="neutral"
-                      variant="outline"
-                      icon="i-lucide:square"
-                      :disabled="!isCameraRunning"
-                      @click="stopCameraScan"
+                    color="neutral"
+                    variant="outline"
+                    icon="i-lucide:square"
+                    :disabled="!isCameraRunning"
+                    @click="stopCameraScan"
                   >
                     停止
                   </UButton>
