@@ -1,6 +1,20 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import ms from 'ms'
 
+const extensions = [
+  '.js',
+  '.jsx',
+  '.mjs',
+  '.ts',
+  '.tsx',
+  '.vue',
+]
+const pagePattern = [
+  `**/*{${extensions.join(',')}}`,
+  '!**/chidren/**',
+  '!**/_*/**',
+  '!**/_*',
+]
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
@@ -58,7 +72,7 @@ export default defineNuxtConfig({
       domain: '',
     },
   },
-  compatibilityDate: '2025-07-15',
+  compatibilityDate: '2026-03-01',
   devtools: { enabled: true },
   modules: [
     '@nuxt/ui',
@@ -87,6 +101,9 @@ export default defineNuxtConfig({
     registry: {
       cloudflareWebAnalytics: true,
     },
+  },
+  pages: {
+    pattern: pagePattern,
   },
   vite: {
     optimizeDeps: {
