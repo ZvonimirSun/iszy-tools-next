@@ -1,6 +1,6 @@
 import type { UseWebWorkerReturn } from '@vueuse/core'
 import type { WatchHandle } from 'vue'
-import type { AlgoNames } from '~/utils/hashText'
+import type { AlgoNames } from './hashFile.service'
 
 interface StartPayload {
   file: File
@@ -28,7 +28,7 @@ const activeTaskId = ref<string | undefined>()
 
 async function _initWorker() {
   if (!worker) {
-    const { default: HashWorker } = await import('~/workers/hashFile.worker?worker')
+    const { default: HashWorker } = await import('./hashFile.worker?worker')
     worker = useWebWorker<WorkerResponse>(new HashWorker())
     watcher = watch(worker!.data, (newData) => {
       const rawData = toRaw(newData)

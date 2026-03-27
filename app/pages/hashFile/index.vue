@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { AlgoNames } from '~/utils/hashText'
+import type { AlgoNames } from './children/hashFile.service'
+import { useHashFile } from './children/useHashFile'
 
 const { copy, copied } = useClipboard()
 const { post, cancel, terminate, data, error, isCalculating, progress, isCanceled } = useHashFile()

@@ -1,7 +1,7 @@
 import type { lib } from 'crypto-js'
-import type { AlgoNames, Encoding } from '~/utils/hashText'
+import type { AlgoNames, Encoding } from './hashText.service'
 import { enc } from 'crypto-js'
-import { algoNames, algos } from '~/utils/hashText'
+import { algoNames, algos } from './hashText.service'
 
 function convertHexToBin(hex: string) {
   return hex

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { AlgoNames } from '~/utils/hashText'
+import type { AlgoNames, Encoding } from './children/hashText.service'
+import { useHashText } from './children/useHashText'
 
 const { copy, copied } = useClipboard()
 const { post, terminate, data } = useHashText()
@@ -27,7 +28,7 @@ const encodingOptions = [
 ]
 
 onMounted(async () => {
-  algoNames = (await import('~/utils/hashText')).algoNames
+  algoNames = (await import('./children/hashText.service')).algoNames
   calculate()
 })
 

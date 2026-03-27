@@ -1,6 +1,6 @@
 import type { UseWebWorkerReturn } from '@vueuse/core'
 import type { WatchHandle } from 'vue'
-import type { Encoding } from '~/utils/hashText'
+import type { AlgoNames, Encoding } from './hashText.service'
 
 let worker: UseWebWorkerReturn<{
   [K in AlgoNames]: string
@@ -13,7 +13,7 @@ const data = ref<{
 
 async function _initWorker() {
   if (!worker) {
-    const { default: HashWorker } = await import('~/workers/hashText.worker?worker')
+    const { default: HashWorker } = await import('./hashText.worker?worker')
     worker = useWebWorker<{
       [K in AlgoNames]: string
     }>(new HashWorker())

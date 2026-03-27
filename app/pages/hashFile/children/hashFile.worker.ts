@@ -1,5 +1,5 @@
 import type { lib } from 'crypto-js'
-import type { AlgoNames } from '~/utils/hashText'
+import type { AlgoNames } from './hashFile.service'
 import { algo as cryptoAlgo, lib as cryptoLib } from 'crypto-js'
 
 interface StartRequest {
