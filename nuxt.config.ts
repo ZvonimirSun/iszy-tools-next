@@ -31,6 +31,18 @@ export default defineNuxtConfig({
           gonganNum: '',
         },
       },
+      piniaPluginPersistedstate: {
+        storage: 'indexedDB',
+        cookieOptions: {
+          maxAge: ms('10y'),
+          refresh: true,
+          sameSite: 'lax',
+        },
+        indexedDBOptions: {
+          name: 'iszy_tools_next',
+          storeName: 'state',
+        },
+      },
     },
     features: {
       showAllTools: false,
@@ -55,6 +67,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxt/scripts',
     '@zvonimirsun/pinia-plugin-persistedstate/nuxt',
+    'json-editor-vue/nuxt',
   ],
   css: ['~/assets/css/main.css'],
   eslint: {
@@ -73,18 +86,6 @@ export default defineNuxtConfig({
   scripts: {
     registry: {
       cloudflareWebAnalytics: true,
-    },
-  },
-  piniaPluginPersistedstate: {
-    storage: 'indexedDB',
-    cookieOptions: {
-      maxAge: ms('10y'),
-      refresh: true,
-      sameSite: 'lax',
-    },
-    indexedDBOptions: {
-      name: 'ovooo_tools',
-      storeName: 'state',
     },
   },
   vite: {
