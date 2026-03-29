@@ -81,7 +81,6 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxt/scripts',
     '@zvonimirsun/pinia-plugin-persistedstate/nuxt',
-    'json-editor-vue/nuxt',
   ],
   css: ['~/assets/css/main.css'],
   eslint: {
