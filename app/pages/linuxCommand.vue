@@ -124,7 +124,12 @@ async function query(c: string) {
             </p>
           </div>
 
-          <UModal :title="`${item} 命令详情`">
+          <UModal
+            :title="`${item} 命令详情`"
+            :ui="{
+              content: 'modal-container',
+            }"
+          >
             <UButton
               size="sm"
               color="neutral"
