@@ -80,6 +80,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@vueuse/nuxt',
     '@nuxt/scripts',
+    '@nuxtjs/sitemap',
     '@zvonimirsun/pinia-plugin-persistedstate/nuxt',
   ],
   css: ['~/assets/css/main.css'],
@@ -95,6 +96,9 @@ export default defineNuxtConfig({
         dir: './app/assets/icons',
       },
     ],
+  },
+  sitemap: {
+    exclude: ['/settings', '/admin', '/api'],
   },
   scripts: {
     registry: {
