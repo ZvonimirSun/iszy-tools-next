@@ -98,6 +98,7 @@ export default defineNuxtConfig({
     ],
   },
   sitemap: {
+    xsl: false,
     exclude: ['/settings', '/admin', '/api'],
   },
   scripts: {
