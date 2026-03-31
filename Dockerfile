@@ -70,6 +70,7 @@ COPY --from=build /app/.output/ ./
 # Nuxt listens on localhost:3000, nginx is exposed on :80
 ENV PORT=3000
 ENV HOST=127.0.0.1
+ENV NODE_OPTIONS="--use-system-ca --use-env-proxy"
 
 EXPOSE 80
 
