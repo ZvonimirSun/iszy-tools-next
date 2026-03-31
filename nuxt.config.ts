@@ -11,7 +11,7 @@ const extensions = [
 ]
 const pagePattern = [
   `**/*{${extensions.join(',')}}`,
-  '!**/chidren/**',
+  '!**/children/**',
   '!**/_*/**',
   '!**/_*',
 ]
