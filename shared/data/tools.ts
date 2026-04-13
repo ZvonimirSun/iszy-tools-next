@@ -250,7 +250,7 @@ export const tools: OriginToolMenu[] = [
     label: '理财',
     children: [
       {
-        label: '多次提前还贷计算器',
+        label: '房贷计算器',
         name: 'mtqLoans',
       },
     ],
