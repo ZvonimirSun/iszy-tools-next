@@ -2032,8 +2032,8 @@ packages:
       '@codemirror/state': ^6.0.0
       '@codemirror/view': ^6.0.0
 
-  '@rolldown/debug@1.0.0-rc.12':
-    resolution: {integrity: sha512-+02OjiqDJuhczmxmhjyGOaYDiut5Z8aQhWx+IGezyeNL2WHzEfL8pTyOXB0CkQ52zihycN7YflRSm/GbepAkgg==}
+  '@rolldown/debug@1.0.0-rc.15':
+    resolution: {integrity: sha512-YlM1cMJEsGVCj9a5j7Nxw6mbnBCUdr5dbbhJdoqvxBp52BEODSKe+bBzSSIPxZIQCLggUEBdeM0652eN52IGRA==}
 
   '@rolldown/pluginutils@1.0.0-rc.2':
     resolution: {integrity: sha512-izyXV/v+cHiRfozX62W9htOAvwMo4/bXKDrQ+vom1L1qRuexPock/7VZDAhnpHCLNejd3NJ6hiab+tO0D44Rgw==}
@@ -4536,6 +4536,9 @@ packages:
   cookie-es@1.2.2:
     resolution: {integrity: sha512-+W7VmiVINB+ywl1HGXJXmrqkOhpKrIiVZV6tQuV54ZyQC7MMuBt81Vc336GMLoHBq5hV/F9eXgt5Mnx0Rha5Fg==}
 
+  cookie-es@1.2.3:
+    resolution: {integrity: sha512-lXVyvUvrNXblMqzIRrxHb57UUVmqsSWlxqt3XIjCkUP0wDAf6uicO6KMbEgYrMNtEvWgWHwe42CKxPu9MYAnWw==}
+
   cookie-es@2.0.0:
     resolution: {integrity: sha512-RAj4E421UYRgqokKUmotqAwuplYw15qtdXfY+hGzgCJ/MBjCVZcSoHK/kH9kocfjRjcDME7IiDWR/1WX1TM2Pg==}
 
@@ -5744,6 +5747,9 @@ packages:
   h3@1.15.10:
     resolution: {integrity: sha512-YzJeWSkDZxAhvmp8dexjRK5hxziRO7I9m0N53WhvYL5NiWfkUkzssVzY9jvGu0HBoLFW6+duYmNSn6MaZBCCtg==}
 
+  h3@1.15.11:
+    resolution: {integrity: sha512-L3THSe2MPeBwgIZVSH5zLdBBU90TOxarvhK9d04IDY2AmVS8j2Jz2LIWtwsGOU3lu2I5jCN7FNvVfY2+XyF+mg==}
+
   h3@1.15.6:
     resolution: {integrity: sha512-oi15ESLW5LRthZ+qPCi5GNasY/gvynSKUQxgiovrY63bPAtG59wtM+LSrlcwvOHAXzGrXVLnI97brbkdPF9WoQ==}
 
@@ -6047,6 +6053,10 @@ packages:
 
   is-wsl@3.1.0:
     resolution: {integrity: sha512-UcVfVfaK4Sc4m7X3dUSoHoozQGBEFeDC+zVo06t98xe8CzHSZZBekNXH+tu0NalHolcJ/QAGqS46Hef7QXBIMw==}
+    engines: {node: '>=16'}
+
+  is-wsl@3.1.1:
+    resolution: {integrity: sha512-e6rvdUCiQCAuumZslxRJWR/Doq4VpPR82kqclvcS0efgt430SlGIk05vdCN58+VrzgtIcfNODjozVielycD4Sw==}
     engines: {node: '>=16'}
 
   is64bit@2.0.0:
@@ -7205,6 +7215,10 @@ packages:
     resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
     engines: {node: '>=12'}
 
+  picomatch@4.0.4:
+    resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
+    engines: {node: '>=12'}
+
   pinia@3.0.4:
     resolution: {integrity: sha512-l7pqLUFTI/+ESXn6k3nu30ZIzW5E2WZF/LaHJEpoq6ElcLD+wduZoB2kBN19du6K/4FDpPMazY2wJr+IndBtQw==}
     peerDependencies:
@@ -7745,6 +7759,11 @@ packages:
     engines: {node: '>= 0.4'}
     hasBin: true
 
+  resolve@1.22.12:
+    resolution: {integrity: sha512-TyeJ1zif53BPfHootBGwPRYT1RUt6oGWsaQr8UyZW/eAm9bKoijtvruSDEmZHm92CwS9nj7/fWttqPCgzep8CA==}
+    engines: {node: '>= 0.4'}
+    hasBin: true
+
   restore-cursor@5.1.0:
     resolution: {integrity: sha512-oMA2dcrw6u0YfxJQXm342bFKX/E4sG9rbTzO9ptUcR/e8A33cHuvStiYOwH7fszkZlZ1z/ta9AAoPk2F4qIOHA==}
     engines: {node: '>=18'}
@@ -8265,8 +8284,16 @@ packages:
     resolution: {integrity: sha512-u9r3uZC0bdpGOXtlxUIdwf9pkmvhqJdrVCH9fapQtgy/OeTTMZ1nqH7agtvEfmGui6e1XxjcdrlxvxJvc3sMqw==}
     engines: {node: '>=18'}
 
+  tinyexec@1.1.1:
+    resolution: {integrity: sha512-VKS/ZaQhhkKFMANmAOhhXVoIfBXblQxGX1myCQ2faQrfmobMftXeJPcZGp0gS07ocvGJWDLZGyOZDadDBqYIJg==}
+    engines: {node: '>=18'}
+
   tinyglobby@0.2.15:
     resolution: {integrity: sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==}
+    engines: {node: '>=12.0.0'}
+
+  tinyglobby@0.2.16:
+    resolution: {integrity: sha512-pn99VhoACYR8nFHhxqix+uvsbXineAasWm5ojXoN8xEwK5Kd3/TrhNn1wByuD52UxWRLy8pu+kRMniEi6Eq9Zg==}
     engines: {node: '>=12.0.0'}
 
   tinyqueue@2.0.3:
@@ -8861,10 +8888,10 @@ packages:
     peerDependencies:
       typescript: ^6.0.2
 
-  vue-virtual-scroller@2.0.0-beta.10:
-    resolution: {integrity: sha512-eubwFXRdiT/5kNYbHKXTkNf3XCmZNSDtpTkWB7TTdOB4LYM14Ylqq/pbW6uXOEbbO/pVXQpxdhtdf2Qj2wZpQA==}
+  vue-virtual-scroller@2.0.1:
+    resolution: {integrity: sha512-3Drq8C61C4B3reSaZJr5nXBf/B7Beq1+h5/kYZB25MLYljTy97ISeUufRX9z6ZSZlFDXyafAOLK9XwajOWJY1A==}
     peerDependencies:
-      vue: ^3.2.0
+      vue: ^3.3.0
 
   vue@3.5.32:
     resolution: {integrity: sha512-vM4z4Q9tTafVfMAK7IVzmxg34rSzTFMyIe0UUEijUCkn9+23lj0WRfA83dg7eQZIUlgOSGrkViIaCfqSAUXsMw==}
@@ -11349,7 +11376,7 @@ snapshots:
       '@codemirror/state': 6.6.0
       '@codemirror/view': 6.41.0
 
-  '@rolldown/debug@1.0.0-rc.12':
+  '@rolldown/debug@1.0.0-rc.15':
     optional: true
 
   '@rolldown/pluginutils@1.0.0-rc.2': {}
@@ -14255,7 +14282,7 @@ snapshots:
     dependencies:
       '@floating-ui/dom': 1.7.6
       '@pnpm/read-project-manifest': 1001.2.6(@pnpm/logger@1001.0.1)
-      '@rolldown/debug': 1.0.0-rc.12
+      '@rolldown/debug': 1.0.0-rc.15
       '@vitejs/devtools-kit': 0.1.11(typescript@6.0.2)(vite@7.3.1(@types/node@25.6.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.99.0)(terser@5.46.0)(yaml@2.8.3))(ws@8.20.0)
       '@vitejs/devtools-rpc': 0.1.11(typescript@6.0.2)(ws@8.20.0)
       ansis: 4.2.0
@@ -14264,7 +14291,7 @@ snapshots:
       d3-shape: 3.2.0
       diff: 8.0.4
       get-port-please: 3.2.0
-      h3: 1.15.10
+      h3: 1.15.11
       mlly: 1.8.2
       mrmime: 2.0.1
       ohash: 2.0.11
@@ -14274,10 +14301,10 @@ snapshots:
       sirv: 3.0.2
       split2: 4.2.0
       structured-clone-es: 2.0.0
-      tinyglobby: 0.2.15
+      tinyglobby: 0.2.16
       unconfig: 7.5.0
       unstorage: 1.17.5(db0@0.3.4)(idb-keyval@6.2.2)(ioredis@5.10.1)
-      vue-virtual-scroller: 2.0.0-beta.10(vue@3.5.32(typescript@6.0.2))
+      vue-virtual-scroller: 2.0.1(vue@3.5.32(typescript@6.0.2))
       ws: 8.20.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -14327,7 +14354,7 @@ snapshots:
       '@vitejs/devtools-rpc': 0.1.11(typescript@6.0.2)(ws@8.20.0)
       birpc: 4.0.0
       cac: 7.0.0
-      h3: 1.15.10
+      h3: 1.15.11
       immer: 11.1.4
       launch-editor: 2.13.2
       mlly: 1.8.2
@@ -14336,7 +14363,7 @@ snapshots:
       pathe: 2.0.3
       perfect-debounce: 2.1.0
       sirv: 3.0.2
-      tinyexec: 1.0.4
+      tinyexec: 1.1.1
       vite: 7.3.1(@types/node@25.6.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.99.0)(terser@5.46.0)(yaml@2.8.3)
       vue: 3.5.32(typescript@6.0.2)
       ws: 8.20.0
@@ -15029,7 +15056,7 @@ snapshots:
 
   browser-resolve@2.0.0:
     dependencies:
-      resolve: 1.22.11
+      resolve: 1.22.12
 
   browserify-aes@1.2.0:
     dependencies:
@@ -15119,7 +15146,7 @@ snapshots:
       querystring-es3: 0.2.1
       read-only-stream: 2.0.0
       readable-stream: 2.3.8
-      resolve: 1.22.11
+      resolve: 1.22.12
       shasum-object: 1.0.1
       shell-quote: 1.8.3
       stream-browserify: 3.0.0
@@ -15412,6 +15439,9 @@ snapshots:
   convert-source-map@2.0.0: {}
 
   cookie-es@1.2.2: {}
+
+  cookie-es@1.2.3:
+    optional: true
 
   cookie-es@2.0.0: {}
 
@@ -16492,6 +16522,11 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.3
 
+  fdir@6.5.0(picomatch@4.0.4):
+    optionalDependencies:
+      picomatch: 4.0.4
+    optional: true
+
   fecha@4.2.3: {}
 
   fetch-ie8@1.5.0: {}
@@ -16817,6 +16852,19 @@ snapshots:
       ufo: 1.6.3
       uncrypto: 0.1.3
 
+  h3@1.15.11:
+    dependencies:
+      cookie-es: 1.2.3
+      crossws: 0.3.5
+      defu: 6.1.7
+      destr: 2.0.5
+      iron-webcrypto: 1.2.1
+      node-mock-http: 1.0.4
+      radix3: 1.1.2
+      ufo: 1.6.3
+      uncrypto: 0.1.3
+    optional: true
+
   h3@1.15.6:
     dependencies:
       cookie-es: 1.2.2
@@ -17109,6 +17157,11 @@ snapshots:
   is-wsl@3.1.0:
     dependencies:
       is-inside-container: 1.0.0
+
+  is-wsl@3.1.1:
+    dependencies:
+      is-inside-container: 1.0.0
+    optional: true
 
   is64bit@2.0.0:
     dependencies:
@@ -17528,7 +17581,7 @@ snapshots:
 
   md5.js@1.3.5:
     dependencies:
-      hash-base: 3.1.2
+      hash-base: 3.0.5
       inherits: 2.0.4
       safe-buffer: 5.2.1
 
@@ -18004,7 +18057,7 @@ snapshots:
       inherits: 2.0.4
       parents: 1.0.1
       readable-stream: 2.3.8
-      resolve: 1.22.11
+      resolve: 1.22.12
       stream-combiner2: 1.1.1
       subarg: 1.0.0
       through2: 2.0.5
@@ -18752,6 +18805,9 @@ snapshots:
 
   picomatch@4.0.3: {}
 
+  picomatch@4.0.4:
+    optional: true
+
   pinia@3.0.4(typescript@6.0.2)(vue@3.5.32(typescript@6.0.2)):
     dependencies:
       '@vue/devtools-api': 7.7.9
@@ -19381,6 +19437,13 @@ snapshots:
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
+  resolve@1.22.12:
+    dependencies:
+      es-errors: 1.3.0
+      is-core-module: 2.16.1
+      path-parse: 1.0.7
+      supports-preserve-symlinks-flag: 1.0.0
+
   restore-cursor@5.1.0:
     dependencies:
       onetime: 7.0.0
@@ -19953,10 +20016,19 @@ snapshots:
 
   tinyexec@1.0.4: {}
 
+  tinyexec@1.1.1:
+    optional: true
+
   tinyglobby@0.2.15:
     dependencies:
       fdir: 6.5.0(picomatch@4.0.3)
       picomatch: 4.0.3
+
+  tinyglobby@0.2.16:
+    dependencies:
+      fdir: 6.5.0(picomatch@4.0.4)
+      picomatch: 4.0.4
+    optional: true
 
   tinyqueue@2.0.3: {}
 
@@ -20585,7 +20657,7 @@ snapshots:
       '@vue/language-core': 3.2.6
       typescript: 6.0.2
 
-  vue-virtual-scroller@2.0.0-beta.10(vue@3.5.32(typescript@6.0.2)):
+  vue-virtual-scroller@2.0.1(vue@3.5.32(typescript@6.0.2)):
     dependencies:
       mitt: 2.1.0
       vue: 3.5.32(typescript@6.0.2)
@@ -20695,7 +20767,7 @@ snapshots:
 
   wsl-utils@0.3.1:
     dependencies:
-      is-wsl: 3.1.0
+      is-wsl: 3.1.1
       powershell-utils: 0.1.0
     optional: true
 
