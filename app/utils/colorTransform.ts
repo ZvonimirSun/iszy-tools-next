@@ -7,18 +7,6 @@ export interface Hsva {
 
 export type FormatName = 'HEX' | 'HEX8' | 'RGB' | 'RGBA' | 'HSL' | 'HSLA' | 'HSV' | 'OKLCH' | 'OKLAB' | 'P3'
 
-type CuloriModule = typeof import('culori')
-
-let culoriModule: CuloriModule | null = null
-
-async function getCulori(): Promise<CuloriModule> {
-  if (!culoriModule) {
-    culoriModule = await import('culori')
-  }
-
-  return culoriModule
-}
-
 export function hsvaToRgba(hsva: Hsva): {
   r: number
   g: number
@@ -83,7 +71,7 @@ export function hsvaToRgba(hsva: Hsva): {
 
 export async function parseToHsva(input: string): Promise<Hsva | null> {
   try {
-    const { parse, converter } = await getCulori()
+    const { parse, converter } = await import('~/libs/culori')
     const color = parse(input.trim())
 
     if (!color) {
@@ -111,12 +99,8 @@ export async function parseToHsva(input: string): Promise<Hsva | null> {
   }
 }
 
-function formatFloat(value: number, digits = 4): string {
-  return Number(value.toFixed(digits)).toString()
-}
-
 export async function hsvaToFormats(hsva: Hsva): Promise<Record<FormatName, string>> {
-  const { converter, formatHex, formatHex8 } = await getCulori()
+  const { converter, formatHex, formatHex8 } = await import('~/libs/culori')
 
   const color = {
     mode: 'hsv' as const,

@@ -45,7 +45,7 @@ async function convert() {
   if (fileList.value.length === 0) {
     return
   }
-  const { PDFDocument, degrees } = await usePdfLib()
+  const { PDFDocument, degrees } = await import('~/libs/pdf-lib')
   const pdf = await PDFDocument.create()
 
   for (const item of fileList.value) {

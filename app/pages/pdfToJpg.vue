@@ -49,7 +49,7 @@ async function convert() {
   isProcessing.value = true
 
   try {
-    const { getDocument } = await usePdfJs()
+    const { getDocument } = await import('~/libs/pdfjs-dist')
     const results: { name: string, data: Blob }[] = []
 
     for (const item of fileList.value) {

@@ -41,7 +41,7 @@ async function merge() {
   if (fileList.value.length === 0) {
     return
   }
-  const { PDFDocument, degrees } = await usePdfLib()
+  const { PDFDocument, degrees } = await import('~/libs/pdf-lib')
   const mergedPdf = await PDFDocument.create()
   for (const item of fileList.value) {
     const arrayBuffer = await item.file.arrayBuffer()

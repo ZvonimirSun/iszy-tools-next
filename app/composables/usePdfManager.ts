@@ -13,7 +13,7 @@ export function usePdfManager() {
         cache.ref += 1
         return cache.data
       }
-      const { getDocument } = await usePdfJs()
+      const { getDocument } = await import('~/libs/pdfjs-dist')
       const arrayBuffer = await file.arrayBuffer()
       const pdf = await getDocument({ data: arrayBuffer }).promise
       pdfCache.set(file, {

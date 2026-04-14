@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import type { QrScanner as QrScannerInstance } from '~/libs/qr-scanner'
 import { renderSVG } from 'uqr'
 
 type Mode = 'encode' | 'decode'
 type DecodeSource = 'image' | 'camera'
 type EccLevel = 'L' | 'M' | 'Q' | 'H'
-type QrScannerModule = typeof import('qr-scanner')
 
 const mode = ref<Mode>('encode')
 const decodeSource = ref<DecodeSource>('image')
@@ -37,8 +37,7 @@ const isCameraRunning = ref(false)
 const isClientReady = ref(false)
 
 const videoEl = ref<HTMLVideoElement | null>(null)
-const scannerModule = shallowRef<QrScannerModule | null>(null)
-const cameraScanner = shallowRef<InstanceType<QrScannerModule['default']> | null>(null)
+const cameraScanner = shallowRef<QrScannerInstance | null>(null)
 
 const { copy } = useCopy()
 
@@ -86,23 +85,6 @@ function clearDecodeState() {
   decodeError.value = ''
 }
 
-async function ensureScannerModule() {
-  if (!import.meta.client) {
-    return null
-  }
-  if (scannerModule.value) {
-    return scannerModule.value
-  }
-  isLoadingScanner.value = true
-  try {
-    scannerModule.value = await import('qr-scanner')
-    return scannerModule.value
-  }
-  finally {
-    isLoadingScanner.value = false
-  }
-}
-
 function getDecodeMessage(error: unknown) {
   const message = error instanceof Error ? error.message : String(error)
   if (message.includes('No QR code found')) {
@@ -117,15 +99,11 @@ async function decodeImage(file: File | null | undefined) {
   }
 
   clearDecodeState()
-  const mod: typeof import('qr-scanner') = (await ensureScannerModule())!
-  if (!mod) {
-    decodeError.value = '当前环境不支持二维码识别。'
-    return
-  }
 
   isDecodingImage.value = true
   try {
-    const result = await mod.default.scanImage(file, {
+    const { QrScanner } = await import('~/libs/qr-scanner')
+    const result = await QrScanner.scanImage(file, {
       returnDetailedScanResult: true,
     })
     decodeResult.value = result.data
@@ -153,16 +131,11 @@ async function startCameraScan() {
   }
 
   clearDecodeState()
-  const mod = await ensureScannerModule()
-  if (!mod) {
-    decodeError.value = '当前环境不支持摄像头识别。'
-    return
-  }
 
   stopCameraScan()
   isStartingCamera.value = true
   try {
-    const QrScanner = mod.default
+    const { QrScanner } = await import('~/libs/qr-scanner')
     cameraScanner.value = new QrScanner(videoEl.value, (result) => {
       const value = result.data
       if (!value) {

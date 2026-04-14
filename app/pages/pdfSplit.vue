@@ -106,7 +106,7 @@ async function splitPdfByRange() {
   isProcessing.value = true
 
   try {
-    const { PDFDocument } = await usePdfLib()
+    const { PDFDocument } = await import('~/libs/pdf-lib')
     const arrayBuffer = await pdfFile.value.arrayBuffer()
     const sourcePdf = await PDFDocument.load(arrayBuffer)
 
@@ -170,7 +170,7 @@ async function splitPdfByPage() {
   isProcessing.value = true
 
   try {
-    const { PDFDocument } = await usePdfLib()
+    const { PDFDocument } = await import('~/libs/pdf-lib')
     const arrayBuffer = await pdfFile.value.arrayBuffer()
     const sourcePdf = await PDFDocument.load(arrayBuffer)
 

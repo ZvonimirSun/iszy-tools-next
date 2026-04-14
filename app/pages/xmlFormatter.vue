@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import xml from '@/components/editor/lang-xml'
+import xml from '~/components/editor/lang-xml'
 
 const value = ref('<hello><world>foo</world><world>bar</world></hello>')
 
