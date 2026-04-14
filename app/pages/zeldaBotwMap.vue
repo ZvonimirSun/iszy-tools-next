@@ -58,6 +58,6 @@ onMounted(async () => {
 <template>
   <div
     ref="mapContainer"
-    class="h-full w-full bg-black z-0"
+    class="h-full w-full bg-black! z-0"
   />
 </template>
