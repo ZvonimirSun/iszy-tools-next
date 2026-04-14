@@ -1,3 +1,5 @@
+import { converter, formatHex, formatHex8, parse } from 'culori'
+
 export interface Hsva {
   h: number // 0-360
   s: number // 0-100
@@ -71,7 +73,6 @@ export function hsvaToRgba(hsva: Hsva): {
 
 export async function parseToHsva(input: string): Promise<Hsva | null> {
   try {
-    const { parse, converter } = await import('~/libs/culori')
     const color = parse(input.trim())
 
     if (!color) {
@@ -99,9 +100,11 @@ export async function parseToHsva(input: string): Promise<Hsva | null> {
   }
 }
 
-export async function hsvaToFormats(hsva: Hsva): Promise<Record<FormatName, string>> {
-  const { converter, formatHex, formatHex8 } = await import('~/libs/culori')
+function formatFloat(value: number, digits = 4): string {
+  return Number(value.toFixed(digits)).toString()
+}
 
+export async function hsvaToFormats(hsva: Hsva): Promise<Record<FormatName, string>> {
   const color = {
     mode: 'hsv' as const,
     h: (((hsva.h % 360) + 360) % 360),

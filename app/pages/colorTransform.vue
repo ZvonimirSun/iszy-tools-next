@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { FormatName, Hsva } from '~/utils/colorTransform'
-import { hsvaToFormats, parseToHsva } from '~/utils/colorTransform'
 
 // ─── State ───────────────────────────────────────────────────────────────────
 const formats: FormatName[] = ['HEX', 'HEX8', 'RGB', 'RGBA', 'HSL', 'HSLA', 'HSV', 'OKLCH', 'OKLAB', 'P3']
@@ -56,6 +55,7 @@ function syncInputFromPreferredFormat() {
 
 // ─── Update format outputs when hsva changes ──────────────────────────────────
 async function updateFormats(val: Hsva) {
+  const { hsvaToFormats } = await import('~/utils/colorTransform')
   outputFormats.value = await hsvaToFormats(val)
 
   // Keep input synced with picker, but do not override while user is actively typing.
@@ -71,6 +71,7 @@ async function updateFormats(val: Hsva) {
 async function handleColorInput() {
   if (!inputValue.value.trim())
     return
+  const { parseToHsva } = await import('~/utils/colorTransform')
   const result = await parseToHsva(inputValue.value)
   if (result) {
     inputError.value = false
