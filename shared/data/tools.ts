@@ -23,149 +23,6 @@ export const tools: OriginToolMenu[] = [
     ],
   },
   {
-    label: '编辑器',
-    children: [
-      {
-        label: 'TinyEditor',
-        name: 'tinyEditor',
-      },
-      {
-        label: '在线流程图',
-        name: 'https://app.diagrams.net/',
-      },
-    ],
-  },
-  {
-    label: 'GIS工具',
-    children: [
-      {
-        label: 'GeoJSON.io',
-        name: 'geoJson',
-      },
-      {
-        label: '经纬度查询',
-        name: 'latLng',
-      },
-      {
-        label: '切片方案计算',
-        name: 'lodCalculator',
-      },
-      {
-        label: '行政区数据',
-        name: 'https://datav.aliyun.com/tools/atlas/index.html',
-      },
-    ],
-  },
-  {
-    label: '加密工具',
-    children: [
-      {
-        label: '文本HASH',
-        name: 'hashText',
-      },
-      {
-        label: '文件HASH',
-        name: 'hashFile',
-      },
-      {
-        label: '在线JWT解密',
-        name: 'jwt',
-      },
-      {
-        label: 'GeoHash编解码',
-        name: 'geohash',
-      },
-      {
-        label: 'UUID生成器',
-        name: 'uuid',
-      },
-    ],
-  },
-  {
-    label: '转换工具',
-    children: [
-      {
-        label: '颜色转换器',
-        name: 'colorTransform',
-      },
-      {
-        label: 'Base64编解码',
-        name: 'base64',
-      },
-      {
-        label: 'Base64转文件',
-        name: 'base64File',
-      },
-      {
-        label: 'Base64图片编码',
-        name: 'imageBase64',
-      },
-      {
-        label: '二维码编解码',
-        name: 'qrcode',
-      },
-      {
-        label: '哔哩哔哩AV、BV号转换',
-        name: 'bilibiliBv2av',
-      },
-      {
-        label: '数字中文转换',
-        name: 'nzh',
-      },
-      {
-        label: '亲戚关系计算器',
-        name: 'relationship',
-      },
-    ],
-  },
-  {
-    label: '网页工具',
-    children: [
-      {
-        label: '短网址',
-        name: 'urls',
-        requiresAuth: true,
-      },
-      {
-        label: 'URL编解码',
-        name: 'urlEncode',
-      },
-      {
-        label: 'UserAgent解析',
-        name: 'userAgent',
-      },
-      {
-        label: 'WHOIS查询',
-        name: 'whois',
-      },
-      {
-        label: '随机数生成',
-        name: 'random',
-      },
-      {
-        label: '渐变色生成器',
-        name: 'gradientColor',
-      },
-    ],
-  },
-  {
-    label: '图像和视频',
-    children: [
-      {
-        label: '极简图床',
-        name: 'imgHosting',
-      },
-      {
-        label: '图片加水印',
-        name: 'watermark',
-      },
-      {
-        label: '屏幕录制',
-        name: 'screenRecord',
-      },
-    ],
-  },
-  {
     label: '开发工具',
     children: [
       {
@@ -214,11 +71,122 @@ export const tools: OriginToolMenu[] = [
         name: 'https://lib.demos.pub',
         requiresAuth: true,
       },
+      {
+        label: 'TinyEditor',
+        name: 'tinyEditor',
+      },
+      {
+        label: '在线流程图',
+        name: 'https://app.diagrams.net/',
+      },
     ],
   },
   {
-    label: '数据工具',
+    label: '转换与编码',
     children: [
+      {
+        label: '颜色转换器',
+        name: 'colorTransform',
+      },
+      {
+        label: 'Base64编解码',
+        name: 'base64',
+      },
+      {
+        label: 'Base64转文件',
+        name: 'base64File',
+      },
+      {
+        label: 'Base64图片编码',
+        name: 'imageBase64',
+      },
+      {
+        label: '二维码编解码',
+        name: 'qrcode',
+      },
+      {
+        label: '哔哩哔哩AV、BV号转换',
+        name: 'bilibiliBv2av',
+      },
+      {
+        label: '数字中文转换',
+        name: 'nzh',
+      },
+      {
+        label: '亲戚关系计算器',
+        name: 'relationship',
+      },
+      {
+        label: '文本HASH',
+        name: 'hashText',
+      },
+      {
+        label: '文件HASH',
+        name: 'hashFile',
+      },
+      {
+        label: '在线JWT解密',
+        name: 'jwt',
+      },
+      {
+        label: 'GeoHash编解码',
+        name: 'geohash',
+      },
+      {
+        label: 'UUID生成器',
+        name: 'uuid',
+      },
+    ],
+  },
+  {
+    label: 'GIS工具',
+    children: [
+      {
+        label: 'GeoJSON.io',
+        name: 'geoJson',
+      },
+      {
+        label: '经纬度查询',
+        name: 'latLng',
+      },
+      {
+        label: '切片方案计算',
+        name: 'lodCalculator',
+      },
+      {
+        label: '行政区数据',
+        name: 'https://datav.aliyun.com/tools/atlas/index.html',
+      },
+    ],
+  },
+  {
+    label: '网页与数据',
+    children: [
+      {
+        label: 'URL编解码',
+        name: 'urlEncode',
+      },
+      {
+        label: 'UserAgent解析',
+        name: 'userAgent',
+      },
+      {
+        label: 'WHOIS查询',
+        name: 'whois',
+      },
+      {
+        label: '短链接',
+        name: 'urls',
+        requiresAuth: true,
+      },
+      {
+        label: '随机数生成',
+        name: 'random',
+      },
+      {
+        label: '渐变色生成器',
+        name: 'gradientColor',
+      },
       {
         label: '身份证解析',
         name: 'idChinese',
@@ -234,7 +202,24 @@ export const tools: OriginToolMenu[] = [
     ],
   },
   {
-    label: '运维',
+    label: '图像与视频',
+    children: [
+      {
+        label: '极简图床',
+        name: 'imgHosting',
+      },
+      {
+        label: '图片加水印',
+        name: 'watermark',
+      },
+      {
+        label: '屏幕录制',
+        name: 'screenRecord',
+      },
+    ],
+  },
+  {
+    label: '系统与运维',
     children: [
       {
         label: 'WebSSH',
@@ -247,7 +232,7 @@ export const tools: OriginToolMenu[] = [
     ],
   },
   {
-    label: '理财',
+    label: '生活工具',
     children: [
       {
         label: '房贷计算器',
@@ -256,7 +241,7 @@ export const tools: OriginToolMenu[] = [
     ],
   },
   {
-    label: '游戏',
+    label: '娱乐游戏',
     children: [
       {
         label: '塞尔达荒野之息地图',
