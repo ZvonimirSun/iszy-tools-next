@@ -1,5 +1,5 @@
-import type { Layer, Map } from '@zvonimirsun/map-sdk/2d'
-import type { Control } from 'leaflet'
+import type { Map } from '@zvonimirsun/map-sdk/2d'
+import type { Control, Layer } from 'leaflet'
 import { LayerUtils } from '@zvonimirsun/map-sdk/2d'
 import { control, Icon, layerGroup } from 'leaflet'
 import { chineseLayer } from '~/libs/leaflet.ChineseLayer'
@@ -107,7 +107,7 @@ export function addDefaultBaseLayers(map: Map, layerControl?: Control.Layers) {
     },
   ]
   layers.forEach(({ name, layer }, index) => {
-    layerControl.addBaseLayer(layer, name)
+    layerControl.addBaseLayer(layer as Layer, name)
     if (index === 0) {
       layer.addTo(map)
     }

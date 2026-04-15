@@ -1,4 +1,4 @@
-import { CrsUtils } from '@zvonimirsun/map-sdk'
+import { CrsUtils } from '@zvonimirsun/map-sdk/2d'
 import { LatLng } from 'leaflet'
 
 export async function getLocation(address: string): Promise<{
