@@ -1,8 +1,56 @@
+import type { LatLng, Map as LeafletMap, Point, TileLayerOptions } from 'leaflet'
 import { CrsUtils } from '@zvonimirsun/map-sdk/2d'
 import { Bounds, Browser, DomUtil, TileLayer } from 'leaflet'
 
+type CoordinateSystemType = 'wgs84' | 'gcj02' | 'bd09'
+
+interface ProviderMapSet {
+  [mapType: string]: string
+}
+
+interface LayerProvider {
+  Subdomains: string | string[]
+  tms?: boolean
+  key?: string
+  [mapName: string]: ProviderMapSet | string | string[] | boolean | undefined
+}
+
+interface ChineseLayerOptions extends TileLayerOptions {
+  csysType?: CoordinateSystemType
+}
+
+interface TileLevel {
+  origin: Point
+  zoom: number
+  el: HTMLElement
+}
+
+interface CenterLike {
+  lng: number
+  lat: number
+}
+
+interface InternalLeafletMap extends LeafletMap {
+  _animatingZoom?: boolean
+  _animateToZoom: number
+  _getNewPixelOrigin: (center: LatLng | CenterLike, zoom: number) => Point
+}
+
+interface TileLayerWithInitialize {
+  initialize: (this: TileLayer, url: string, options?: TileLayerOptions) => void
+}
+
+interface ChineseLayerInstance extends TileLayer {
+  options: ChineseLayerOptions
+  providers: Record<string, LayerProvider>
+}
+
+interface ChineseLayerConstructor {
+  new (type: string, options?: ChineseLayerOptions): ChineseLayerInstance
+}
+
 export const ChineseLayer = TileLayer.extend({
-  initialize(type, options = {}) { // (type, Object)
+  initialize(this: ChineseLayerInstance, type: string, options: ChineseLayerOptions = {}) { // (type, Object)
     const providers = this.providers
 
     const parts = type.split('.')
@@ -11,14 +59,30 @@ export const ChineseLayer = TileLayer.extend({
     const mapName = parts[1]
     const mapType = parts[2]
 
-    const url = providers[providerName][mapName][mapType]
-    options.subdomains = providers[providerName].Subdomains
-
-    if ('tms' in providers[providerName]) {
-      options.tms = providers[providerName].tms
+    if (!providerName || !mapName || !mapType) {
+      throw new TypeError(`Invalid Chinese layer type: ${type}`)
     }
 
-    TileLayer.prototype.initialize.call(this, url, options)
+    const provider = providers[providerName]
+    const providerMap = provider?.[mapName]
+
+    if (!provider || !providerMap || typeof providerMap !== 'object' || Array.isArray(providerMap)) {
+      throw new TypeError(`Unknown Chinese layer type: ${type}`)
+    }
+
+    const url = (providerMap as Record<string, unknown>)[mapType]
+
+    if (typeof url !== 'string') {
+      throw new TypeError(`Unknown Chinese layer type: ${type}`)
+    }
+
+    options.subdomains = provider.Subdomains
+
+    if ('tms' in provider) {
+      options.tms = provider.tms
+    }
+
+    ;(TileLayer.prototype as unknown as TileLayerWithInitialize).initialize.call(this, url, options)
   },
   providers: {
     TianDiTu: {
@@ -91,28 +155,35 @@ export const ChineseLayer = TileLayer.extend({
       Subdomains: '0123456789',
       tms: true,
     },
-  },
-  _setZoomTransform(level, _center, zoom) {
-    let center = _center
+  } satisfies Record<string, LayerProvider>,
+  _setZoomTransform(this: ChineseLayerInstance, level: TileLevel, _center: LatLng, zoom: number) {
+    const internalLayer = this as unknown as { _map: InternalLeafletMap | null }
+    const map = internalLayer._map
+    let center: LatLng | CenterLike = _center
+
+    if (!map) {
+      return
+    }
+
     if (center != null && this.options) {
       if (this.options.csysType === 'gcj02') {
-        const position = CrsUtils.transformPoint('wgs84', 'gcj02', [_center.lng, _center.lat])
+        const position = CrsUtils.transformPoint('wgs84', 'gcj02', [_center.lng, _center.lat]) as [number, number]
         center = {
           lng: position[0],
           lat: position[1],
         }
       }
       else if (this.options.csysType === 'bd09') {
-        const position = CrsUtils.transformPoint('wgs84', 'bd09', [_center.lng, _center.lat])
+        const position = CrsUtils.transformPoint('wgs84', 'bd09', [_center.lng, _center.lat]) as [number, number]
         center = {
           lng: position[0],
           lat: position[1],
         }
       }
     }
-    const scale = this._map.getZoomScale(zoom, level.zoom)
+    const scale = map.getZoomScale(zoom, level.zoom)
     const translate = level.origin.multiplyBy(scale)
-      .subtract(this._map._getNewPixelOrigin(center, zoom))
+      .subtract(map._getNewPixelOrigin(center, zoom))
       .round()
 
     if (Browser.any3d) {
@@ -122,36 +193,48 @@ export const ChineseLayer = TileLayer.extend({
       DomUtil.setPosition(level.el, translate)
     }
   },
-  _getTiledPixelBounds(_center) {
-    let center = _center
+  _getTiledPixelBounds(this: ChineseLayerInstance, _center: LatLng) {
+    const internalLayer = this as unknown as { _map: InternalLeafletMap | null, _tileZoom?: number }
+    const map = internalLayer._map
+    let center: LatLng | CenterLike = _center
+
+    if (!map) {
+      return new Bounds([0, 0], [0, 0])
+    }
+
     if (center != null && this.options) {
       if (this.options.csysType === 'gcj02') {
-        const position = CrsUtils.transformPoint('wgs84', 'gcj02', [_center.lng, _center.lat])
+        const position = CrsUtils.transformPoint('wgs84', 'gcj02', [_center.lng, _center.lat]) as [number, number]
         center = {
           lng: position[0],
           lat: position[1],
         }
       }
       else if (this.options.csysType === 'bd09') {
-        const position = CrsUtils.transformPoint('wgs84', 'bd09', [_center.lng, _center.lat])
+        const position = CrsUtils.transformPoint('wgs84', 'bd09', [_center.lng, _center.lat]) as [number, number]
         center = {
           lng: position[0],
           lat: position[1],
         }
       }
     }
-    const map = this._map
     const mapZoom = map._animatingZoom ? Math.max(map._animateToZoom, map.getZoom()) : map.getZoom()
-    const scale = map.getZoomScale(mapZoom, this._tileZoom)
-    const pixelCenter = map.project(center, this._tileZoom).floor()
+    const tileZoom = internalLayer._tileZoom ?? map.getZoom()
+    const scale = map.getZoomScale(mapZoom, tileZoom)
+    const pixelCenter = map.project(center, tileZoom).floor()
     const halfSize = map.getSize().divideBy(scale * 2)
 
     return new Bounds(pixelCenter.subtract(halfSize), pixelCenter.add(halfSize))
   },
-})
+}) as unknown as ChineseLayerConstructor
 
-export function chineseLayer(type, options = {}) {
+export function chineseLayer(type: string, options: ChineseLayerOptions = {}) {
   const providerName = type.split('.')[0]
+
+  if (!providerName) {
+    throw new TypeError(`Invalid Chinese layer type: ${type}`)
+  }
+
   switch (providerName) {
     case 'GaoDe':
       options = Object.assign({}, {
@@ -184,10 +267,10 @@ export function chineseLayer(type, options = {}) {
   return new ChineseLayer(type, options)
 
   // 获取坐标类型
-  function getCsysType(type) {
+  function getCsysType(type: string): CoordinateSystemType {
     const parts = type.split('.')
     const providerName = parts[0]
-    let zbName = 'wgs84'
+    let zbName: CoordinateSystemType = 'wgs84'
     switch (providerName) {
       case 'Geoq':
       case 'GaoDe':
