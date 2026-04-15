@@ -1,75 +1,31 @@
 # ISZY Tools Next
 
+[![Docker Build CI](https://github.com/ZvonimirSun/iszy-tools-next/actions/workflows/docker.yml/badge.svg)](https://github.com/ZvonimirSun/iszy-tools-next/actions/workflows/docker.yml)
+
+[![Nuxt 4.x](https://img.shields.io/badge/Nuxt-4.x-brightgreen)](https://nuxt.com/) [![code style](https://antfu.me/badge-code-style.svg)](https://github.com/antfu/eslint-config) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ZvonimirSun/iszy-tools-next)
+
 一个基于 Nuxt 4 的前端工具集应用。
 
-## Setup
+## 项目安装
 
-Make sure to install dependencies:
-
-```bash
-# npm
-npm install
-
-# pnpm
+```shell
 pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+### 启动开发服务器
 
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
+```shell
 pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+### 为生产环境构建产物
 
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
+```shell
 pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+### 本地预览生产构建产物
 
-```bash
-# npm
-npm run preview
-
-# pnpm
+```shell
 pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
