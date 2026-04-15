@@ -34,6 +34,10 @@ export default defineNuxtConfig({
       },
       features: {
         publicRegister: false,
+        map: {
+          tdtToken: '',
+          gaodeToken: '',
+        },
       },
       footer: {
         since: '',
