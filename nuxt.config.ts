@@ -117,17 +117,7 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       include: [
-        'dayjs', // CJS
-        'nanoid',
-        'fflate',
-        'pdfjs-dist',
-        'pdf-lib',
-        'vuedraggable', // CJS
-        'crypto-js', // CJS
         'reka-ui',
-        'culori',
-        'uqr',
-        'qr-scanner',
       ],
     },
   },

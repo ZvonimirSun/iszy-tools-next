@@ -35,6 +35,14 @@ export const tools: OriginToolMenu[] = [
         requiresAuth: true,
       },
       {
+        label: 'TinyEditor',
+        name: 'tinyEditor',
+      },
+      {
+        label: 'RunJS',
+        name: 'runjs',
+      },
+      {
         label: 'CSS格式化',
         name: 'cssFormatter',
       },
@@ -70,10 +78,6 @@ export const tools: OriginToolMenu[] = [
         label: '资源包',
         name: 'https://lib.demos.pub',
         requiresAuth: true,
-      },
-      {
-        label: 'TinyEditor',
-        name: 'tinyEditor',
       },
       {
         label: '在线流程图',
