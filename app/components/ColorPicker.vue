@@ -6,10 +6,12 @@ import { computed, nextTick, onUnmounted, ref, watch } from 'vue'
 const props = withDefaults(defineProps<{
   throttle?: number
   disabled?: boolean
+  alpha?: boolean
   class?: string
 }>(), {
   throttle: 50,
   disabled: false,
+  alpha: true,
 })
 
 const modelValue = defineModel<Hsva>({ required: true })
@@ -24,16 +26,18 @@ function useColorDraggable(
 ) {
   const position = ref({ ...initial })
   const pressedDelta = ref<{ x: number, y: number } | undefined>()
-  const targetRect = useElementBounding(targetRef)
-  const containerRect = useElementBounding(containerRef)
 
   function start(e: PointerEvent) {
     if (isDisabled.value)
       return e.preventDefault()
+
     const c = containerRef.value
+    const cRect = c?.getBoundingClientRect()
+    const tRect = targetRef.value?.getBoundingClientRect()
+
     pressedDelta.value = {
-      x: e.clientX - (c ? e.clientX - containerRect.left.value + c.scrollLeft : targetRect.left.value),
-      y: e.clientY - (c ? e.clientY - containerRect.top.value + c.scrollTop : targetRect.top.value),
+      x: c && cRect ? cRect.left - c.scrollLeft : tRect ? e.clientX - tRect.left : 0,
+      y: c && cRect ? cRect.top - c.scrollTop : tRect ? e.clientY - tRect.top : 0,
     }
     move(e)
   }
@@ -55,7 +59,7 @@ function useColorDraggable(
   }
 
   if (import.meta.client) {
-    useEventListener(containerRef, 'pointerdown', start)
+    useEventListener(() => containerRef.value, 'pointerdown', start)
     useEventListener(window, 'pointermove', move)
     useEventListener(window, 'pointerup', end)
   }
@@ -111,7 +115,7 @@ const { position: alphaPos } = useColorDraggable(
   alphaThumbRef,
   alphaTrackRef,
   'y',
-  { x: 0, y: alphaToY(mv.a) },
+  { x: 0, y: alphaToY(props.alpha ? mv.a : 100) },
   isDisabled,
 )
 
@@ -119,10 +123,22 @@ const { position: alphaPos } = useColorDraggable(
 const { stop, pause, resume } = watch(() => modelValue.value, (hsva) => {
   svPos.value = { x: hsva.s, y: vToY(hsva.v) }
   huePos.value = { x: 0, y: hueToY(hsva.h) }
-  alphaPos.value = { x: 0, y: alphaToY(hsva.a) }
+  alphaPos.value = { x: 0, y: alphaToY(props.alpha ? hsva.a : 100) }
 }, { immediate: true })
 
 onUnmounted(stop)
+
+watch(() => props.alpha, (enabled) => {
+  if (enabled || modelValue.value.a === 100)
+    return
+
+  pause()
+  modelValue.value = {
+    ...modelValue.value,
+    a: 100,
+  }
+  nextTick(resume)
+}, { immediate: true })
 
 // ─── Sync: positions → external model (throttled) ───────────────────────────
 watchThrottled([svPos, huePos, alphaPos], () => {
@@ -130,7 +146,7 @@ watchThrottled([svPos, huePos, alphaPos], () => {
     h: yToHue(huePos.value.y),
     s: svPos.value.x,
     v: yToV(svPos.value.y),
-    a: yToAlpha(alphaPos.value.y),
+    a: props.alpha ? yToAlpha(alphaPos.value.y) : 100,
   }
 
   if (isSameHsva(modelValue.value, nextHsva))
@@ -139,7 +155,7 @@ watchThrottled([svPos, huePos, alphaPos], () => {
   pause()
   modelValue.value = nextHsva
   nextTick(resume)
-}, { throttle: () => props.throttle })
+}, { throttle: props.throttle })
 
 // Simpler: use the 6-segment HSV-at-full-saturation formula
 function pureHueColor(hDeg: number): string {
@@ -236,6 +252,7 @@ const alphaThumbStyle = computed(() => ({
 
       <!-- Alpha track (vertical, checkerboard + hue→transparent gradient) -->
       <div
+        v-if="props.alpha"
         ref="alphaTrackRef"
         data-slot="alphaTrack"
         class="w-2 h-42 relative rounded-md touch-none shrink-0 checkerboard [--checker-size:4px]"

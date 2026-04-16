@@ -195,10 +195,6 @@ export const tools: OriginToolMenu[] = [
         label: 'glTF模型浏览',
         name: '3dView',
       },
-      {
-        label: '这是什么动漫',
-        name: 'whatAnimeIsThis',
-      },
     ],
   },
   {
