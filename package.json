@@ -50,6 +50,7 @@
     "@zvonimirsun/map-sdk": "^1.2.1",
     "@zvonimirsun/pinia-plugin-persistedstate": "^1.0.1",
     "acorn": "^8.16.0",
+    "china-area-data": "5.0.1",
     "codemirror": "^6.0.2",
     "crypto-js": "^4.2.0",
     "culori": "^4.0.2",
