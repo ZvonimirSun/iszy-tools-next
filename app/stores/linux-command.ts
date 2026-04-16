@@ -8,7 +8,7 @@ export const useLinuxCommandStore = defineStore('linuxCommand', {
   actions: {
     async getData() {
       const { cdnOrigin } = usePublicConfig()
-      this.data = await $fetch(`${cdnOrigin}/jsd/gh/jaywcjlove/linux-command@1.8.1/dist/data.min.json`)
+      this.data = await $fetch<Record<string, any>>(`${cdnOrigin}/jsd/gh/jaywcjlove/linux-command@1.8.1/dist/data.min.json`)
       this.time = dayjs().format()
     },
   },
