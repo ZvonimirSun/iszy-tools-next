@@ -250,12 +250,8 @@ function buildSrcdoc(executableCode: string) {
       }, '*')
     }
 
-    const rawLog = console.log.bind(console)
-    const rawError = console.error.bind(console)
-
     console.log = (...args) => {
       post('log', { text: args.map(serialize).join(' ') })
-      rawLog(...args)
     }
 
     console.error = (...args) => {
@@ -264,7 +260,6 @@ function buildSrcdoc(executableCode: string) {
         text: args.map(serialize).join(' '),
         stack: firstError ? (firstError.stack || firstError.message) : undefined,
       })
-      rawError(...args)
     }
 
     window.__runjs_output = (value) => {
