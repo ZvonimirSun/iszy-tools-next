@@ -176,7 +176,6 @@ const svThumbStyle = computed(() => ({
 }))
 
 const hueThumbStyle = computed(() => ({
-  backgroundColor: hueColor.value,
   top: `${huePos.value.y}%`,
 }))
 
@@ -186,7 +185,6 @@ const alphaTrackGradientStyle = computed(() => ({
 }))
 
 const alphaThumbStyle = computed(() => ({
-  backgroundColor: currentRgba.value,
   top: `${alphaPos.value.y}%`,
 }))
 </script>
@@ -230,7 +228,7 @@ const alphaThumbStyle = computed(() => ({
         <div
           ref="hueThumbRef"
           data-slot="trackThumb"
-          class="absolute transform -translate-y-1/2 -translate-x-1 size-4 rounded-full ring-2 ring-white cursor-pointer shadow-sm data-disabled:cursor-not-allowed"
+          class="absolute transform -translate-y-1/2 -translate-x-1 size-4 rounded-full ring-2 ring-white cursor-pointer shadow-sm data-disabled:cursor-not-allowed bg-primary"
           :style="hueThumbStyle"
           :data-disabled="isDisabled || undefined"
         />
@@ -240,7 +238,7 @@ const alphaThumbStyle = computed(() => ({
       <div
         ref="alphaTrackRef"
         data-slot="alphaTrack"
-        class="w-2 h-42 relative rounded-md touch-none shrink-0 overflow-hidden checkerboard [--checker-size:4px]"
+        class="w-2 h-42 relative rounded-md touch-none shrink-0 checkerboard [--checker-size:4px]"
       >
         <!-- Gradient overlay (pointer-events-none so drag hits the container) -->
         <div
@@ -250,7 +248,7 @@ const alphaThumbStyle = computed(() => ({
         <div
           ref="alphaThumbRef"
           data-slot="alphaTrackThumb"
-          class="absolute transform -translate-y-1/2 -translate-x-1 size-4 rounded-full ring-2 ring-white cursor-pointer shadow-sm z-10 data-disabled:cursor-not-allowed"
+          class="absolute transform -translate-y-1/2 -translate-x-1 size-4 rounded-full ring-2 ring-white cursor-pointer shadow-sm z-10 data-disabled:cursor-not-allowed bg-primary"
           :style="alphaThumbStyle"
           :data-disabled="isDisabled || undefined"
         />
