@@ -80,7 +80,10 @@ onMounted(() => {
       size="xl"
       icon="i-icon-park-outline:search"
       placeholder="搜索工具..."
-      class="w-full"
+      class="w-full sticky top-[calc(var(--ui-header-height)+--spacing(4))] z-50 shadow-sm"
+      :ui="{
+        base: 'bg-default/75 backdrop-blur',
+      }"
     >
       <template #trailing>
         <UKbd value="/" />
