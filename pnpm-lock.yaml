@@ -174,6 +174,9 @@ importers:
       reka-ui:
         specifier: ^2.9.6
         version: 2.9.6(vue@3.5.32(typescript@6.0.2))
+      relationship.js:
+        specifier: ^1.2.8
+        version: 1.2.8
       shiki:
         specifier: ^4.0.2
         version: 4.0.2
@@ -7810,6 +7813,10 @@ packages:
     resolution: {integrity: sha512-K6bL457owpvWONc7hsjFxo3HDC9s6IzhRqShW0w9JSKelPGfRbkHD558UQTn/NH1cvrXVHygKyC7fExFmRketg==}
     peerDependencies:
       vue: '>= 3.4.0'
+
+  relationship.js@1.2.8:
+    resolution: {integrity: sha512-KxvY08weXTPx9KAsWedhKzDGr6JnGe4R1M5gDX//1en5WzzJQlSphzgSUDxmMrAWCfZgSu15SESCCibTNn6SeA==}
+    engines: {node: '>=20', npm: '>=8', yarn: please-use-npm}
 
   rename-function-calls@0.1.1:
     resolution: {integrity: sha512-F+z4csKBo6gw4y5vhIbOhG+UcZVWNh42fW35dagdFP74YrY4ET932NTZZEimMdJz8Efha73caz/OFGxt1vReOA==}
@@ -19617,6 +19624,8 @@ snapshots:
       vue: 3.5.32(typescript@6.0.2)
     transitivePeerDependencies:
       - '@vue/composition-api'
+
+  relationship.js@1.2.8: {}
 
   rename-function-calls@0.1.1:
     dependencies:
