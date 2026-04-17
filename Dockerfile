@@ -26,7 +26,7 @@ RUN apk add --no-cache nginx \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Configure nginx: serve static files from /app/public and proxy others to Nuxt
-RUN cat <<'EOF' > /etc/nginx/http.d/default.conf
+RUN mkdir -p /app/static && cat <<'EOF' > /etc/nginx/http.d/default.conf
 server {
     listen 80;
     server_name _;
@@ -38,7 +38,7 @@ server {
     }
 
     location / {
-        root /app/public;
+        root /app/static;
         try_files $uri @nuxt;
     }
 
