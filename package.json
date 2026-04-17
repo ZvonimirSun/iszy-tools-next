@@ -49,7 +49,7 @@
     "@vueuse/router": "^14.2.1",
     "@zvonimirsun/iszy-common": "^1.1.4",
     "@zvonimirsun/map-sdk": "^1.2.1",
-    "@zvonimirsun/pinia-plugin-persistedstate": "^1.0.1",
+    "@zvonimirsun/pinia-plugin-persistedstate": "^1.1.0",
     "acorn": "^8.16.0",
     "china-area-data": "5.0.1",
     "codemirror": "^6.0.2",

@@ -59,6 +59,7 @@ export default defineNuxtConfig({
         indexedDBOptions: {
           name: 'iszy_tools_next',
           storeName: 'state',
+          debounce: 300,
         },
       },
     },
