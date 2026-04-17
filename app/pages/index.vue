@@ -87,37 +87,12 @@ onMounted(() => {
       </template>
     </UInput>
     <div class="w-full flex flex-col gap-4">
-      <ClientOnly>
-        <TransitionGroup name="fade">
-          <div
-            v-for="(item, index) in userToolMenus"
-            :key="index"
-            class="w-full flex flex-col gap-4"
-          >
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              <div class="col-span-full text-muted">
-                {{ item.label }}
-              </div>
-              <div
-                v-for="(tool) in item.children"
-                :key="tool.name"
-              >
-                <UPageCard
-                  class="bg-elevated border border-inverted hover:border-primary text-base font-semibold"
-                  :title="tool.label"
-                  :to="tool.name"
-                  :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
-                />
-              </div>
-            </div>
-          </div>
-        </TransitionGroup>
-      </ClientOnly>
-      <template
-        v-for="(item, index) in toolMenus"
-        :key="index"
-      >
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <TransitionGroup name="list">
+        <div
+          v-for="(item, index) in userToolMenus"
+          :key="`user${index}`"
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+        >
           <div class="col-span-full text-muted">
             {{ item.label }}
           </div>
@@ -133,24 +108,45 @@ onMounted(() => {
             />
           </div>
         </div>
-      </template>
+        <div
+          v-for="(item, index) in toolMenus"
+          :key="index"
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+        >
+          <div class="col-span-full text-muted">
+            {{ item.label }}
+          </div>
+          <div
+            v-for="(tool) in item.children"
+            :key="tool.name"
+          >
+            <UPageCard
+              class="bg-elevated border border-inverted hover:border-primary text-base font-semibold"
+              :title="tool.label"
+              :to="tool.name"
+              :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
+            />
+          </div>
+        </div>
+      </TransitionGroup>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.fade-enter-active,
-.fade-leave-active {
+.list-move,
+.list-enter-active,
+.list-leave-active {
   transition: all 0.5s ease;
 }
 
-.fade-enter-from {
+.list-enter-from,
+.list-leave-to {
   opacity: 0;
-  transform: translateY(6px);
+  transform: translateX(30px);
 }
 
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(6px);
+.list-leave-active {
+  position: absolute;
 }
 </style>
