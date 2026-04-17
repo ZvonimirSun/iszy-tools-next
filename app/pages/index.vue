@@ -14,7 +14,7 @@ const settings = settingsStore.general
 // const isFav = toolsStore.isFav
 // const updateFav = toolsStore.updateFav
 
-const showUserToolMenus = ref(false)
+const showUserToolMenus = useState('showUserToolMenus', () => false)
 const userToolMenus = computed<OriginToolMenu[]>(() => {
   if (!showUserToolMenus.value) {
     return []
