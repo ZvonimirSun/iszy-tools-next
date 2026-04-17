@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-import { NIL as NIL_UUID, v1 as uuidv1, v4 as uuidv4 } from 'uuid'
+import { NIL as NIL_UUID, v1 as uuidv1, v4 as uuidv4, v7 as uuidv7 } from 'uuid'
+
+definePageMeta({
+  layout: 'full',
+})
 
 const toast = useToast()
 
@@ -32,6 +36,10 @@ function generate() {
       }
       case 'v4': {
         tmp = uuidv4()
+        break
+      }
+      case 'v7': {
+        tmp = uuidv7()
         break
       }
       case 'nil': {
@@ -78,6 +86,10 @@ function copy() {
               {
                 label: 'Version 4',
                 value: 'v4',
+              },
+              {
+                label: 'Version 7',
+                value: 'v7',
               },
               {
                 label: 'NIL',
@@ -129,6 +141,14 @@ function copy() {
         :rows="10"
         :readonly="true"
       />
+    </ContainerToolItem>
+    <ContainerToolItem label="常用 UUID 类型">
+      <div class="text-sm leading-6 text-muted">
+        <p>v1: 基于时间和节点信息，兼容性高。</p>
+        <p>v4: 纯随机，最常用。</p>
+        <p>v7: 基于 Unix 时间 + 随机，适合按时间排序与数据库索引。</p>
+        <p>nil: 全 0 UUID，常用于占位。</p>
+      </div>
     </ContainerToolItem>
   </div>
 </template>
