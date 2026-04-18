@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import relationship from 'relationship.js'
-
-type ActiveTab = 'call' | 'relation'
-type CallDirection = 'toTarget' | 'fromTarget'
-type Sex = 0 | 1
+import type { ActiveTab, CallDirection, Sex } from './children/relationship.service'
+import {
+  calculateCallResult,
+  calculateRelationChainResult,
+  getDisabledSpouseKey,
+  getTargetPronoun,
+  isActiveTab,
+  isSex,
+} from './children/relationship.service'
 
 const { copy } = useCopy()
 
@@ -35,20 +39,7 @@ const displayChain = computed(() => {
 })
 
 const targetPronoun = computed(() => {
-  const last = callChain.value.at(-1)
-  if (!last) {
-    return 'TA'
-  }
-
-  if (['父', '兄', '弟', '夫', '子'].includes(last)) {
-    return '他'
-  }
-
-  if (['母', '姐', '妹', '妻', '女'].includes(last)) {
-    return '她'
-  }
-
-  return 'TA'
+  return getTargetPronoun(callChain.value)
 })
 
 const titleText = computed(() => {
@@ -58,30 +49,11 @@ const titleText = computed(() => {
 })
 
 const disabledSpouseKey = computed(() => {
-  if (selfSex.value === 1) {
-    return '夫'
-  }
-  return '妻'
+  return getDisabledSpouseKey(callChain.value, selfSex.value)
 })
 
 const hasCallResult = computed(() => callResult.value.length > 0)
 const hasRelationResult = computed(() => relationResult.value.length > 0)
-
-function isActiveTab(value: string | number): value is ActiveTab {
-  return value === 'call' || value === 'relation'
-}
-
-function isSex(value: string | number): value is Sex {
-  return value === 0 || value === 1
-}
-
-function normalizeRelationshipResult(value: unknown): string[] {
-  if (!Array.isArray(value)) {
-    return []
-  }
-
-  return [...new Set(value.filter((item): item is string => typeof item === 'string' && item.length > 0))]
-}
 
 function clearCallState() {
   callCalculated.value = false
@@ -144,19 +116,7 @@ function calculateCall() {
     return
   }
 
-  try {
-    const relationText = callChain.value.join('的')
-    const response = relationship({
-      text: relationText,
-      sex: selfSex.value,
-      reverse: callDirection.value === 'fromTarget',
-    })
-
-    callResult.value = normalizeRelationshipResult(response)
-  }
-  catch {
-    callResult.value = []
-  }
+  callResult.value = calculateCallResult(callChain.value, selfSex.value, callDirection.value)
 
   callCalculated.value = true
 }
@@ -168,17 +128,7 @@ function calculateRelation() {
     return
   }
 
-  try {
-    const response = relationship({
-      text: relationInput.value.trim(),
-      type: 'chain',
-    })
-
-    relationResult.value = normalizeRelationshipResult(response)
-  }
-  catch {
-    relationResult.value = []
-  }
+  relationResult.value = calculateRelationChainResult(relationInput.value)
 
   relationCalculated.value = true
 }
