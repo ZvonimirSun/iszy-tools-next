@@ -99,17 +99,14 @@ onMounted(() => {
           <div class="col-span-full text-muted">
             {{ item.label }}
           </div>
-          <div
+          <UPageCard
             v-for="(tool) in item.children"
             :key="tool.name"
-          >
-            <UPageCard
-              class="bg-elevated border border-inverted hover:border-primary text-base font-semibold"
-              :title="tool.label"
-              :to="tool.name"
-              :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
-            />
-          </div>
+            class="bg-elevated border border-inverted hover:border-primary text-base"
+            :title="tool.label"
+            :to="tool.name"
+            :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
+          />
         </div>
         <div
           v-for="(item, index) in toolMenus"
@@ -119,17 +116,14 @@ onMounted(() => {
           <div class="col-span-full text-muted">
             {{ item.label }}
           </div>
-          <div
+          <UPageCard
             v-for="(tool) in item.children"
             :key="tool.name"
-          >
-            <UPageCard
-              class="bg-elevated border border-inverted hover:border-primary text-base font-semibold"
-              :title="tool.label"
-              :to="tool.name"
-              :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
-            />
-          </div>
+            class="bg-elevated border border-inverted hover:border-primary text-base"
+            :title="tool.label"
+            :to="tool.name"
+            :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
+          />
         </div>
       </TransitionGroup>
     </div>
