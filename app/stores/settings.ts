@@ -1,7 +1,7 @@
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
     general: {
-      showMost: false,
+      showMost: true,
       showRecent: false,
 
       showSearch: true,
