@@ -195,19 +195,19 @@ export const tools: OriginToolMenu[] = [
         label: '身份证解析',
         name: 'idChinese',
       },
-      {
-        label: 'glTF模型浏览',
-        name: '3dView',
-      },
+      // {
+      //   label: 'glTF模型浏览',
+      //   name: '3dView',
+      // },
     ],
   },
   {
     label: '图像与视频',
     children: [
-      {
-        label: '极简图床',
-        name: 'imgHosting',
-      },
+      // {
+      //   label: '极简图床',
+      //   name: 'imgHosting',
+      // },
       {
         label: '图片加水印',
         name: 'watermark',
@@ -221,10 +221,10 @@ export const tools: OriginToolMenu[] = [
   {
     label: '系统与运维',
     children: [
-      {
-        label: 'WebSSH',
-        name: 'webssh',
-      },
+      // {
+      //   label: 'WebSSH',
+      //   name: 'webssh',
+      // },
       {
         label: 'Linux命令查询',
         name: 'linuxCommand',
@@ -247,22 +247,22 @@ export const tools: OriginToolMenu[] = [
         label: '塞尔达荒野之息地图',
         name: 'zeldaBotwMap',
       },
-      {
-        label: '2048',
-        name: '2048',
-      },
-      {
-        label: '俄罗斯方块',
-        name: 'tetris',
-      },
-      {
-        label: '奥利奥生成器',
-        name: 'oreooo',
-      },
-      {
-        label: 'PalWorld服务器设置',
-        name: 'palServerSettings',
-      },
+      // {
+      //   label: '2048',
+      //   name: '2048',
+      // },
+      // {
+      //   label: '俄罗斯方块',
+      //   name: 'tetris',
+      // },
+      // {
+      //   label: '奥利奥生成器',
+      //   name: 'oreooo',
+      // },
+      // {
+      //   label: 'PalWorld服务器设置',
+      //   name: 'palServerSettings',
+      // },
     ],
   },
 ]
