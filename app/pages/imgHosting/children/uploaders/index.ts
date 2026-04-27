@@ -8,12 +8,13 @@
 
 import type { Uploader } from './types'
 import aliyun from './aliyun'
+import r2 from './r2'
 import s3 from './s3'
 
 export type { FieldMeta, FileItem, ProgressCallback, Uploader, UploaderConfig } from './types'
 
 /** 所有已注册的 uploader，顺序决定 UI 中下拉列表的排列 */
-export const uploaders: Uploader[] = [aliyun, s3]
+export const uploaders: Uploader[] = [aliyun, s3, r2]
 
 /** 根据 type 字段查找对应 uploader */
 export function getUploader(type: string): Uploader | undefined {

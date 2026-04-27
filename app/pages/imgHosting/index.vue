@@ -70,16 +70,33 @@ function handleUploaded(item: { key: string, url: string }) {
   })
 }
 
+// 标记当前选中配置是否在 settings tab 中被修改过
+const configDirty = ref(false)
+
+// 深度监听当前配置内容变化，仅在 settings tab 时标记脏
+watch(() => store.activeConfig, () => {
+  if (activeTab.value === 'settings') {
+    configDirty.value = true
+  }
+}, { deep: true })
+
 watch(activeTab, (tab) => {
-  if (tab === 'list' && !listLoaded.value) {
-    listLoaded.value = true
-    if (store.activeConfig) {
+  if (tab === 'list') {
+    if (!listLoaded.value) {
+      listLoaded.value = true
+      if (store.activeConfig) {
+        refreshList()
+      }
+    }
+    else if (configDirty.value) {
+      configDirty.value = false
       refreshList()
     }
   }
 })
 
 watch(() => store.activeConfigId, () => {
+  configDirty.value = false
   if (activeTab.value === 'list') {
     files.value = []
     errorMessage.value = ''
