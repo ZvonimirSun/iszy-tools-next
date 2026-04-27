@@ -23,3 +23,7 @@ logs
 .env
 .env.*
 !.env.example
+
+.claude/*.local.*
+.claude/cache/
+.claude/tmp/
