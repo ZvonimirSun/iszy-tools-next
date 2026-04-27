@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ImgHostingConfig } from './imgHosting.d'
+import { uploadFile } from './imgHosting.service'
 
 const props = defineProps<{
   config: ImgHostingConfig | null
@@ -42,11 +43,9 @@ async function handleUpload(files: FileList | File[]) {
 
   for (const file of fileList) {
     try {
-      const uploadFile = store.commonConfig.renameTimeStamp ? renameWithTimestamp(file) : file
+      const fileToUpload = store.commonConfig.renameTimeStamp ? renameWithTimestamp(file) : file
 
-      const { uploadFile: doUpload } = await import('./imgHosting.service')
-
-      const result = await doUpload(props.config, uploadFile, (pct) => {
+      const result = await uploadFile(props.config, fileToUpload, (pct) => {
         progress.value = pct
       })
 
