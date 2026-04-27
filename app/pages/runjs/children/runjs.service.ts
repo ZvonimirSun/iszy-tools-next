@@ -239,5 +239,3 @@ ${safeCode}
 </body>
 </html>`
 }
-
-

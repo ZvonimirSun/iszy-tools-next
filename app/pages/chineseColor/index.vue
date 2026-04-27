@@ -75,10 +75,6 @@ const cmykCss = computed(() => selectedColor.value ? `cmyk(${selectedColor.value
 const rgbCss = computed(() => selectedColor.value ? `rgb(${selectedColor.value.RGB.join(', ')})` : '')
 const hexCss = computed(() => selectedColor.value?.hex.toUpperCase() ?? '')
 
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value))
-}
-
 function measureNaturalWidth(text: string, font: string) {
   const module = pretextModule.value
   if (!module || !text) {

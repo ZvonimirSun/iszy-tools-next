@@ -204,10 +204,10 @@ export const tools: OriginToolMenu[] = [
   {
     label: '图像与视频',
     children: [
-      // {
-      //   label: '极简图床',
-      //   name: 'imgHosting',
-      // },
+      {
+        label: '极简图床',
+        name: 'imgHosting',
+      },
       {
         label: '图片加水印',
         name: 'watermark',
