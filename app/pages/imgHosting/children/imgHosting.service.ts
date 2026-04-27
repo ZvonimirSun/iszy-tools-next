@@ -29,7 +29,8 @@ export function validateConfig(config: ImgHostingConfig): { valid: boolean, erro
 
 /** 创建默认空配置 */
 export function createDefaultConfig(type: string = 'aliyun'): ImgHostingConfig {
-  return { id: nanoid(), type, name: '', config: {} }
+  const uploader = getUploader(type)
+  return { id: nanoid(), type, name: uploader?.name ?? type, config: {} }
 }
 
 // ------------------------------------------------------------------ delegate wrappers

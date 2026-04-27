@@ -78,6 +78,9 @@ function cancelEdit() {
 }
 
 function saveConfig() {
+  if (!draft.name.trim()) {
+    draft.name = getUploader(draft.type)?.name ?? draft.type
+  }
   const { valid, errors } = validateConfig(draft)
   if (!valid) {
     toast.add({ title: errors[0], color: 'error' })
@@ -103,6 +106,13 @@ function deleteConfig(id: string) {
 
 function onTypeChange() {
   draft.config = {}
+  const newUploader = getUploader(draft.type)
+  const newDefaultName = newUploader?.name ?? draft.type
+  // 如果名称为空或仍是某个 uploader 的默认名称，则自动更新为新类型名称
+  const isDefaultName = !draft.name || getUploaderOptions().some(opt => opt.label === draft.name)
+  if (isDefaultName) {
+    draft.name = newDefaultName
+  }
 }
 
 /** 当前编辑类型对应的 uploader */
@@ -283,7 +293,7 @@ onMounted(() => {
       </div>
       <div class="p-4">
         <UForm class="grid gap-3">
-          <UFormField label="配置名称" required>
+          <UFormField label="配置名称">
             <UInput v-model="draft.name" placeholder="例如：我的阿里云OSS" class="w-full" />
           </UFormField>
 
