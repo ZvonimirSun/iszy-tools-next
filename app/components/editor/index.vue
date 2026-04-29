@@ -24,19 +24,100 @@ defineExpose({
   setInput,
 })
 
+interface Control {
+  title: string
+  event: () => void
+  isDisabled?: () => boolean
+  icon: string
+}
+
 const editor = useComponentRef(EditorMini)
 let cm: EditorView
 const hasUndo = ref(false)
 const hasRedo = ref(false)
 
-const newPlugin: EditorPlugin = {
+const newPlugin = computed<EditorPlugin>(() => ({
   ...props.plugin,
   miniExtensions: undefined,
   extensions: [
     basic.extensions,
     ...(props.plugin?.extensions || []),
   ],
-}
+}))
+
+const controls = computed(() => {
+  const tmp: Control[][] = reactive([
+    [
+      {
+        title: '撤销',
+        isDisabled: () => !hasUndo.value,
+        event: function undoBtn() {
+          if (!hasUndo.value)
+            return
+          undo(cm)
+        },
+        icon: 'i-fa6-solid:arrow-rotate-left',
+      },
+      {
+        title: '重做',
+        isDisabled: () => !hasRedo.value,
+        event: function redoBtn() {
+          if (!hasRedo.value)
+            return
+          redo(cm)
+        },
+        icon: 'i-fa6-solid:arrow-rotate-right',
+      },
+    ],
+  ])
+  const formatControls: Control[] = []
+  if (props.plugin?.formatter) {
+    formatControls.push({
+      title: '格式化',
+      event: function formatBtn() {
+        if (!props.plugin?.formatter) {
+          return
+        }
+        try {
+          const val = props.plugin.formatter(cm.state.doc.toString())
+          if (val && val !== cm.state.doc.toString()) {
+            cm.dispatch({
+              changes: { from: 0, to: cm.state.doc.length, insert: val },
+            })
+          }
+        }
+        catch (e) {
+        }
+      },
+      icon: 'i-custom:format',
+    })
+  }
+  if (props.plugin?.compactor) {
+    formatControls.push({
+      title: '压缩',
+      event: function compactBtn() {
+        if (!props.plugin?.compactor) {
+          return
+        }
+        try {
+          const val = props.plugin.compactor(cm.state.doc.toString())
+          if (val && val !== cm.state.doc.toString()) {
+            cm.dispatch({
+              changes: { from: 0, to: cm.state.doc.length, insert: val },
+            })
+          }
+        }
+        catch (e) {
+        }
+      },
+      icon: 'i-custom:compact',
+    })
+  }
+  if (formatControls.length) {
+    tmp.unshift(formatControls)
+  }
+  return tmp
+})
 
 onMounted(() => {
   if (!editor.value) {
@@ -60,81 +141,6 @@ function getView() {
 
 function setInput(val: string) {
   editor.value?.setInput(val)
-}
-
-interface Control {
-  title: string
-  event: () => void
-  isDisabled?: () => boolean
-  icon: string
-}
-const controls: Control[][] = [
-  [
-    {
-      title: '撤销',
-      isDisabled: () => !hasUndo.value,
-      event: function undoBtn() {
-        if (!hasUndo.value)
-          return
-        undo(cm)
-      },
-      icon: 'i-fa6-solid:arrow-rotate-left',
-    },
-    {
-      title: '重做',
-      isDisabled: () => !hasRedo.value,
-      event: function redoBtn() {
-        if (!hasRedo.value)
-          return
-        redo(cm)
-      },
-      icon: 'i-fa6-solid:arrow-rotate-right',
-    },
-  ],
-]
-const formatControls: Control[] = []
-if (props.plugin?.formatter) {
-  formatControls.push({
-    title: '格式化',
-    event: function formatBtn() {
-      if (!props.plugin?.formatter) {
-        return
-      }
-      try {
-        const val = props.plugin.formatter(cm.state.doc.toString())
-        if (val && val !== cm.state.doc.toString()) {
-          cm.dispatch({
-            changes: { from: 0, to: cm.state.doc.length, insert: val },
-          })
-        }
-      }
-      catch (e) {}
-    },
-    icon: 'i-custom:format',
-  })
-}
-if (props.plugin?.compactor) {
-  formatControls.push({
-    title: '压缩',
-    event: function compactBtn() {
-      if (!props.plugin?.compactor) {
-        return
-      }
-      try {
-        const val = props.plugin.compactor(cm.state.doc.toString())
-        if (val && val !== cm.state.doc.toString()) {
-          cm.dispatch({
-            changes: { from: 0, to: cm.state.doc.length, insert: val },
-          })
-        }
-      }
-      catch (e) {}
-    },
-    icon: 'i-custom:compact',
-  })
-}
-if (formatControls.length) {
-  controls.unshift(formatControls)
 }
 </script>
 
