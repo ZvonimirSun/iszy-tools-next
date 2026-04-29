@@ -6,17 +6,26 @@ import { linter } from '@codemirror/lint'
 import * as eslint from 'eslint-linter-browserify'
 import { js as jsBeautify } from 'js-beautify'
 
-const config = {
-  // eslint configuration
-  parserOptions: {
-    ecmaVersion: 15,
-    sourceType: 'module',
+// flat config format (ESLint v9+)
+const config = [
+  {
+    languageOptions: {
+      ecmaVersion: 2024,
+      sourceType: 'module',
+      globals: {
+        // browser globals
+        window: 'readonly',
+        document: 'readonly',
+        navigator: 'readonly',
+        console: 'readonly',
+        // node globals
+        process: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+      },
+    },
   },
-  env: {
-    browser: true,
-    node: true,
-  },
-}
+]
 
 export function formatter(value: string, { indent = 2 } = {}) {
   return jsBeautify(value, {

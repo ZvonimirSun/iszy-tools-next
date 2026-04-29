@@ -25,10 +25,10 @@ export const tools: OriginToolMenu[] = [
   {
     label: '开发工具',
     children: [
-      {
-        label: 'JSON编辑器',
-        name: 'jsonEditor',
-      },
+      // {
+      //   label: 'JSON编辑器',
+      //   name: 'jsonEditor',
+      // },
       {
         label: 'Mock工具',
         name: 'mock',

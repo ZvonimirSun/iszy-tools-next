@@ -329,7 +329,7 @@ onUnmounted(() => {
           </UModal>
         </div>
 
-        <EditorMini
+        <Editor
           class="flex-1"
           placeholder="输入 JavaScript（ES Module）代码..."
           :plugin="js"
