@@ -22,7 +22,7 @@
 
 .modal-container {
     @apply w-full;
-    @apply translate-x-[calc(-50%-1/2*var(--scrollbar-width,0px))];
+    @apply translate-x-[calc(-50%-1/2*var(--scrollbar-width,0))];
     @apply max-w-[min(calc(var(--ui-container)---spacing(8)),calc(100%---spacing(8)))];
     @apply sm:max-w-[min(calc(var(--ui-container)---spacing(12)),calc(100%---spacing(12)))];
     @apply lg:max-w-[min(calc(var(--ui-container)---spacing(16)),calc(100%---spacing(16)))];

@@ -140,25 +140,29 @@ if (formatControls.length) {
 
 <template>
   <div class="flex flex-col">
-    <div class="controller flex">
-      <template v-for="(group, i) in controls">
-        <div
+    <div class="flex bg-primary w-full h-8 items-center">
+      <template
+        v-for="(group, i) in controls"
+        :key="`divider${i}`"
+      >
+        <USeparator
           v-if="i !== 0"
-          :key="`divider${i}`"
-          class="divider"
+          orientation="vertical"
+          class="h-1/2"
+          :ui="{
+            border: 'border-white',
+          }"
         />
-        <div
+        <UButton
           v-for="(btn, j) in group"
           :key="`btn${i}${j}`"
+          :icon="btn.icon"
           :title="btn.title"
-          class="controller-btn"
-          :class="{
-            disabled: btn.isDisabled?.(),
-          }"
+          variant="solid"
+          class="cursor-pointer text-white"
+          :disabled="btn.isDisabled?.()"
           @click="btn.event"
-        >
-          <UIcon :name="btn.icon" class="size-6" />
-        </div>
+        />
       </template>
     </div>
     <EditorMini
@@ -167,45 +171,8 @@ if (formatControls.length) {
       :placeholder="placeholder"
       :plugin="newPlugin"
       :readonly="readonly"
+      class="flex-1"
       @change="onChange"
     />
   </div>
 </template>
-
-<style scoped lang="scss">
-.controller {
-  background: var(--el-color-primary);
-  width: 100%;
-  height: 3rem;
-  display: flex;
-  align-items: center;
-
-  & .divider {
-    width: 1px;
-    height: calc(100% - 1rem);
-    background: var(--el-color-primary-light-3);
-  }
-
-  &-btn {
-    width: 3rem;
-    height: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--el-color-white);
-    cursor: pointer;
-
-    &.disabled {
-      color: var(--el-color-primary-light-3);
-    }
-
-    &:not(.disabled):hover {
-      background: var(--el-color-primary-light-3);
-    }
-
-    & > span {
-      font-size: 1.6rem;
-    }
-  }
-}
-</style>
