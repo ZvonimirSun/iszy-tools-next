@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import 'vanilla-jsoneditor'
 import 'vanilla-jsoneditor/themes/jse-theme-dark.css'
 
 const isDark = useIsDark()
