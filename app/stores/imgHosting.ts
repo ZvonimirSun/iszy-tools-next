@@ -1,52 +1,59 @@
 import type { ImgHostingConfig } from '~/pages/imgHosting/children/imgHosting.d'
 import { getUploader } from '~/pages/imgHosting/children/imgHosting.service'
 
+const userImgHosting = useSettingsStore().modules.imgHosting
+
 export const useImgHostingStore = defineStore('imgHosting', {
-  state: () => ({
-    configs: [] as ImgHostingConfig[],
-    activeConfigId: null as string | null,
-    commonConfig: {
-      renameTimeStamp: true,
-      copyUrlAfterUpload: true,
-      customCopyContent: '$url',
-    },
-  }),
   getters: {
-    activeConfig: (state): ImgHostingConfig | null => {
-      if (!state.activeConfigId)
-        return null
-      return state.configs.find(c => c.id === state.activeConfigId) || null
+    configs() {
+      return userImgHosting.configs
     },
-    hasConfigs: state => state.configs.length > 0,
-    configOptions: state => state.configs.map(c => ({
-      label: `${c.name} (${getUploader(c.type)?.name ?? c.type})`,
-      value: c.id,
-    })),
+    activeConfigId() {
+      return userImgHosting.activeConfigId
+    },
+    commonConfig() {
+      return userImgHosting.commonConfig
+    },
+    activeConfig(): ImgHostingConfig | null {
+      const activeConfigId = userImgHosting.activeConfigId
+      if (!activeConfigId)
+        return null
+      return userImgHosting.configs.find(c => c.id === activeConfigId) || null
+    },
+    hasConfigs() {
+      return userImgHosting.configs.length > 0
+    },
+    configOptions() {
+      return userImgHosting.configs.map(c => ({
+        label: `${c.name} (${getUploader(c.type)?.name ?? c.type})`,
+        value: c.id,
+      }))
+    },
   },
   actions: {
     addConfig(config: ImgHostingConfig) {
-      this.configs.push(config)
-      if (!this.activeConfigId) {
-        this.activeConfigId = config.id
+      userImgHosting.configs.push(config)
+      if (!userImgHosting.activeConfigId) {
+        userImgHosting.activeConfigId = config.id
       }
     },
     updateConfig(id: string, updates: Partial<ImgHostingConfig>) {
-      const index = this.configs.findIndex(c => c.id === id)
+      const index = userImgHosting.configs.findIndex(c => c.id === id)
       if (index !== -1) {
-        this.configs[index] = { ...this.configs[index], ...updates } as ImgHostingConfig
+        const imgHostingConfig = { ...userImgHosting.configs[index], ...updates } as ImgHostingConfig
+        userImgHosting.configs.splice(index, 1, imgHostingConfig)
       }
     },
     removeConfig(id: string) {
-      this.configs = this.configs.filter(c => c.id !== id)
-      if (this.activeConfigId === id) {
-        this.activeConfigId = this.configs[0]?.id || null
+      userImgHosting.configs = userImgHosting.configs.filter(c => c.id !== id)
+      if (userImgHosting.activeConfigId === id) {
+        userImgHosting.activeConfigId = userImgHosting.configs[0]?.id || null
       }
     },
     setActiveConfig(id: string) {
-      this.activeConfigId = id
+      userImgHosting.activeConfigId = id
     },
   },
-  persist: true,
 })
 
 if (import.meta.hot) {
