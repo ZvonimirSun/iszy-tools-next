@@ -3,7 +3,7 @@ import type { EditorPlugin } from '#shared/types/editor'
 import type { ViewUpdate } from '@codemirror/view'
 import { defaultHighlightStyle, syntaxHighlighting } from '@codemirror/language'
 import { Compartment, EditorState } from '@codemirror/state'
-import { oneDarkHighlightStyle, oneDarkTheme } from '@codemirror/theme-one-dark'
+import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorView, placeholder as PlaceHolder } from '@codemirror/view'
 import mini from './lang-mini'
 
@@ -39,8 +39,8 @@ const extensions = [
   mini.extensions,
   props.plugin ? props.plugin.miniExtensions || props.plugin.extensions : [],
   EditorView.updateListener.of(onChange),
-  themeCompartment.of(isDark.value ? oneDarkTheme : EditorView.theme({}, { dark: false })),
-  highLightCompartment.of(isDark.value ? syntaxHighlighting(oneDarkHighlightStyle, { fallback: true }) : syntaxHighlighting(defaultHighlightStyle)),
+  themeCompartment.of(isDark.value ? oneDark : EditorView.theme({}, { dark: false })),
+  highLightCompartment.of(isDark.value ? oneDark : syntaxHighlighting(defaultHighlightStyle)),
 ]
 if (props.placeholder) {
   extensions.push(PlaceHolder(props.placeholder))
@@ -66,8 +66,8 @@ onUnmounted(() => {
 watch(isDark, (val) => {
   cm.dispatch({
     effects: [
-      themeCompartment.reconfigure(val ? oneDarkTheme : EditorView.theme({}, { dark: false })),
-      highLightCompartment.reconfigure(val ? syntaxHighlighting(oneDarkHighlightStyle, { fallback: true }) : syntaxHighlighting(defaultHighlightStyle)),
+      themeCompartment.reconfigure(val ? oneDark : EditorView.theme({}, { dark: false })),
+      highLightCompartment.reconfigure(val ? oneDark : syntaxHighlighting(defaultHighlightStyle)),
     ],
   })
 })
