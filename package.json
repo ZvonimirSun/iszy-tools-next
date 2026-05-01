@@ -48,7 +48,7 @@
     "@vueuse/core": "^14.2.1",
     "@vueuse/integrations": "^14.2.1",
     "@vueuse/nuxt": "^14.2.1",
-    "@vueuse/router": "^14.2.1",
+    "@vueuse/router": "^14.3.0",
     "@zvonimirsun/iszy-common": "^1.1.4",
     "@zvonimirsun/map-sdk": "^1.2.1",
     "@zvonimirsun/pinia-plugin-persistedstate": "^1.1.0",
