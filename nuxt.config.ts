@@ -86,6 +86,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxt/scripts',
     '@nuxtjs/sitemap',
+    '@nuxtjs/partytown',
     '@zvonimirsun/pinia-plugin-persistedstate/nuxt',
     'json-editor-vue/nuxt',
   ],
@@ -109,7 +110,10 @@ export default defineNuxtConfig({
   },
   scripts: {
     registry: {
-      cloudflareWebAnalytics: { trigger: 'onNuxtReady' },
+      cloudflareWebAnalytics: {
+        partytown: true,
+        trigger: 'onNuxtReady',
+      },
     },
   },
   pages: {
