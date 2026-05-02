@@ -109,7 +109,7 @@ export default defineNuxtConfig({
   },
   scripts: {
     registry: {
-      cloudflareWebAnalytics: true,
+      cloudflareWebAnalytics: { trigger: 'onNuxtReady' },
     },
   },
   pages: {
