@@ -131,7 +131,7 @@ function updateParams() {
       lodInfo.scaleDomination = Number.parseFloat(formInfo.scaleDomination)
     }
   }
-  else if (scaleDominationEdited && resolutionEdited && formInfo.scaleDomination) {
+  else if (scaleDominationEdited && resolutionEdited && formInfo.scaleDomination && formInfo.resolution) {
     formInfo.ppi = getPPI(lodInfo.scaleDomination, lodInfo.resolution, formInfo.unit).toFixed(3)
     lodInfo.ppi = Number.parseFloat(formInfo.ppi)
     formInfo.pixelSize = (ppiToPX(lodInfo.ppi) * 1000).toFixed(2)
@@ -140,12 +140,37 @@ function updateParams() {
 }
 
 function generate() {
+  const scaleDominationEdited = lastEdit.includes('scaleDomination')
+  const resolutionEdited = lastEdit.includes('resolution')
+  const ppiEdited = lastEdit.includes('ppi')
   let baseResolution
-  if (lodInfo.lod === 0) {
-    baseResolution = lodInfo.resolution
+  let baseScale
+  if (scaleDominationEdited && ppiEdited) {
+    if (formInfo.scaleDomination && formInfo.ppi) {
+      baseScale = lodInfo.scaleDomination * (2 ** lodInfo.lod)
+      baseResolution = getResolution(baseScale, lodInfo.ppi, formInfo.unit)
+    }
+    else {
+      return
+    }
   }
-  else {
-    baseResolution = lodInfo.resolution * (2 ** lodInfo.lod)
+  else if (resolutionEdited && ppiEdited) {
+    if (formInfo.resolution && formInfo.ppi) {
+      baseResolution = lodInfo.resolution * (2 ** lodInfo.lod)
+      baseScale = getScaleDomination(baseResolution, lodInfo.ppi, formInfo.unit)
+    }
+    else {
+      return
+    }
+  }
+  else if (scaleDominationEdited && resolutionEdited) {
+    if (formInfo.scaleDomination && formInfo.resolution) {
+      baseScale = lodInfo.scaleDomination * (2 ** lodInfo.lod)
+      baseResolution = lodInfo.resolution * (2 ** lodInfo.lod)
+    }
+    else {
+      return
+    }
   }
   const lods: {
     level: number
@@ -154,10 +179,11 @@ function generate() {
   }[] = []
   for (let i = 0; i < lodInfo.count; i++) {
     const resolution = baseResolution / (2 ** i)
+    const scale = baseScale / (2 ** i)
     lods.push({
       level: i,
       resolution: Number.parseFloat(resolution.toPrecision(11)),
-      scale: Number.parseFloat(getScaleDomination(resolution, lodInfo.ppi, formInfo.unit).toPrecision(11)),
+      scale: Number.parseFloat(scale.toPrecision(11)),
     })
   }
   lodsStr.value = JSON.stringify(lods, null, 2)
