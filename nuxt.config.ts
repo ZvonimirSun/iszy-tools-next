@@ -120,6 +120,9 @@ export default defineNuxtConfig({
     pattern: pagePattern,
   },
   vite: {
+    worker: {
+      format: 'es',
+    },
     optimizeDeps: {
       include: [
         'reka-ui',
