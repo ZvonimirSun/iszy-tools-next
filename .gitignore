@@ -27,3 +27,5 @@ logs
 .claude/*.local.*
 .claude/cache/
 .claude/tmp/
+
+.codex
