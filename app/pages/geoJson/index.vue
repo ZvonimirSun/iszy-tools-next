@@ -4,7 +4,7 @@ import type { GeoJsonCollapsedSide } from '~/stores/geoJson'
 import { downloadBlob } from '~/utils/common'
 import GeoJsonExportDialog from './children/components/GeoJsonExportDialog.vue'
 import GeoJsonImportDialog from './children/components/GeoJsonImportDialog.vue'
-import { exportGeoJsonFile, guessImportFormat, importGeoJsonFileByFormat } from './children/file/geoJson.file'
+import { exportGeoJsonFile, importGeoJsonFileByFormat } from './children/file/geoJson.file'
 import { canShowGeoJsonPropertyTable, useGeoJsonProperties } from './children/useGeoJsonProperties'
 import { getFeatures, getProperties, isGeometry, normalizeGeoJsonObject, toFeatureCollection } from './children/utils'
 import 'leaflet/dist/leaflet.css'
@@ -170,20 +170,6 @@ function handleGeoJsonUpdate(val: unknown) {
   }, 300)
 }
 
-function confirmBeforeLeaving() {
-  // eslint-disable-next-line no-alert
-  return !hasFeatures.value || window.confirm('当前页面已有图斑，确定要离开吗？')
-}
-
-function handleBeforeUnload(event: BeforeUnloadEvent) {
-  if (!hasFeatures.value) {
-    return
-  }
-
-  event.preventDefault()
-  event.returnValue = ''
-}
-
 function openImportDialog() {
   fileInput.value?.click()
 }
@@ -206,18 +192,8 @@ function handleImportFileChange(event: Event) {
   }
 
   pendingImportFile.value = file
-  try {
-    importDefaultFormat.value = guessImportFormat(file)
-    importDialogOpen.value = true
-  }
-  catch (error) {
-    pendingImportFile.value = null
-    toast.add({
-      color: 'error',
-      title: '导入失败',
-      description: (error as Error).message || '无法识别文件格式',
-    })
-  }
+  importDefaultFormat.value = 'geojson'
+  importDialogOpen.value = true
 }
 
 function cancelImport() {
@@ -379,7 +355,6 @@ function renderGeoJson(val: unknown) {
 }
 
 onMounted(async () => {
-  window.addEventListener('beforeunload', handleBeforeUnload)
   mediaQuery = window.matchMedia('(max-width: 1023px)')
   updateMobileLayout(mediaQuery)
   mediaQuery.addEventListener('change', updateMobileLayout)
@@ -397,13 +372,8 @@ onBeforeUnmount(() => {
     clearTimeout(renderTimer)
   }
   mediaQuery?.removeEventListener('change', updateMobileLayout)
-  window.removeEventListener('beforeunload', handleBeforeUnload)
   window.removeEventListener('pointermove', resize)
   mapHandler?.destroy()
-})
-
-onBeforeRouteLeave(() => {
-  return confirmBeforeLeaving()
 })
 
 async function createMapHandler(dom: HTMLDivElement) {

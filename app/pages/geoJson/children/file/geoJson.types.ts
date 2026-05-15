@@ -1,7 +1,7 @@
 import type { GeoJSON } from '@zvonimirsun/map-sdk'
 
-export type GeoJsonImportFormat = 'geojson' | 'geojsonl' | 'shapefile'
-export type GeoJsonExportFormat = 'geojson' | 'geojsonl' | 'shapefile'
+export type GeoJsonImportFormat = 'geojson' | 'geojsonl' | 'shapefile' | 'topojson' | 'wkt'
+export type GeoJsonExportFormat = 'geojson' | 'geojsonl' | 'shapefile' | 'topojson' | 'wkt'
 
 export interface GeoJsonExportOptions {
   format: GeoJsonExportFormat

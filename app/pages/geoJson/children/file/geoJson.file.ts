@@ -7,30 +7,36 @@ export const geoJsonImportFormatItems = [
   { label: 'GeoJSON', value: 'geojson' },
   { label: 'GeoJSONL', value: 'geojsonl' },
   { label: 'Esri Shapefile', value: 'shapefile' },
+  { label: 'TopoJSON', value: 'topojson' },
+  { label: 'WKT', value: 'wkt' },
 ] satisfies Array<{ label: string, value: GeoJsonImportFormat }>
 
 export const geoJsonExportFormatItems = [
   { label: 'GeoJSON', value: 'geojson' },
   { label: 'GeoJSONL', value: 'geojsonl' },
   { label: 'Esri Shapefile', value: 'shapefile' },
+  { label: 'TopoJSON', value: 'topojson' },
+  { label: 'WKT', value: 'wkt' },
 ] satisfies Array<{ label: string, value: GeoJsonExportOptions['format'] }>
 
-export function guessImportFormat(file: File): GeoJsonImportFormat {
+const importFormatExtensions = {
+  geojson: ['.geojson', '.json'],
+  geojsonl: ['.geojsonl', '.geojsons', '.ld'],
+  shapefile: ['.zip'],
+  topojson: ['.topojson', '.json'],
+  wkt: [],
+} satisfies Record<GeoJsonImportFormat, string[]>
+
+export function validateImportFileFormat(file: File, format: GeoJsonImportFormat) {
+  const extensions = importFormatExtensions[format]
+  if (!extensions.length) {
+    return
+  }
+
   const name = file.name.toLowerCase()
-
-  if (name.endsWith('.zip')) {
-    return 'shapefile'
+  if (!extensions.some(extension => name.endsWith(extension))) {
+    throw new Error(`所选格式仅支持 ${extensions.join('、')} 文件`)
   }
-
-  if (/\.(?:geojsonl|geojsons|ld)$/i.test(name)) {
-    return 'geojsonl'
-  }
-
-  if (/\.(?:geojson|json)$/i.test(name)) {
-    return 'geojson'
-  }
-
-  throw new Error('无法识别文件格式')
 }
 
 export async function parseGeoJsonFile(file: File): Promise<GeoJSON> {
@@ -69,11 +75,39 @@ export async function parseGeoJsonLinesFile(file: File): Promise<GeoJSON> {
   }
 }
 
+export async function parseTopoJsonFile(file: File): Promise<GeoJSON> {
+  const { feature } = await import('topojson-client')
+  const topology = JSON.parse(await file.text()) as { objects?: Record<string, unknown> }
+  if (!topology || typeof topology !== 'object' || !topology.objects || typeof topology.objects !== 'object') {
+    throw new Error('文件内容不是有效的 TopoJSON')
+  }
+
+  const geoJsonList = Object.keys(topology.objects).map((key) => {
+    return feature(topology as never, key) as unknown
+  })
+
+  return normalizeImportedGeoJson(mergeGeoJsonList(geoJsonList))
+}
+
+export async function parseWktFile(file: File): Promise<GeoJSON> {
+  const wellknown = await import('wellknown')
+  const geometry = wellknown.parse((await file.text()).trim())
+  if (!geometry || !isGeometry(geometry)) {
+    throw new Error('文件内容不是有效的 WKT')
+  }
+
+  return geometry
+}
+
 export function importGeoJsonFileByFormat(file: File, format: GeoJsonImportFormat): Promise<unknown> {
+  validateImportFileFormat(file, format)
+
   const parsers = {
     geojson: parseGeoJsonFile,
     geojsonl: parseGeoJsonLinesFile,
     shapefile: importShapefileInWorker,
+    topojson: parseTopoJsonFile,
+    wkt: parseWktFile,
   } satisfies Record<GeoJsonImportFormat, (file: File) => Promise<unknown>>
 
   return parsers[format](file)
@@ -115,6 +149,42 @@ export function createGeoJsonLinesExport(data: unknown): GeoJsonExportResult {
   }
 }
 
+export async function createTopoJsonExport(data: unknown): Promise<GeoJsonExportResult> {
+  const { topology } = await import('topojson-server')
+  const collection = createShapefileSource(data)
+  return {
+    blob: new Blob([JSON.stringify(topology({ data: collection }))], {
+      type: 'application/topo+json;charset=utf-8',
+    }),
+    filename: 'geojson.topojson',
+  }
+}
+
+export async function createWktExport(data: unknown): Promise<GeoJsonExportResult> {
+  const wellknown = await import('wellknown')
+  const collection = createShapefileSource(data)
+  const geometry = collection.features.length === 1
+    ? collection.features[0]?.geometry
+    : {
+        type: 'GeometryCollection',
+        geometries: collection.features.map(feature => feature.geometry).filter(isGeometry),
+      }
+  if (!isGeometry(geometry)) {
+    throw new Error('当前没有可导出的 WKT 几何')
+  }
+
+  const wkt = wellknown.stringify(geometry)
+
+  if (!wkt) {
+    throw new Error('WKT 导出失败')
+  }
+
+  return {
+    blob: new Blob([wkt], { type: 'text/plain;charset=utf-8' }),
+    filename: 'geojson.wkt',
+  }
+}
+
 export function createShapefileSource(data: unknown) {
   const collection = toFeatureCollection(data)
   if (!collection.features.length) {
@@ -135,6 +205,8 @@ export async function exportGeoJsonFile(data: unknown, options: GeoJsonExportOpt
         filename: 'shapefile.zip',
       }
     },
+    topojson: () => createTopoJsonExport(data),
+    wkt: () => createWktExport(data),
   } satisfies Record<GeoJsonExportOptions['format'], () => GeoJsonExportResult | Promise<GeoJsonExportResult>>
 
   return exporters[options.format]()
