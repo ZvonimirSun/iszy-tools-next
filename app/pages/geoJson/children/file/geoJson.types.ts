@@ -2,6 +2,13 @@ import type { GeoJSON } from '@zvonimirsun/map-sdk'
 
 export type GeoJsonImportFormat = 'geojson' | 'geojsonl' | 'shapefile' | 'topojson' | 'wkt'
 export type GeoJsonExportFormat = 'geojson' | 'geojsonl' | 'shapefile' | 'topojson' | 'wkt'
+export type GeoJsonImportReadType = 'text' | 'binary'
+
+export interface GeoJsonImportFormatConfig {
+  label: string
+  readType: GeoJsonImportReadType
+  extensions: string[]
+}
 
 export interface GeoJsonExportOptions {
   format: GeoJsonExportFormat

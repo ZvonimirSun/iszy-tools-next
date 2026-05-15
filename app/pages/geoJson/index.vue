@@ -4,7 +4,7 @@ import type { GeoJsonCollapsedSide } from '~/stores/geoJson'
 import { downloadBlob } from '~/utils/common'
 import GeoJsonExportDialog from './children/components/GeoJsonExportDialog.vue'
 import GeoJsonImportDialog from './children/components/GeoJsonImportDialog.vue'
-import { exportGeoJsonFile, importGeoJsonFileByFormat } from './children/file/geoJson.file'
+import { exportGeoJsonFile, guessImportFormat, importGeoJsonFileByFormat } from './children/file/geoJson.file'
 import { canShowGeoJsonPropertyTable, useGeoJsonProperties } from './children/useGeoJsonProperties'
 import { getFeatures, getProperties, isGeometry, normalizeGeoJsonObject, toFeatureCollection } from './children/utils'
 import 'leaflet/dist/leaflet.css'
@@ -192,7 +192,7 @@ function handleImportFileChange(event: Event) {
   }
 
   pendingImportFile.value = file
-  importDefaultFormat.value = 'geojson'
+  importDefaultFormat.value = guessImportFormat(file)
   importDialogOpen.value = true
 }
 

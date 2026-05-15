@@ -1,15 +1,42 @@
 import type { Feature, GeoJSON, Geometry } from '@zvonimirsun/map-sdk'
-import type { GeoJsonExportOptions, GeoJsonExportResult, GeoJsonImportFormat } from './geoJson.types'
+import type { GeoJsonExportOptions, GeoJsonExportResult, GeoJsonImportFormat, GeoJsonImportFormatConfig } from './geoJson.types'
 import { isGeoJsonObject, isGeometry, toFeatureCollection } from '../utils'
 import { exportShapefileInWorker, importShapefileInWorker } from './useGeoJsonFileWorkers'
 
-export const geoJsonImportFormatItems = [
-  { label: 'GeoJSON', value: 'geojson' },
-  { label: 'GeoJSONL', value: 'geojsonl' },
-  { label: 'Esri Shapefile', value: 'shapefile' },
-  { label: 'TopoJSON', value: 'topojson' },
-  { label: 'WKT', value: 'wkt' },
-] satisfies Array<{ label: string, value: GeoJsonImportFormat }>
+const geoJsonImportFormatOrder = ['geojson', 'geojsonl', 'shapefile', 'topojson', 'wkt'] as const
+
+export const geoJsonImportFormatConfigs = {
+  geojson: {
+    label: 'GeoJSON',
+    readType: 'text',
+    extensions: ['.geojson', '.json'],
+  },
+  geojsonl: {
+    label: 'GeoJSONL',
+    readType: 'text',
+    extensions: ['.geojsonl', '.geojsons', '.ld'],
+  },
+  shapefile: {
+    label: 'Esri Shapefile',
+    readType: 'binary',
+    extensions: ['.zip'],
+  },
+  topojson: {
+    label: 'TopoJSON',
+    readType: 'text',
+    extensions: ['.topojson', '.json'],
+  },
+  wkt: {
+    label: 'WKT',
+    readType: 'text',
+    extensions: [],
+  },
+} satisfies Record<GeoJsonImportFormat, GeoJsonImportFormatConfig>
+
+export const geoJsonImportFormatItems = geoJsonImportFormatOrder.map(format => ({
+  label: geoJsonImportFormatConfigs[format].label,
+  value: format,
+})) satisfies Array<{ label: string, value: GeoJsonImportFormat }>
 
 export const geoJsonExportFormatItems = [
   { label: 'GeoJSON', value: 'geojson' },
@@ -19,24 +46,16 @@ export const geoJsonExportFormatItems = [
   { label: 'WKT', value: 'wkt' },
 ] satisfies Array<{ label: string, value: GeoJsonExportOptions['format'] }>
 
-const importFormatExtensions = {
-  geojson: ['.geojson', '.json'],
-  geojsonl: ['.geojsonl', '.geojsons', '.ld'],
-  shapefile: ['.zip'],
-  topojson: ['.topojson', '.json'],
-  wkt: [],
-} satisfies Record<GeoJsonImportFormat, string[]>
-
-export function validateImportFileFormat(file: File, format: GeoJsonImportFormat) {
-  const extensions = importFormatExtensions[format]
-  if (!extensions.length) {
-    return
-  }
-
+export function guessImportFormat(file: File): GeoJsonImportFormat {
   const name = file.name.toLowerCase()
-  if (!extensions.some(extension => name.endsWith(extension))) {
-    throw new Error(`所选格式仅支持 ${extensions.join('、')} 文件`)
+
+  for (const format of geoJsonImportFormatOrder) {
+    if (geoJsonImportFormatConfigs[format].extensions.some(extension => name.endsWith(extension))) {
+      return format
+    }
   }
+
+  return 'geojson'
 }
 
 export async function parseGeoJsonFile(file: File): Promise<GeoJSON> {
@@ -100,8 +119,6 @@ export async function parseWktFile(file: File): Promise<GeoJSON> {
 }
 
 export function importGeoJsonFileByFormat(file: File, format: GeoJsonImportFormat): Promise<unknown> {
-  validateImportFileFormat(file, format)
-
   const parsers = {
     geojson: parseGeoJsonFile,
     geojsonl: parseGeoJsonLinesFile,
@@ -173,7 +190,7 @@ export async function createWktExport(data: unknown): Promise<GeoJsonExportResul
     throw new Error('当前没有可导出的 WKT 几何')
   }
 
-  const wkt = wellknown.stringify(geometry)
+  const wkt = wellknown.stringify(geometry as never)
 
   if (!wkt) {
     throw new Error('WKT 导出失败')
