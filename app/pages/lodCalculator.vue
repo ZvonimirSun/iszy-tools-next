@@ -150,17 +150,11 @@ function generate() {
       baseScale = lodInfo.scaleDomination * (2 ** lodInfo.lod)
       baseResolution = getResolution(baseScale, lodInfo.ppi, formInfo.unit)
     }
-    else {
-      return
-    }
   }
   else if (resolutionEdited && ppiEdited) {
     if (formInfo.resolution && formInfo.ppi) {
       baseResolution = lodInfo.resolution * (2 ** lodInfo.lod)
       baseScale = getScaleDomination(baseResolution, lodInfo.ppi, formInfo.unit)
-    }
-    else {
-      return
     }
   }
   else if (scaleDominationEdited && resolutionEdited) {
@@ -168,9 +162,9 @@ function generate() {
       baseScale = lodInfo.scaleDomination * (2 ** lodInfo.lod)
       baseResolution = lodInfo.resolution * (2 ** lodInfo.lod)
     }
-    else {
-      return
-    }
+  }
+  if (!baseResolution || !baseScale) {
+    return
   }
   const lods: {
     level: number
