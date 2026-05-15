@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
+import type { TableColumn } from '@nuxt/ui'
+import type { GeoJsonExportOptions, GeoJsonImportFormat } from './children/file/geoJson.types'
 import type { PropertyRow } from './children/utils'
 import type { GeoJsonCollapsedSide } from '~/stores/geoJson'
-import { formatPropertyValue, getFeatures, getProperties, isGeoJsonObject, isGeometry, normalizeGeoJsonObject, toFeatureCollection } from './children/utils'
+import { downloadBlob } from '~/utils/common'
+import GeoJsonExportDialog from './children/components/GeoJsonExportDialog.vue'
+import GeoJsonImportDialog from './children/components/GeoJsonImportDialog.vue'
+import { createGeoJsonExport, createShapefileSource, guessImportFormat, parseGeoJsonFile } from './children/file/geoJson.file'
+import { exportShapefileInWorker, importShapefileInWorker } from './children/file/useGeoJsonFileWorkers'
+import { formatPropertyValue, getFeatures, getProperties, isGeometry, normalizeGeoJsonObject, toFeatureCollection } from './children/utils'
 import 'leaflet/dist/leaflet.css'
 
 definePageMeta({ layout: 'wide' })
@@ -18,6 +24,12 @@ const geoJsonData = shallowRef<unknown>({
   type: 'FeatureCollection',
   features: [],
 })
+const pendingImportFile = shallowRef<File | null>(null)
+const importDialogOpen = ref(false)
+const exportDialogOpen = ref(false)
+const importDefaultFormat = ref<GeoJsonImportFormat>('geojson')
+const isImporting = ref(false)
+const isExporting = ref(false)
 const showAddPropertyDialog = ref(false)
 const newPropertyKey = ref('')
 const isDraggingDivider = ref(false)
@@ -35,24 +47,6 @@ const hasFeatures = computed(() => {
   const data = normalizeGeoJsonObject(geoJsonData.value)
   return featureRows.value.length > 0 || isGeometry(data)
 })
-const actionItems = computed<DropdownMenuItem[]>(() => [
-  {
-    label: '导入',
-    icon: 'i-lucide:upload',
-    onSelect() {
-      openImportDialog()
-    },
-  },
-  {
-    label: '导出',
-    icon: 'i-lucide:download',
-    disabled: !hasFeatures.value,
-    onSelect() {
-      exportGeoJson()
-    },
-  },
-])
-
 const propertyKeys = computed(() => {
   const keys = new Set<string>()
 
@@ -238,7 +232,15 @@ function openImportDialog() {
   fileInput.value?.click()
 }
 
-async function importGeoJsonFile(event: Event) {
+function openExportDialog() {
+  if (!hasFeatures.value) {
+    return
+  }
+
+  exportDialogOpen.value = true
+}
+
+function handleImportFileChange(event: Event) {
   const input = event.target as HTMLInputElement
   const file = input.files?.[0]
   input.value = ''
@@ -247,47 +249,75 @@ async function importGeoJsonFile(event: Event) {
     return
   }
 
-  if (!/\.(?:geojson|json)$/i.test(file.name)) {
-    toast.add({
-      color: 'error',
-      title: '仅支持 .geojson 和 .json 文件',
-    })
+  pendingImportFile.value = file
+  importDefaultFormat.value = guessImportFormat(file)
+  importDialogOpen.value = true
+}
+
+function cancelImport() {
+  pendingImportFile.value = null
+}
+
+async function importSelectedFile(format: GeoJsonImportFormat) {
+  if (!pendingImportFile.value || isImporting.value) {
     return
   }
 
+  isImporting.value = true
   try {
-    const data = JSON.parse(await file.text())
-    if (!isGeoJsonObject(data)) {
-      throw new Error('文件内容不是有效的 GeoJSON')
-    }
+    const data = format === 'shapefile'
+      ? await importShapefileInWorker(pendingImportFile.value)
+      : await parseGeoJsonFile(pendingImportFile.value)
 
     geoJsonData.value = data
     renderGeoJson(data)
+    importDialogOpen.value = false
+    pendingImportFile.value = null
     toast.add({
       color: 'success',
-      title: 'GeoJSON 导入成功',
+      title: '导入成功',
     })
   }
   catch (error) {
     toast.add({
       color: 'error',
-      title: 'GeoJSON 导入失败',
+      title: '导入失败',
       description: (error as Error).message || '文件解析失败',
     })
   }
+  finally {
+    isImporting.value = false
+  }
 }
 
-function exportGeoJson() {
-  const data = normalizeGeoJsonObject(geoJsonData.value)
-  if (!isGeoJsonObject(data)) {
-    toast.add({
-      color: 'error',
-      title: '当前内容不是有效的 GeoJSON',
-    })
+async function exportSelectedFile(options: GeoJsonExportOptions) {
+  if (isExporting.value) {
     return
   }
 
-  downloadBlob(new Blob([JSON.stringify(data)], { type: 'application/geo+json;charset=utf-8' }), 'geojson.geojson')
+  isExporting.value = true
+  try {
+    if (options.format === 'shapefile') {
+      const buffer = await exportShapefileInWorker(createShapefileSource(geoJsonData.value))
+      downloadBlob(new Blob([buffer], { type: 'application/zip' }), 'shapefile.zip')
+    }
+    else {
+      const result = createGeoJsonExport(geoJsonData.value, options)
+      downloadBlob(result.blob, result.filename)
+    }
+
+    exportDialogOpen.value = false
+  }
+  catch (error) {
+    toast.add({
+      color: 'error',
+      title: '导出失败',
+      description: (error as Error).message || '文件导出失败',
+    })
+  }
+  finally {
+    isExporting.value = false
+  }
 }
 
 function startResize(event: PointerEvent) {
@@ -444,26 +474,32 @@ async function createMapHandler(dom: HTMLDivElement) {
       class="relative min-h-0 overflow-hidden rounded-lg border border-muted bg-default"
     >
       <div ref="mapContainer" class="h-full w-full z-0" />
-      <div class="absolute left-3 top-3 z-[1001]">
-        <UDropdownMenu
-          :items="actionItems"
-          :content="{ align: 'start', side: 'bottom' }"
+      <div class="absolute left-3 top-3 z-1001 flex items-center gap-2">
+        <UButton
+          color="neutral"
+          variant="outline"
+          icon="i-lucide:upload"
+          class="shadow-sm"
+          @click="openImportDialog"
         >
-          <button
-            type="button"
-            class="inline-flex h-9 items-center justify-center rounded-md border border-default bg-default px-3 text-sm font-medium text-highlighted shadow-sm outline-none hover:bg-elevated focus-visible:ring-2 focus-visible:ring-primary"
-            aria-label="操作菜单"
-          >
-            菜单
-          </button>
-        </UDropdownMenu>
+          导入
+        </UButton>
+        <UButton
+          color="neutral"
+          variant="outline"
+          icon="i-lucide:download"
+          class="shadow-sm"
+          :disabled="!hasFeatures"
+          @click="openExportDialog"
+        >
+          导出
+        </UButton>
       </div>
       <input
         ref="fileInput"
         type="file"
         class="hidden"
-        accept=".geojson,.json,application/geo+json,application/json"
-        @change="importGeoJsonFile"
+        @change="handleImportFileChange"
       >
     </section>
 
@@ -568,5 +604,20 @@ async function createMapHandler(dom: HTMLDivElement) {
         </div>
       </template>
     </UModal>
+
+    <GeoJsonImportDialog
+      v-model:open="importDialogOpen"
+      :file-name="pendingImportFile?.name"
+      :default-format="importDefaultFormat"
+      :loading="isImporting"
+      @confirm="importSelectedFile"
+      @cancel="cancelImport"
+    />
+
+    <GeoJsonExportDialog
+      v-model:open="exportDialogOpen"
+      :loading="isExporting"
+      @confirm="exportSelectedFile"
+    />
   </div>
 </template>
