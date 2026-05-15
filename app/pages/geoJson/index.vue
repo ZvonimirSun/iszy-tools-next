@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { TableColumn } from '@nuxt/ui'
+import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
 import type { PropertyRow } from './children/utils'
 import type { GeoJsonCollapsedSide } from '~/stores/geoJson'
-import { formatPropertyValue, getFeatures, getProperties, normalizeGeoJsonObject, toFeatureCollection } from './children/utils'
+import { formatPropertyValue, getFeatures, getProperties, isGeoJsonObject, isGeometry, normalizeGeoJsonObject, toFeatureCollection } from './children/utils'
 import 'leaflet/dist/leaflet.css'
 
 definePageMeta({ layout: 'wide' })
@@ -12,6 +12,7 @@ type TabValue = 'json' | 'properties'
 const toast = useToast()
 const geoJsonStore = useGeoJsonStore()
 const mapContainer = useTemplateRef('mapContainer')
+const fileInput = useTemplateRef('fileInput')
 const activeTab = ref<TabValue>('json')
 const geoJsonData = shallowRef<unknown>({
   type: 'FeatureCollection',
@@ -29,8 +30,29 @@ const tabItems = [
   { label: 'JSON', value: 'json' as const },
   { label: '属性', value: 'properties' as const },
 ]
-
 const featureRows = computed(() => getFeatures(geoJsonData.value))
+const hasFeatures = computed(() => {
+  const data = normalizeGeoJsonObject(geoJsonData.value)
+  return featureRows.value.length > 0 || isGeometry(data)
+})
+const actionItems = computed<DropdownMenuItem[]>(() => [
+  {
+    label: '导入',
+    icon: 'i-lucide:upload',
+    onSelect() {
+      openImportDialog()
+    },
+  },
+  {
+    label: '导出',
+    icon: 'i-lucide:download',
+    disabled: !hasFeatures.value,
+    onSelect() {
+      exportGeoJson()
+    },
+  },
+])
+
 const propertyKeys = computed(() => {
   const keys = new Set<string>()
 
@@ -198,6 +220,76 @@ function handleGeoJsonUpdate(val: unknown) {
   }, 300)
 }
 
+function confirmBeforeLeaving() {
+  // eslint-disable-next-line no-alert
+  return !hasFeatures.value || window.confirm('当前页面已有图斑，确定要离开吗？')
+}
+
+function handleBeforeUnload(event: BeforeUnloadEvent) {
+  if (!hasFeatures.value) {
+    return
+  }
+
+  event.preventDefault()
+  event.returnValue = ''
+}
+
+function openImportDialog() {
+  fileInput.value?.click()
+}
+
+async function importGeoJsonFile(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ''
+
+  if (!file) {
+    return
+  }
+
+  if (!/\.(?:geojson|json)$/i.test(file.name)) {
+    toast.add({
+      color: 'error',
+      title: '仅支持 .geojson 和 .json 文件',
+    })
+    return
+  }
+
+  try {
+    const data = JSON.parse(await file.text())
+    if (!isGeoJsonObject(data)) {
+      throw new Error('文件内容不是有效的 GeoJSON')
+    }
+
+    geoJsonData.value = data
+    renderGeoJson(data)
+    toast.add({
+      color: 'success',
+      title: 'GeoJSON 导入成功',
+    })
+  }
+  catch (error) {
+    toast.add({
+      color: 'error',
+      title: 'GeoJSON 导入失败',
+      description: (error as Error).message || '文件解析失败',
+    })
+  }
+}
+
+function exportGeoJson() {
+  const data = normalizeGeoJsonObject(geoJsonData.value)
+  if (!isGeoJsonObject(data)) {
+    toast.add({
+      color: 'error',
+      title: '当前内容不是有效的 GeoJSON',
+    })
+    return
+  }
+
+  downloadBlob(new Blob([JSON.stringify(data)], { type: 'application/geo+json;charset=utf-8' }), 'geojson.geojson')
+}
+
 function startResize(event: PointerEvent) {
   if (isMobileLayout.value) {
     return
@@ -299,6 +391,7 @@ function renderGeoJson(val: unknown) {
 }
 
 onMounted(async () => {
+  window.addEventListener('beforeunload', handleBeforeUnload)
   mediaQuery = window.matchMedia('(max-width: 1023px)')
   updateMobileLayout(mediaQuery)
   mediaQuery.addEventListener('change', updateMobileLayout)
@@ -316,8 +409,13 @@ onBeforeUnmount(() => {
     clearTimeout(renderTimer)
   }
   mediaQuery?.removeEventListener('change', updateMobileLayout)
+  window.removeEventListener('beforeunload', handleBeforeUnload)
   window.removeEventListener('pointermove', resize)
   mapHandler?.destroy()
+})
+
+onBeforeRouteLeave(() => {
+  return confirmBeforeLeaving()
 })
 
 async function createMapHandler(dom: HTMLDivElement) {
@@ -343,9 +441,30 @@ async function createMapHandler(dom: HTMLDivElement) {
   >
     <section
       v-show="showMapPane"
-      class="min-h-0 overflow-hidden rounded-lg border border-muted bg-default"
+      class="relative min-h-0 overflow-hidden rounded-lg border border-muted bg-default"
     >
       <div ref="mapContainer" class="h-full w-full z-0" />
+      <div class="absolute left-3 top-3 z-[1001]">
+        <UDropdownMenu
+          :items="actionItems"
+          :content="{ align: 'start', side: 'bottom' }"
+        >
+          <button
+            type="button"
+            class="inline-flex h-9 items-center justify-center rounded-md border border-default bg-default px-3 text-sm font-medium text-highlighted shadow-sm outline-none hover:bg-elevated focus-visible:ring-2 focus-visible:ring-primary"
+            aria-label="操作菜单"
+          >
+            菜单
+          </button>
+        </UDropdownMenu>
+      </div>
+      <input
+        ref="fileInput"
+        type="file"
+        class="hidden"
+        accept=".geojson,.json,application/geo+json,application/json"
+        @change="importGeoJsonFile"
+      >
     </section>
 
     <button
@@ -377,7 +496,7 @@ async function createMapHandler(dom: HTMLDivElement) {
 
       <div class="min-h-0 flex-1 overflow-hidden p-3">
         <JsonEditor
-          v-if="activeTab === 'json'"
+          v-show="activeTab === 'json'"
           v-model="geoJsonData"
           class="h-full min-h-80"
           mode="text"
@@ -385,7 +504,7 @@ async function createMapHandler(dom: HTMLDivElement) {
         />
 
         <div
-          v-else-if="activeTab === 'properties'"
+          v-show="activeTab === 'properties'"
           class="flex h-full min-h-0 flex-col gap-3"
         >
           <div class="flex shrink-0 justify-end">

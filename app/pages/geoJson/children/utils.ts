@@ -44,6 +44,18 @@ export function normalizeGeoJsonObject(data: unknown): GeoJSON | undefined {
   return data as GeoJSON
 }
 
+export function isGeoJsonObject(data: unknown): data is GeoJSON {
+  const geoJson = normalizeGeoJsonObject(data)
+
+  if (!geoJson) {
+    return false
+  }
+
+  return geoJson.type === 'Feature'
+    || geoJson.type === 'FeatureCollection'
+    || isGeometry(geoJson)
+}
+
 export function toFeatureCollection(data: unknown): FeatureCollection {
   const geoJson = normalizeGeoJsonObject(data)
 

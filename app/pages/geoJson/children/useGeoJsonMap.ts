@@ -56,7 +56,7 @@ export function useGeoJsonMap(dom: HTMLDivElement, options: GeoJsonMapOptions = 
     },
   })
   map.pm.addControls({
-    position: 'topleft',
+    position: 'topright',
     drawText: false,
     drawCircle: false,
     rotateMode: false,
