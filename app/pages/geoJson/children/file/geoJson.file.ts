@@ -1,19 +1,36 @@
 import type { Feature, GeoJSON, Geometry } from '@zvonimirsun/map-sdk'
 import type { GeoJsonExportOptions, GeoJsonExportResult, GeoJsonImportFormat } from './geoJson.types'
 import { isGeoJsonObject, isGeometry, toFeatureCollection } from '../utils'
+import { exportShapefileInWorker, importShapefileInWorker } from './useGeoJsonFileWorkers'
 
 export const geoJsonImportFormatItems = [
   { label: 'GeoJSON', value: 'geojson' },
+  { label: 'GeoJSONL', value: 'geojsonl' },
   { label: 'Esri Shapefile', value: 'shapefile' },
 ] satisfies Array<{ label: string, value: GeoJsonImportFormat }>
 
 export const geoJsonExportFormatItems = [
   { label: 'GeoJSON', value: 'geojson' },
+  { label: 'GeoJSONL', value: 'geojsonl' },
   { label: 'Esri Shapefile', value: 'shapefile' },
 ] satisfies Array<{ label: string, value: GeoJsonExportOptions['format'] }>
 
 export function guessImportFormat(file: File): GeoJsonImportFormat {
-  return file.name.toLowerCase().endsWith('.zip') ? 'shapefile' : 'geojson'
+  const name = file.name.toLowerCase()
+
+  if (name.endsWith('.zip')) {
+    return 'shapefile'
+  }
+
+  if (/\.(?:geojsonl|geojsons|ld)$/i.test(name)) {
+    return 'geojsonl'
+  }
+
+  if (/\.(?:geojson|json)$/i.test(name)) {
+    return 'geojson'
+  }
+
+  throw new Error('无法识别文件格式')
 }
 
 export async function parseGeoJsonFile(file: File): Promise<GeoJSON> {
@@ -23,6 +40,43 @@ export async function parseGeoJsonFile(file: File): Promise<GeoJSON> {
   }
 
   return data
+}
+
+export async function parseGeoJsonLinesFile(file: File): Promise<GeoJSON> {
+  const features = (await file.text())
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(Boolean)
+    .flatMap((line, index) => {
+      let data: unknown
+      try {
+        data = JSON.parse(line)
+      }
+      catch {
+        throw new Error(`第 ${index + 1} 行不是有效的 JSON`)
+      }
+
+      if (!isGeoJsonObject(data)) {
+        throw new Error(`第 ${index + 1} 行不是有效的 GeoJSON`)
+      }
+
+      return toFeatureCollection(data).features
+    })
+
+  return {
+    type: 'FeatureCollection',
+    features,
+  }
+}
+
+export function importGeoJsonFileByFormat(file: File, format: GeoJsonImportFormat): Promise<unknown> {
+  const parsers = {
+    geojson: parseGeoJsonFile,
+    geojsonl: parseGeoJsonLinesFile,
+    shapefile: importShapefileInWorker,
+  } satisfies Record<GeoJsonImportFormat, (file: File) => Promise<unknown>>
+
+  return parsers[format](file)
 }
 
 export function normalizeImportedGeoJson(data: unknown): GeoJSON {
@@ -47,6 +101,20 @@ export function createGeoJsonExport(data: unknown, options: GeoJsonExportOptions
   }
 }
 
+export function createGeoJsonLinesExport(data: unknown): GeoJsonExportResult {
+  const collection = toFeatureCollection(data)
+  if (!collection.features.length) {
+    throw new Error('当前没有可导出的图斑')
+  }
+
+  return {
+    blob: new Blob([collection.features.map(feature => JSON.stringify(feature)).join('\n')], {
+      type: 'application/x-ndjson;charset=utf-8',
+    }),
+    filename: 'geojson.geojsonl',
+  }
+}
+
 export function createShapefileSource(data: unknown) {
   const collection = toFeatureCollection(data)
   if (!collection.features.length) {
@@ -54,6 +122,22 @@ export function createShapefileSource(data: unknown) {
   }
 
   return collection
+}
+
+export async function exportGeoJsonFile(data: unknown, options: GeoJsonExportOptions): Promise<GeoJsonExportResult> {
+  const exporters = {
+    geojson: () => createGeoJsonExport(data, options),
+    geojsonl: () => createGeoJsonLinesExport(data),
+    shapefile: async () => {
+      const buffer = await exportShapefileInWorker(createShapefileSource(data))
+      return {
+        blob: new Blob([buffer], { type: 'application/zip' }),
+        filename: 'shapefile.zip',
+      }
+    },
+  } satisfies Record<GeoJsonExportOptions['format'], () => GeoJsonExportResult | Promise<GeoJsonExportResult>>
+
+  return exporters[options.format]()
 }
 
 export function mergeGeoJsonList(items: unknown[]) {

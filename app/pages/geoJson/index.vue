@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import type { TableColumn } from '@nuxt/ui'
 import type { GeoJsonExportOptions, GeoJsonImportFormat } from './children/file/geoJson.types'
-import type { PropertyRow } from './children/utils'
 import type { GeoJsonCollapsedSide } from '~/stores/geoJson'
 import { downloadBlob } from '~/utils/common'
 import GeoJsonExportDialog from './children/components/GeoJsonExportDialog.vue'
 import GeoJsonImportDialog from './children/components/GeoJsonImportDialog.vue'
-import { createGeoJsonExport, createShapefileSource, guessImportFormat, parseGeoJsonFile } from './children/file/geoJson.file'
-import { exportShapefileInWorker, importShapefileInWorker } from './children/file/useGeoJsonFileWorkers'
-import { formatPropertyValue, getFeatures, getProperties, isGeometry, normalizeGeoJsonObject, toFeatureCollection } from './children/utils'
+import { exportGeoJsonFile, guessImportFormat, importGeoJsonFileByFormat } from './children/file/geoJson.file'
+import { canShowGeoJsonPropertyTable, useGeoJsonProperties } from './children/useGeoJsonProperties'
+import { getFeatures, getProperties, isGeometry, normalizeGeoJsonObject, toFeatureCollection } from './children/utils'
 import 'leaflet/dist/leaflet.css'
 
 definePageMeta({ layout: 'wide' })
@@ -47,50 +45,8 @@ const hasFeatures = computed(() => {
   const data = normalizeGeoJsonObject(geoJsonData.value)
   return featureRows.value.length > 0 || isGeometry(data)
 })
-const propertyKeys = computed(() => {
-  const keys = new Set<string>()
-
-  for (const feature of featureRows.value) {
-    const properties = getProperties(feature)
-    for (const key of Object.keys(properties)) {
-      keys.add(key)
-    }
-  }
-
-  return Array.from(keys)
-})
-const propertyTableRows = computed<PropertyRow[]>(() => {
-  return featureRows.value.map((feature, index) => {
-    const properties = getProperties(feature)
-    const row: PropertyRow = {
-      __index: index + 1,
-    }
-
-    for (const key of propertyKeys.value) {
-      row[key] = formatPropertyValue(properties[key])
-    }
-
-    return row
-  })
-})
-const propertyColumns = computed<TableColumn<PropertyRow>[]>(() => {
-  return [
-    {
-      accessorKey: '__index',
-      header: '#',
-      size: 64,
-    },
-    ...propertyKeys.value.map(key => ({
-      accessorKey: key,
-      header: key,
-      size: 160,
-    })),
-  ]
-})
-const canShowPropertyTable = computed(() => {
-  const data = normalizeGeoJsonObject(geoJsonData.value)
-  return data?.type === 'Feature' || data?.type === 'FeatureCollection'
-})
+const { propertyTableRows, propertyColumns } = useGeoJsonProperties(featureRows)
+const canShowPropertyTable = computed(() => canShowGeoJsonPropertyTable(geoJsonData.value))
 const collapsedSide = computed<GeoJsonCollapsedSide>({
   get() {
     return isMobileLayout.value ? geoJsonStore.mobileCollapsedSide : geoJsonStore.desktopCollapsedSide
@@ -250,8 +206,18 @@ function handleImportFileChange(event: Event) {
   }
 
   pendingImportFile.value = file
-  importDefaultFormat.value = guessImportFormat(file)
-  importDialogOpen.value = true
+  try {
+    importDefaultFormat.value = guessImportFormat(file)
+    importDialogOpen.value = true
+  }
+  catch (error) {
+    pendingImportFile.value = null
+    toast.add({
+      color: 'error',
+      title: '导入失败',
+      description: (error as Error).message || '无法识别文件格式',
+    })
+  }
 }
 
 function cancelImport() {
@@ -265,9 +231,7 @@ async function importSelectedFile(format: GeoJsonImportFormat) {
 
   isImporting.value = true
   try {
-    const data = format === 'shapefile'
-      ? await importShapefileInWorker(pendingImportFile.value)
-      : await parseGeoJsonFile(pendingImportFile.value)
+    const data = await importGeoJsonFileByFormat(pendingImportFile.value, format)
 
     geoJsonData.value = data
     renderGeoJson(data)
@@ -297,14 +261,8 @@ async function exportSelectedFile(options: GeoJsonExportOptions) {
 
   isExporting.value = true
   try {
-    if (options.format === 'shapefile') {
-      const buffer = await exportShapefileInWorker(createShapefileSource(geoJsonData.value))
-      downloadBlob(new Blob([buffer], { type: 'application/zip' }), 'shapefile.zip')
-    }
-    else {
-      const result = createGeoJsonExport(geoJsonData.value, options)
-      downloadBlob(result.blob, result.filename)
-    }
+    const result = await exportGeoJsonFile(geoJsonData.value, options)
+    downloadBlob(result.blob, result.filename)
 
     exportDialogOpen.value = false
   }
