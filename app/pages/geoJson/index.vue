@@ -326,6 +326,9 @@ async function createMapHandler(dom: HTMLDivElement) {
     onFeatureClick() {
       activeTab.value = 'properties'
     },
+    onGeoJsonChange(geoJson) {
+      geoJsonData.value = geoJson
+    },
   })
 }
 </script>
@@ -342,7 +345,7 @@ async function createMapHandler(dom: HTMLDivElement) {
       v-show="showMapPane"
       class="min-h-0 overflow-hidden rounded-lg border border-muted bg-default"
     >
-      <div ref="mapContainer" class="h-full w-full" />
+      <div ref="mapContainer" class="h-full w-full z-0" />
     </section>
 
     <button

@@ -1,6 +1,7 @@
-import type { FeatureGroup, GeoJSON as LeafletGeoJSON, Map as LeafletMap } from 'leaflet'
+import type { FeatureGroup, Layer, GeoJSON as LeafletGeoJSON, Map as LeafletMap } from 'leaflet'
 import { Config, MapUtils, ViewUtils } from '@zvonimirsun/map-sdk/2d'
 import { control, featureGroup, geoJSON, marker } from 'leaflet'
+import '@zvonimirsun/leaflet-geoman'
 import '@zvonimirsun/leaflet-geoman/dist/leaflet-geoman.css'
 
 interface RenderGeoJsonResult {
@@ -13,6 +14,7 @@ interface GeoJsonMapOptions {
   maxFeatures?: number
   maxCoordinates?: number
   onFeatureClick?: (feature: unknown) => void
+  onGeoJsonChange?: (geoJson: unknown) => void
 }
 
 interface GeoJsonStats {
@@ -60,6 +62,13 @@ export function useGeoJsonMap(dom: HTMLDivElement, options: GeoJsonMapOptions = 
     rotateMode: false,
     cutPolygon: false,
   })
+  map.on('pm:create', (event) => {
+    bindLayerChangeEvents(event.layer)
+    emitGeoJsonChange()
+  })
+  map.on('pm:update', emitGeoJsonChange)
+  map.on('pm:remove', emitGeoJsonChange)
+  map.on('pm:edit', emitGeoJsonChange)
 
   function clearGeoJson() {
     geoJsonLayerGroup.clearLayers()
@@ -110,6 +119,7 @@ export function useGeoJsonMap(dom: HTMLDivElement, options: GeoJsonMapOptions = 
           layer.on('click', () => {
             options.onFeatureClick?.(feature)
           })
+          bindLayerChangeEvents(layer)
         },
       }).addTo(geoJsonLayerGroup as FeatureGroup)
 
@@ -134,8 +144,24 @@ export function useGeoJsonMap(dom: HTMLDivElement, options: GeoJsonMapOptions = 
 
   function destroy() {
     map.pm.removeControls()
+    map.off('pm:create')
+    map.off('pm:update', emitGeoJsonChange)
+    map.off('pm:remove', emitGeoJsonChange)
+    map.off('pm:edit', emitGeoJsonChange)
     clearGeoJson()
     map.remove()
+  }
+
+  function bindLayerChangeEvents(layer: Layer) {
+    layer.on('pm:update', emitGeoJsonChange)
+    layer.on('pm:remove', emitGeoJsonChange)
+    layer.on('pm:edit', emitGeoJsonChange)
+  }
+
+  function emitGeoJsonChange() {
+    window.requestAnimationFrame(() => {
+      options.onGeoJsonChange?.(geoJsonLayerGroup.toGeoJSON())
+    })
   }
 
   return {
