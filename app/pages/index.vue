@@ -20,6 +20,8 @@ function toggleFav(tool: OriginToolItem) {
   })
 }
 
+const mounted = useMounted()
+
 const showUserToolMenus = useState('showUserToolMenus', () => false)
 const userToolMenus = computed<OriginToolMenu[]>(() => {
   if (!showUserToolMenus.value) {
@@ -71,9 +73,7 @@ defineShortcuts({
 
 onMounted(() => {
   toolsStore.fixFavorite()
-  requestAnimationFrame(() => {
-    showUserToolMenus.value = true
-  })
+  showUserToolMenus.value = true
 })
 </script>
 
@@ -117,7 +117,7 @@ onMounted(() => {
                 {{ tool.label }}
               </span>
             </template>
-            <UTooltip :text="isFav(tool.label) ? '取消收藏' : '收藏'">
+            <UTooltip v-if="mounted" :text="isFav(tool.label) ? '取消收藏' : '收藏'">
               <UButton
                 :aria-label="isFav(tool.label) ? '取消收藏' : '收藏'"
                 :color="isFav(tool.label) ? 'warning' : 'neutral'"
@@ -151,7 +151,7 @@ onMounted(() => {
                 {{ tool.label }}
               </span>
             </template>
-            <UTooltip :text="isFav(tool.label) ? '取消收藏' : '收藏'">
+            <UTooltip v-if="mounted" :text="isFav(tool.label) ? '取消收藏' : '收藏'">
               <UButton
                 :aria-label="isFav(tool.label) ? '取消收藏' : '收藏'"
                 :color="isFav(tool.label) ? 'warning' : 'neutral'"
