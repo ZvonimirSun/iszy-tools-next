@@ -1,12 +1,12 @@
 <script setup lang="ts">
 const mapContainer = useTemplateRef('mapContainer')
 
-onMounted(async () => {
-  if (!mapContainer.value) {
+watchOnce(mapContainer, async (newVal) => {
+  if (!newVal) {
     return
   }
   const { initMap } = await import('./children/init')
-  initMap(mapContainer.value)
+  initMap(newVal)
 })
 </script>
 
