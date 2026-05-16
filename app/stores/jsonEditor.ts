@@ -2,14 +2,17 @@ import type { ResultDto } from '@zvonimirsun/iszy-common'
 import dayjs from 'dayjs'
 import { clamp, debounce } from 'lodash-es'
 
-interface EditorData {
+export interface JsonEditorData {
   name: string
   updated?: string
+  indentation?: number
   content: {
     text?: string
     json?: unknown
   }
 }
+
+export type JsonEditorMode = 'text' | 'tree' | 'table'
 
 interface SyncDto {
   key: string
@@ -27,6 +30,7 @@ interface SaveDataOptions {
   id?: string
   content?: unknown
   name?: string
+  indentation?: number
 }
 
 let waitList = {} as Record<string, SyncPayload>
@@ -47,7 +51,9 @@ export const useJsonEditorStore = defineStore('jsonEditor', () => {
   const rightId = ref<string | null>(null)
   const splitterValue = ref(0.5)
   const fullStatus = ref('')
-  const $_data = ref<Record<string, EditorData>>({})
+  const leftMode = ref<JsonEditorMode>('text')
+  const rightMode = ref<JsonEditorMode>('text')
+  const $_data = ref<Record<string, JsonEditorData>>({})
 
   const syncCloud = computed(() => {
     return useUserStore().logged && useSettingsStore().modules.jsonEditor.syncCloud
@@ -101,7 +107,7 @@ export const useJsonEditorStore = defineStore('jsonEditor', () => {
   }
 
   function replaceState(val: SyncDto[] = []) {
-    const nextData: Record<string, EditorData> = {}
+    const nextData: Record<string, JsonEditorData> = {}
     for (const d of val) {
       nextData[d.key] = {
         name: d.name,
@@ -171,7 +177,7 @@ export const useJsonEditorStore = defineStore('jsonEditor', () => {
     }
   }, 500)
 
-  function saveData({ left, right, id, content, name }: SaveDataOptions = {}) {
+  function saveData({ left, right, id, content, name, indentation }: SaveDataOptions = {}) {
     let dataId = id
 
     if (syncCloud.value) {
@@ -192,8 +198,9 @@ export const useJsonEditorStore = defineStore('jsonEditor', () => {
 
     if (typeof content !== 'undefined') {
       dataId = dataId || randomString(6)
-      $_data.value[dataId] = $_data.value[dataId] || {} as EditorData
+      $_data.value[dataId] = $_data.value[dataId] || {} as JsonEditorData
       $_data.value[dataId]!.name = name || $_data.value[dataId]!.name || `文档-${dataId}`
+      $_data.value[dataId]!.indentation = indentation ?? $_data.value[dataId]!.indentation
 
       if (typeof content === 'string') {
         $_data.value[dataId]!.content = {
@@ -208,16 +215,21 @@ export const useJsonEditorStore = defineStore('jsonEditor', () => {
 
       $_data.value[dataId]!.updated = dayjs().format()
       setActiveSide({ left, right, id: dataId })
-      return
+      return dataId
     }
 
     if (dataId && $_data.value[dataId]) {
       $_data.value[dataId]!.name = name || $_data.value[dataId]!.name
+      $_data.value[dataId]!.indentation = indentation ?? $_data.value[dataId]!.indentation
+      if (indentation != null) {
+        $_data.value[dataId]!.updated = dayjs().format()
+      }
       setActiveSide({ left, right, id: dataId })
-      return
+      return dataId
     }
 
     clearActiveSide({ left, right })
+    return null
   }
 
   async function deleteData({ id }: { id: string }) {
@@ -270,7 +282,7 @@ export const useJsonEditorStore = defineStore('jsonEditor', () => {
     }
   }
 
-  function formatEditorData(item: EditorData) {
+  function formatEditorData(item: JsonEditorData) {
     return {
       ...item,
       updated: formatUpdated(item.updated),
@@ -294,6 +306,8 @@ export const useJsonEditorStore = defineStore('jsonEditor', () => {
     rightId,
     splitterValue,
     fullStatus,
+    leftMode,
+    rightMode,
     $_data,
     dataList,
     data,
