@@ -32,7 +32,7 @@ interface Control {
 }
 
 const editor = useComponentRef(EditorMini)
-let cm: EditorView
+let cm: EditorView | undefined
 const hasUndo = ref(false)
 const hasRedo = ref(false)
 
@@ -52,9 +52,10 @@ const controls = computed(() => {
         title: '撤销',
         isDisabled: () => !hasUndo.value,
         event: function undoBtn() {
-          if (!hasUndo.value)
+          const view = getView()
+          if (!hasUndo.value || !view)
             return
-          undo(cm)
+          undo(view)
         },
         icon: 'i-fa6-solid:arrow-rotate-left',
       },
@@ -62,9 +63,10 @@ const controls = computed(() => {
         title: '重做',
         isDisabled: () => !hasRedo.value,
         event: function redoBtn() {
-          if (!hasRedo.value)
+          const view = getView()
+          if (!hasRedo.value || !view)
             return
-          redo(cm)
+          redo(view)
         },
         icon: 'i-fa6-solid:arrow-rotate-right',
       },
@@ -79,10 +81,15 @@ const controls = computed(() => {
           return
         }
         try {
-          const val = props.plugin.formatter(cm.state.doc.toString())
-          if (val && val !== cm.state.doc.toString()) {
-            cm.dispatch({
-              changes: { from: 0, to: cm.state.doc.length, insert: val },
+          const view = getView()
+          if (!view) {
+            return
+          }
+          const currentValue = view.state.doc.toString()
+          const val = props.plugin.formatter(currentValue)
+          if (val && val !== currentValue) {
+            view.dispatch({
+              changes: { from: 0, to: view.state.doc.length, insert: val },
             })
           }
         }
@@ -100,10 +107,15 @@ const controls = computed(() => {
           return
         }
         try {
-          const val = props.plugin.compactor(cm.state.doc.toString())
-          if (val && val !== cm.state.doc.toString()) {
-            cm.dispatch({
-              changes: { from: 0, to: cm.state.doc.length, insert: val },
+          const view = getView()
+          if (!view) {
+            return
+          }
+          const currentValue = view.state.doc.toString()
+          const val = props.plugin.compactor(currentValue)
+          if (val && val !== currentValue) {
+            view.dispatch({
+              changes: { from: 0, to: view.state.doc.length, insert: val },
             })
           }
         }
@@ -127,16 +139,17 @@ onMounted(() => {
 })
 
 function onChange(val: string) {
-  if (!cm) {
-    return
+  const view = getView()
+  if (view) {
+    hasUndo.value = undoDepth(view.state) > 0
+    hasRedo.value = redoDepth(view.state) > 0
   }
-  hasUndo.value = undoDepth(cm.state) > 0
-  hasRedo.value = redoDepth(cm.state) > 0
   emits('change', val)
 }
 
 function getView() {
-  return editor.value?.getView()
+  cm = editor.value?.getView()
+  return cm
 }
 
 function setInput(val: string) {
