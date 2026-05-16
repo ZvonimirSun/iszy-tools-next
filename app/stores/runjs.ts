@@ -3,10 +3,14 @@ export interface RunjsDependency {
   url: string
 }
 
-export const useRunjsStore = defineStore('runjs', {
-  state: () => ({
-    code: `console.log('RunJS ready')`,
-    deps: [] as RunjsDependency[],
-  }),
+export const useRunjsStore = defineStore('runjs', () => {
+  const code = ref(`console.log('RunJS ready')`)
+  const deps = ref<RunjsDependency[]>([])
+
+  return {
+    code,
+    deps,
+  }
+}, {
   persist: true,
 })

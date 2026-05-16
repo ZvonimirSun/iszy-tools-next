@@ -1,11 +1,16 @@
 export type GeoJsonCollapsedSide = 'map' | 'panel' | null
 
-export const useGeoJsonStore = defineStore('geoJson', {
-  state: () => ({
-    leftPercent: 50,
-    desktopCollapsedSide: null as GeoJsonCollapsedSide,
-    mobileCollapsedSide: 'panel' as GeoJsonCollapsedSide,
-  }),
+export const useGeoJsonStore = defineStore('geoJson', () => {
+  const leftPercent = ref(50)
+  const desktopCollapsedSide = ref<GeoJsonCollapsedSide>(null)
+  const mobileCollapsedSide = ref<GeoJsonCollapsedSide>('panel')
+
+  return {
+    leftPercent,
+    desktopCollapsedSide,
+    mobileCollapsedSide,
+  }
+}, {
   persist: true,
 })
 

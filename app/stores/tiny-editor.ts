@@ -1,8 +1,13 @@
-export const useTinyEditorStore = defineStore('tinyEditor', {
-  state: () => ({
-    html: '',
-    css: '',
-    js: '',
-  }),
+export const useTinyEditorStore = defineStore('tinyEditor', () => {
+  const html = ref('')
+  const css = ref('')
+  const js = ref('')
+
+  return {
+    html,
+    css,
+    js,
+  }
+}, {
   persist: true,
 })

@@ -1,210 +1,223 @@
 import type { Device, ResultDto } from '@zvonimirsun/iszy-common'
 import dayjs from 'dayjs'
 
-let pullProfilePromise: Promise<ResultDto<{
-  logged: boolean
-  profile?: PublicSimpleUser
-}>> | null = null
-let pullProfileResolve: ((value: ResultDto<{ logged: boolean, profile?: PublicSimpleUser }>) => void) | null
-let pullProfileReject: ((value: unknown) => void) | null
-let pullProfileAbortController: AbortController | null = null // 用于中断请求
+export const useUserStore = defineStore('user', () => {
+  const profilePulled = ref(false)
+  const profile = ref<PublicSimpleUser>()
+  const logged = computed(() => {
+    return !!profile.value
+  })
 
-export const useUserStore = defineStore('user', {
-  state: () => ({
-    profilePulled: false,
-    profile: undefined as PublicSimpleUser | undefined,
-  }),
-  getters: {
-    logged: (state) => {
-      return !!state.profile
-    },
-  },
-  actions: {
-    async login({ userName, password }: {
-      userName: string
-      password: string
-    }) {
-      let error = ''
-      try {
-        if (userName && password) {
-          const res = await $fetch<ResultDto<PublicSimpleUser>>(`/api/auth/login`, {
-            method: 'post',
-            body: {
-              userName: userName.trim(),
-              password,
-            },
-          })
-          if (res.success) {
-            this.profilePulled = true
-            await this.updateProfile(res.data)
-            return
-          }
-          else {
-            this.removeProfile()
-            error = res.message
-          }
+  let pullProfilePromise: Promise<ResultDto<{
+    logged: boolean
+    profile?: PublicSimpleUser
+  }>> | null = null
+  let pullProfileResolve: ((value: ResultDto<{ logged: boolean, profile?: PublicSimpleUser }>) => void) | null
+  let pullProfileReject: ((value: unknown) => void) | null
+  let pullProfileAbortController: AbortController | null = null // 用于中断请求
+
+  async function login({ userName, password }: {
+    userName: string
+    password: string
+  }) {
+    let error = ''
+    try {
+      if (userName && password) {
+        const res = await $fetch<ResultDto<PublicSimpleUser>>(`/api/auth/login`, {
+          method: 'post',
+          body: {
+            userName: userName.trim(),
+            password,
+          },
+        })
+        if (res.success) {
+          profilePulled.value = true
+          await updateProfile(res.data)
+          return
         }
         else {
-          error = '用户名或密码错误'
+          removeProfile()
+          error = res.message
         }
-      }
-      catch (e) {
-        this.removeProfile()
-        throw e
-      }
-      throw new Error(error)
-    },
-    async logout() {
-      const data = await $fetch<ResultDto<void>>(`/api/auth/logout`, {
-        method: 'POST',
-      })
-      if (data && data.success) {
-        await this.removeProfile()
       }
       else {
-        throw new Error(data?.message || '登出失败')
+        error = '用户名或密码错误'
       }
-    },
+    }
+    catch (e) {
+      removeProfile()
+      throw e
+    }
+    throw new Error(error)
+  }
 
-    async pullProfile(force?: boolean, headers?: any) {
-      // 1. 非强制刷新且已拉取成功，直接返回
-      if (this.profilePulled && !force) {
-        return true
+  async function logout() {
+    const data = await $fetch<ResultDto<void>>(`/api/auth/logout`, {
+      method: 'POST',
+    })
+    if (data && data.success) {
+      await removeProfile()
+    }
+    else {
+      throw new Error(data?.message || '登出失败')
+    }
+  }
+
+  async function pullProfile(force?: boolean, headers?: any) {
+    // 1. 非强制刷新且已拉取成功，直接返回
+    if (profilePulled.value && !force) {
+      return true
+    }
+
+    // 2. 强制刷新：中断正在进行的请求并重置状态
+    if (force) {
+      // 中断之前的请求
+      if (pullProfileAbortController) {
+        pullProfileAbortController.abort()
+        pullProfileAbortController = null
       }
+      // 重置 Promise 相关状态
+      pullProfilePromise = null
+      pullProfileResolve = null
+      pullProfileReject = null
+    }
 
-      // 2. 强制刷新：中断正在进行的请求并重置状态
-      if (force) {
-        // 中断之前的请求
-        if (pullProfileAbortController) {
-          pullProfileAbortController.abort()
-          pullProfileAbortController = null
-        }
-        // 重置 Promise 相关状态
-        pullProfilePromise = null
-        pullProfileResolve = null
-        pullProfileReject = null
-      }
+    // 3. 非强制刷新且已有请求中，返回现有 Promise
+    if (pullProfilePromise && !force) {
+      return pullProfilePromise
+    }
 
-      // 3. 非强制刷新且已有请求中，返回现有 Promise
-      if (pullProfilePromise && !force) {
-        return pullProfilePromise
-      }
-
-      // 4. 创建新的 Promise 并发起请求
-      pullProfilePromise = new Promise<ResultDto<{
+    // 4. 创建新的 Promise 并发起请求
+    pullProfilePromise = new Promise<ResultDto<{
+      logged: boolean
+      profile?: PublicSimpleUser
+    }>>((resolve, reject) => {
+      pullProfileResolve = resolve
+      pullProfileReject = reject
+    })
+    try {
+      // 创建 AbortController 用于中断请求
+      pullProfileAbortController = new AbortController()
+      const res = await $fetch<ResultDto<{
         logged: boolean
         profile?: PublicSimpleUser
-      }>>((resolve, reject) => {
-        pullProfileResolve = resolve
-        pullProfileReject = reject
+      }>>(`/api/auth/check`, {
+        headers,
+        signal: pullProfileAbortController.signal, // 关联中断信号
       })
-      try {
-        // 创建 AbortController 用于中断请求
-        pullProfileAbortController = new AbortController()
-        const res = await $fetch<ResultDto<{
-          logged: boolean
-          profile?: PublicSimpleUser
-        }>>(`/api/auth/check`, {
-          headers,
-          signal: pullProfileAbortController.signal, // 关联中断信号
-        })
-        if (res && res.success) {
-          await this.updateProfile(res.data?.profile, headers)
-          this.profilePulled = true
-          // 安全调用 resolve（避免空值）
-          pullProfileResolve?.(res)
-        }
-        else {
-          await this.removeProfile(headers)
-          // 安全调用 reject
-          pullProfileReject?.(new Error(res?.message || '拉取用户信息失败'))
-        }
+      if (res && res.success) {
+        await updateProfile(res.data?.profile, headers)
+        profilePulled.value = true
+        // 安全调用 resolve（避免空值）
+        pullProfileResolve?.(res)
       }
-      catch (error) {
-        // 处理中断错误（无需提示，属于正常取消）
-        if ((error as Error).name !== 'AbortError') {
-          await this.removeProfile(headers)
-          console.error('拉取用户信息异常:', error)
-        }
+      else {
+        await removeProfile(headers)
         // 安全调用 reject
-        pullProfileReject?.(error)
+        pullProfileReject?.(new Error(res?.message || '拉取用户信息失败'))
       }
-      finally {
-        // 清理资源
-        pullProfileAbortController = null
-        pullProfileResolve = null
-        pullProfileReject = null
-        // 关键：请求完成后重置 Promise（避免复用旧 Promise）
-        pullProfilePromise = null
+    }
+    catch (error) {
+      // 处理中断错误（无需提示，属于正常取消）
+      if ((error as Error).name !== 'AbortError') {
+        await removeProfile(headers)
+        console.error('拉取用户信息异常:', error)
       }
-      return pullProfilePromise
-    },
-    async updateProfile(data?: PublicSimpleUser, headers?: any) {
-      this.profile = data
-      return useOriginToolsStore().fetchTools(headers)
-    },
-    async removeProfile(headers?: any) {
-      return this.updateProfile(headers)
-    },
+      // 安全调用 reject
+      pullProfileReject?.(error)
+    }
+    finally {
+      // 清理资源
+      pullProfileAbortController = null
+      pullProfileResolve = null
+      pullProfileReject = null
+      // 关键：请求完成后重置 Promise（避免复用旧 Promise）
+      pullProfilePromise = null
+    }
+    return pullProfilePromise
+  }
 
-    async thirdPartyUnbind(type: string) {
-      await $fetch<{
-        success: boolean
-      }>('/api/oauth/unbind', {
-        method: 'POST',
-        body: {
-          provider: type,
-        },
-      })
-      await this.pullProfile(true)
-    },
+  async function updateProfile(data?: PublicSimpleUser, headers?: any) {
+    profile.value = data
+    return useOriginToolsStore().fetchTools(headers)
+  }
 
-    async getDevices(): Promise<(Device & {
+  async function removeProfile(headers?: any) {
+    return updateProfile(undefined, headers)
+  }
+
+  async function thirdPartyUnbind(type: string) {
+    await $fetch<{
+      success: boolean
+    }>('/api/oauth/unbind', {
+      method: 'POST',
+      body: {
+        provider: type,
+      },
+    })
+    await pullProfile(true)
+  }
+
+  async function getDevices(): Promise<(Device & {
+    createTime?: string
+    lastLoginTime?: string
+  })[]> {
+    const res = await $fetch<ResultDto<Device[]>>(`/api/auth/devices`)
+    return res.data!.map((device: Device & {
       createTime?: string
       lastLoginTime?: string
-    })[]> {
-      const res = await $fetch<ResultDto<Device[]>>(`/api/auth/devices`)
-      return res.data!.map((device: Device & {
-        createTime?: string
-        lastLoginTime?: string
-      }) => {
-        const ip = device.ip
-        if (!ip) {
-          device.ip = '未知'
-        }
-        else {
-          const tmp = ip.split('.')
-          device.ip = `${tmp[0]}.${tmp[1]}.***.***`
-        }
-        device.createTime = dayjs(device.createdAt!).format('YYYY年MM月DD日 HH:mm')
-        device.lastLoginTime = dayjs(device.updatedAt!).format('YYYY年MM月DD日 HH:mm')
-        return device
+    }) => {
+      const ip = device.ip
+      if (!ip) {
+        device.ip = '未知'
+      }
+      else {
+        const tmp = ip.split('.')
+        device.ip = `${tmp[0]}.${tmp[1]}.***.***`
+      }
+      device.createTime = dayjs(device.createdAt!).format('YYYY年MM月DD日 HH:mm')
+      device.lastLoginTime = dayjs(device.updatedAt!).format('YYYY年MM月DD日 HH:mm')
+      return device
+    })
+  }
+
+  async function removeDevice({ deviceId, other }: {
+    deviceId?: string
+    all?: boolean
+    other?: boolean
+  }) {
+    if (other) {
+      await $fetch(`/api/auth/logout`, {
+        method: 'POST',
+        query: {
+          other,
+        },
       })
-    },
-    async removeDevice({ deviceId, other }: {
-      deviceId?: string
-      all?: boolean
-      other?: boolean
-    }) {
-      if (other) {
-        await $fetch(`/api/auth/logout`, {
-          method: 'POST',
-          query: {
-            other,
-          },
-        })
-        return
-      }
-      if (deviceId) {
-        await $fetch(`/api/auth/logout`, {
-          method: 'POST',
-          query: {
-            deviceId,
-          },
-        })
-      }
-    },
-  },
+      return
+    }
+    if (deviceId) {
+      await $fetch(`/api/auth/logout`, {
+        method: 'POST',
+        query: {
+          deviceId,
+        },
+      })
+    }
+  }
+
+  return {
+    profilePulled,
+    profile,
+    logged,
+    login,
+    logout,
+    pullProfile,
+    updateProfile,
+    removeProfile,
+    thirdPartyUnbind,
+    getDevices,
+    removeDevice,
+  }
 })
 
 if (import.meta.hot) {

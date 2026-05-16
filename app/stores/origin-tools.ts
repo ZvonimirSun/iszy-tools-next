@@ -1,30 +1,33 @@
 import type { ResultDto } from '@zvonimirsun/iszy-common'
 import type { ToolMenu } from '#shared/types/tool'
 
-export const useOriginToolsStore = defineStore('originTools', {
-  state: () => ({
-    toolMenus: [] as ToolMenu[],
-  }),
-  getters: {
-    toolItems(): ToolItem[] {
-      return this.toolMenus.map((item: ToolMenu) => {
-        return item.children
-      }).flat()
-    },
-  },
-  actions: {
-    async init(headers?: any) {
-      if (this.toolMenus.length) {
-        return
-      }
-      await this.fetchTools(headers)
-    },
-    async fetchTools(headers?: any) {
-      this.toolMenus = (await $fetch<ResultDto<ToolMenu[]>>('/api/tools', {
-        headers,
-      })).data || []
-    },
-  },
+export const useOriginToolsStore = defineStore('originTools', () => {
+  const toolMenus = ref<ToolMenu[]>([])
+  const toolItems = computed<ToolItem[]>(() => {
+    return toolMenus.value.map((item: ToolMenu) => {
+      return item.children
+    }).flat()
+  })
+
+  async function init(headers?: any) {
+    if (toolMenus.value.length) {
+      return
+    }
+    await fetchTools(headers)
+  }
+
+  async function fetchTools(headers?: any) {
+    toolMenus.value = (await $fetch<ResultDto<ToolMenu[]>>('/api/tools', {
+      headers,
+    })).data || []
+  }
+
+  return {
+    toolMenus,
+    toolItems,
+    init,
+    fetchTools,
+  }
 })
 
 if (import.meta.hot) {
