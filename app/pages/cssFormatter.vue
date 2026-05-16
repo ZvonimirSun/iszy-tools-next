@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import Css from '~/components/editor/lang-css'
+const css = import.meta.client
+  ? import('~/components/editor/lang-css').then(m => m.default)
+  : undefined
 </script>
 
 <template>
   <FormatTransformer
     class="w-full h-full overflow-auto"
-    :plugin="Css"
+    :plugin="css"
     target="CSS"
   />
 </template>

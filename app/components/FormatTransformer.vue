@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import type { EditorPlugin } from '#shared/types/editor'
 import type { FormError } from '@nuxt/ui'
+import type { EditorPlugin } from '#shared/types/editor'
 import { EditorMini } from '#components'
+
+type MaybePromise<T> = T | Promise<T>
 
 const props = withDefaults(
   defineProps<{
-    plugin: EditorPlugin
+    plugin?: MaybePromise<EditorPlugin>
     target?: string
     inputLabel?: string
     inputDefault?: string
@@ -30,6 +32,7 @@ defineEmits<{
 }>()
 
 const { plugin, inputDefault } = toRefs(props)
+const resolvedPlugin = shallowRef<EditorPlugin>()
 
 const { _inputLabel, _inputPlaceholder, _invalidMessage, _outputLabel } = props.target
   ? {
@@ -48,17 +51,25 @@ const editor = useComponentRef(EditorMini)
 const state = reactive({
   input: inputDefault.value,
 })
-const formatter = props.plugin.formatter || identity<string>
-const isValid = props.plugin.isValid || (() => true)
+const formatter = computed(() => resolvedPlugin.value?.formatter || identity<string>)
+const isValid = computed(() => resolvedPlugin.value?.isValid || (() => true))
 
-const valid = computed(() => isValid(state.input))
+const valid = computed(() => isValid.value(state.input))
 
 watch(inputDefault, (val) => {
   state.input = val
 })
-watch([valid, () => props.options, editor, state], () => {
+watch(plugin, async (val) => {
+  if (import.meta.server && val instanceof Promise) {
+    return
+  }
+  resolvedPlugin.value = await val
+}, {
+  immediate: true,
+})
+watch([valid, () => props.options, editor, state, resolvedPlugin], () => {
   if (valid.value) {
-    editor.value?.setInput(formatter(state.input, props.options))
+    editor.value?.setInput(formatter.value(state.input, props.options))
   }
   else {
     editor.value?.setInput('')
@@ -102,9 +113,9 @@ function validate(): FormError[] {
     >
       <EditorMini
         ref="editor"
-        :plugin="plugin"
+        :plugin="resolvedPlugin"
         :readonly="true"
       />
-    </uformfield>
+    </UFormField>
   </UForm>
 </template>

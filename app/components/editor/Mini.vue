@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { EditorPlugin } from '#shared/types/editor'
 import type { ViewUpdate } from '@codemirror/view'
+import type { EditorPlugin } from '#shared/types/editor'
 import { defaultHighlightStyle, syntaxHighlighting } from '@codemirror/language'
 import { Compartment, EditorState } from '@codemirror/state'
 import { oneDark } from '@codemirror/theme-one-dark'
@@ -9,7 +9,7 @@ import mini from './lang-mini'
 
 const props = withDefaults(defineProps<{
   inputDefault?: string
-  plugin?: EditorPlugin
+  plugin?: EditorPlugin | Promise<EditorPlugin>
   placeholder?: string
   readonly?: boolean
 }>(), {
@@ -35,21 +35,21 @@ let cm: EditorView
 const themeCompartment = new Compartment()
 const highLightCompartment = new Compartment()
 
-const extensions = [
-  mini.extensions,
-  props.plugin ? props.plugin.miniExtensions || props.plugin.extensions : [],
-  EditorView.updateListener.of(onChange),
-  themeCompartment.of(isDark.value ? oneDark : EditorView.theme({}, { dark: false })),
-  highLightCompartment.of(isDark.value ? oneDark : syntaxHighlighting(defaultHighlightStyle)),
-]
-if (props.placeholder) {
-  extensions.push(PlaceHolder(props.placeholder))
-}
-if (props.readonly) {
-  extensions.push(EditorState.readOnly.of(true))
-}
-
-onMounted(() => {
+onMounted(async () => {
+  const plugin = await props.plugin
+  const extensions = [
+    mini.extensions,
+    plugin ? plugin.miniExtensions || plugin.extensions : [],
+    EditorView.updateListener.of(onChange),
+    themeCompartment.of(isDark.value ? oneDark : EditorView.theme({}, { dark: false })),
+    highLightCompartment.of(isDark.value ? oneDark : syntaxHighlighting(defaultHighlightStyle)),
+  ]
+  if (props.placeholder) {
+    extensions.push(PlaceHolder(props.placeholder))
+  }
+  if (props.readonly) {
+    extensions.push(EditorState.readOnly.of(true))
+  }
   cm = new EditorView({
     state: EditorState.create({
       extensions,
@@ -79,6 +79,9 @@ function onChange(update: ViewUpdate) {
 }
 
 function setInput(val: string) {
+  if (!cm) {
+    return
+  }
   cm.dispatch({
     changes: {
       from: 0,
