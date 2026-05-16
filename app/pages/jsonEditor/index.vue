@@ -11,6 +11,8 @@ const layoutRef = useTemplateRef('layoutRef')
 const dividerRef = useTemplateRef('dividerRef')
 const isDraggingDivider = ref(false)
 const isMobileLayout = ref(false)
+const isSyncLoading = ref(false)
+const syncPulled = ref(false)
 let resizeObserver: ResizeObserver | undefined
 let pendingResizeEvent: PointerEvent | undefined
 let resizeFrame: number | undefined
@@ -87,6 +89,7 @@ const dividerButton = computed(() => {
 
 onMounted(() => {
   updateMobileLayout()
+  pullCloudDataIfNeeded()
 
   if (layoutRef.value) {
     resizeObserver = new ResizeObserver(updateMobileLayout)
@@ -94,6 +97,10 @@ onMounted(() => {
   }
 
   window.addEventListener('resize', updateMobileLayout)
+})
+
+watch(() => store.syncCloud, () => {
+  pullCloudDataIfNeeded()
 })
 
 onBeforeUnmount(() => {
@@ -287,13 +294,28 @@ function updateMobileLayout() {
   const layoutWidth = layoutRef.value?.getBoundingClientRect().width ?? window.innerWidth
   isMobileLayout.value = layoutWidth < minPaneWidth * 2 + getDividerWidth()
 }
+
+async function pullCloudDataIfNeeded() {
+  if (!store.syncCloud || syncPulled.value || isSyncLoading.value) {
+    return
+  }
+
+  isSyncLoading.value = true
+  try {
+    await store.getSyncData()
+    syncPulled.value = true
+  }
+  finally {
+    isSyncLoading.value = false
+  }
+}
 </script>
 
 <template>
   <ClientOnly>
     <div
       ref="layoutRef"
-      class="json-editor-layout grid h-full min-h-0 w-full gap-0 overflow-hidden"
+      class="json-editor-layout relative grid h-full min-h-0 w-full gap-0 overflow-hidden"
       :class="{ 'select-none cursor-col-resize': isDraggingDivider }"
       :style="layoutStyle"
     >
@@ -361,6 +383,16 @@ function updateMobileLayout() {
         side="right"
         class="min-h-0"
       />
+
+      <div
+        v-if="isSyncLoading"
+        class="absolute inset-0 z-10 flex items-center justify-center bg-default/75 backdrop-blur-sm"
+      >
+        <div class="flex items-center gap-2 rounded-md border border-muted bg-default px-4 py-3 text-sm text-highlighted shadow-sm">
+          <UIcon name="i-lucide:loader-circle" class="size-4 animate-spin text-primary" />
+          <span>正在同步云端记录</span>
+        </div>
+      </div>
     </div>
   </ClientOnly>
 </template>

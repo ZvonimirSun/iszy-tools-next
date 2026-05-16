@@ -35,16 +35,6 @@ interface SaveDataOptions {
 
 let waitList = {} as Record<string, SyncPayload>
 let listened = false
-let syncTask = Promise.resolve<unknown>(undefined)
-
-function enqueueSyncTask(task: () => Promise<unknown>) {
-  syncTask = syncTask
-    .catch(() => undefined)
-    .then(task)
-    .catch(e => console.error(e))
-
-  return syncTask
-}
 
 export const useJsonEditorStore = defineStore('jsonEditor', () => {
   const leftId = ref<string | null>(null)
@@ -57,22 +47,6 @@ export const useJsonEditorStore = defineStore('jsonEditor', () => {
 
   const syncCloud = computed(() => {
     return useUserStore().logged && useSettingsStore().modules.jsonEditor.syncCloud
-  })
-
-  const leftData = computed(() => {
-    if (leftId.value && $_data.value[leftId.value]) {
-      return formatEditorData($_data.value[leftId.value]!)
-    }
-
-    return null
-  })
-
-  const rightData = computed(() => {
-    if (rightId.value && $_data.value[rightId.value]) {
-      return formatEditorData($_data.value[rightId.value]!)
-    }
-
-    return null
   })
 
   function dataList(keyword = '') {
@@ -311,12 +285,9 @@ export const useJsonEditorStore = defineStore('jsonEditor', () => {
     $_data,
     dataList,
     data,
-    leftData,
-    rightData,
     syncCloud,
     setSplitter,
     setFullStatus,
-    replaceState,
     getSyncData,
     syncData,
     saveData,

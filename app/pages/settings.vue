@@ -7,7 +7,9 @@ definePageMeta({
 
 const userStore = useUserStore()
 const { features: { publicRegister } } = usePublicConfig()
-const settings = useSettingsStore().general
+const settingsStore = useSettingsStore()
+const settings = settingsStore.general
+const modules = settingsStore.modules
 const toast = useToast()
 
 /** ************** 三方登录绑定 ***************/
@@ -317,6 +319,17 @@ async function removeDevice(options: {
       <UCheckbox v-model="settings.showSearch" label="显示搜索" />
       <UCheckbox v-model="settings.showType" label="显示分类" />
       <UCheckbox v-model="settings.openInNewTab" label="新标签页打开工具" />
+    </div>
+    <USeparator />
+    <h3 class="text-xl text-pretty font-semibold text-highlighted">
+      应用设置
+    </h3>
+    <h4 class="text-lg text-pretty font-semibold text-highlighted">
+      JSON编辑器
+    </h4>
+    <div class="flex items-center gap-2">
+      <USwitch v-model="modules.jsonEditor.syncCloud" />
+      <span class="text-sm text-muted">同步云端记录</span>
     </div>
   </div>
 </template>
