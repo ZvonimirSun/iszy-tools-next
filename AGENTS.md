@@ -4,6 +4,8 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## Commands
 
+Do not run `pnpm build` casually as a default verification step. Prefer targeted checks such as `pnpm lint`, `pnpm typecheck`, or focused tests, and only run `pnpm build` when explicitly requested or when a production build is genuinely necessary.
+
 | Task | Command |
 |------|---------|
 | Install dependencies | `pnpm install` |

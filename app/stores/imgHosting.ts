@@ -2,52 +2,55 @@ import type { ImgHostingConfig } from '~/pages/imgHosting/children/imgHosting.d'
 import { getUploader } from '~/pages/imgHosting/children/imgHosting.service'
 
 export const useImgHostingStore = defineStore('imgHosting', () => {
-  const userImgHosting = useSettingsStore().modules.imgHosting
+  const userImgHosting = computed(() => useSettingsStore().modules.imgHosting)
 
+  const configs = computed(() => userImgHosting.value.configs)
+  const activeConfigId = computed(() => userImgHosting.value.activeConfigId)
+  const commonConfig = computed(() => userImgHosting.value.commonConfig)
   const activeConfig = computed<ImgHostingConfig | null>(() => {
-    const currentActiveConfigId = userImgHosting.activeConfigId
+    const currentActiveConfigId = activeConfigId.value
     if (!currentActiveConfigId)
       return null
-    return userImgHosting.configs.find(c => c.id === currentActiveConfigId) || null
+    return userImgHosting.value.configs.find(c => c.id === currentActiveConfigId) || null
   })
-  const hasConfigs = computed(() => userImgHosting.configs.length > 0)
+  const hasConfigs = computed(() => userImgHosting.value.configs.length > 0)
   const configOptions = computed(() => {
-    return userImgHosting.configs.map(c => ({
+    return userImgHosting.value.configs.map(c => ({
       label: `${c.name} (${getUploader(c.type)?.name ?? c.type})`,
       value: c.id,
     }))
   })
 
   function addConfig(config: ImgHostingConfig) {
-    userImgHosting.configs.push(config)
-    if (!userImgHosting.activeConfigId) {
-      userImgHosting.activeConfigId = config.id
+    userImgHosting.value.configs.push(config)
+    if (!userImgHosting.value.activeConfigId) {
+      userImgHosting.value.activeConfigId = config.id
     }
   }
 
   function updateConfig(id: string, updates: Partial<ImgHostingConfig>) {
-    const index = userImgHosting.configs.findIndex(c => c.id === id)
+    const index = userImgHosting.value.configs.findIndex(c => c.id === id)
     if (index !== -1) {
-      const imgHostingConfig = { ...userImgHosting.configs[index], ...updates } as ImgHostingConfig
-      userImgHosting.configs.splice(index, 1, imgHostingConfig)
+      const imgHostingConfig = { ...userImgHosting.value.configs[index], ...updates } as ImgHostingConfig
+      userImgHosting.value.configs.splice(index, 1, imgHostingConfig)
     }
   }
 
   function removeConfig(id: string) {
-    userImgHosting.configs = userImgHosting.configs.filter(c => c.id !== id)
-    if (userImgHosting.activeConfigId === id) {
-      userImgHosting.activeConfigId = userImgHosting.configs[0]?.id || null
+    userImgHosting.value.configs = userImgHosting.value.configs.filter(c => c.id !== id)
+    if (userImgHosting.value.activeConfigId === id) {
+      userImgHosting.value.activeConfigId = userImgHosting.value.configs[0]?.id || null
     }
   }
 
   function setActiveConfig(id: string) {
-    userImgHosting.activeConfigId = id
+    userImgHosting.value.activeConfigId = id
   }
 
   return {
-    configs: userImgHosting.configs,
-    activeConfigId: userImgHosting.activeConfigId,
-    commonConfig: userImgHosting.commonConfig,
+    configs,
+    activeConfigId,
+    commonConfig,
     activeConfig,
     hasConfigs,
     configOptions,

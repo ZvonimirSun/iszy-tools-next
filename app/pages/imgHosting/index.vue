@@ -22,11 +22,23 @@ const tabItems = [
 const files = ref<ImgHostingFileItem[]>([])
 const loading = ref(false)
 const errorMessage = ref('')
-const listLoaded = ref(false)
+const lastLoadedConfigKey = ref<string | null>(null)
+let refreshRequestId = 0
+
+const activeConfigKey = computed(() => {
+  const config = store.activeConfig
+  return config ? JSON.stringify(config) : null
+})
 
 async function refreshList() {
-  if (!store.activeConfig) {
+  const config = store.activeConfig
+  const configKey = activeConfigKey.value
+  const requestId = ++refreshRequestId
+
+  if (!config) {
     files.value = []
+    errorMessage.value = ''
+    lastLoadedConfigKey.value = null
     return
   }
 
@@ -34,15 +46,26 @@ async function refreshList() {
   errorMessage.value = ''
 
   try {
-    files.value = await listFiles(store.activeConfig)
+    const nextFiles = await listFiles(config)
+    if (requestId !== refreshRequestId)
+      return
+
+    files.value = nextFiles
+    lastLoadedConfigKey.value = configKey
   }
   catch (e) {
+    if (requestId !== refreshRequestId)
+      return
+
     console.error(e)
     errorMessage.value = '获取文件列表失败，请检查配置和网络连接'
     files.value = []
+    lastLoadedConfigKey.value = configKey
   }
   finally {
-    loading.value = false
+    if (requestId === refreshRequestId) {
+      loading.value = false
+    }
   }
 }
 
@@ -70,39 +93,27 @@ function handleUploaded(item: { key: string, url: string }) {
   })
 }
 
-// 标记当前选中配置是否在 settings tab 中被修改过
-const configDirty = ref(false)
-
-// 深度监听当前配置内容变化，仅在 settings tab 时标记脏
-watch(() => store.activeConfig, () => {
-  if (activeTab.value === 'settings') {
-    configDirty.value = true
-  }
-}, { deep: true })
-
 watch(activeTab, (tab) => {
-  if (tab === 'list') {
-    if (!listLoaded.value) {
-      listLoaded.value = true
-      if (store.activeConfig) {
-        refreshList()
-      }
-    }
-    else if (configDirty.value) {
-      configDirty.value = false
-      refreshList()
-    }
+  if (tab === 'list' && activeConfigKey.value !== lastLoadedConfigKey.value) {
+    refreshList()
   }
 })
 
-watch(() => store.activeConfigId, () => {
-  configDirty.value = false
+watch(activeConfigKey, (configKey, oldConfigKey) => {
+  if (configKey === oldConfigKey)
+    return
+
+  if (!configKey) {
+    files.value = []
+    errorMessage.value = ''
+    lastLoadedConfigKey.value = null
+    return
+  }
+
   if (activeTab.value === 'list') {
     files.value = []
     errorMessage.value = ''
-    if (store.activeConfigId) {
-      refreshList()
-    }
+    refreshList()
   }
 })
 </script>
