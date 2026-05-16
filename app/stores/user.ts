@@ -33,6 +33,7 @@ export const useUserStore = defineStore('user', () => {
         if (res.success) {
           profilePulled.value = true
           await updateProfile(res.data)
+          await useSettingsStore().getSyncData()
           return
         }
         else {

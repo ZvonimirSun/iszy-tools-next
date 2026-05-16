@@ -7,5 +7,9 @@ export default defineNuxtPlugin({
 
     await userStore.pullProfile(false, headers)
     await originToolsStore.init(headers)
+
+    onNuxtReady(() => {
+      useSettingsStore().getSyncData()
+    })
   },
 })

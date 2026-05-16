@@ -1,4 +1,6 @@
+import type { ResultDto } from '@zvonimirsun/iszy-common'
 import type { ImgHostingConfig } from '~/pages/imgHosting/children/imgHosting'
+import { debounce, merge } from 'lodash-es'
 
 export const useSettingsStore = defineStore('settings', () => {
   const general = ref({
@@ -34,9 +36,44 @@ export const useSettingsStore = defineStore('settings', () => {
     },
   })
 
+  const syncData = debounce(() => {
+    if (!useUserStore().logged) {
+      return
+    }
+
+    if (navigator.onLine) {
+      enqueueSyncTask(() => $fetch('/api/tools/settings/tools-next', {
+        method: 'POST',
+        body: modules.value,
+      }))
+    }
+  })
+
+  async function getSyncData() {
+    if (!useUserStore().logged) {
+      return
+    }
+    try {
+      const data = await $fetch<ResultDto<any>>('/api/tools/settings/tools-next')
+      if (data.success) {
+        if (data.data) {
+          merge(modules.value, data.data)
+        }
+        else {
+          syncData()
+        }
+        watch(modules, syncData, {
+          deep: true,
+        })
+      }
+    }
+    catch (err) {}
+  }
+
   return {
     general,
     modules,
+    getSyncData,
   }
 }, {
   persist: [
