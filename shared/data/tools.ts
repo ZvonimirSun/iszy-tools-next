@@ -247,10 +247,10 @@ export const tools: OriginToolMenu[] = [
         label: '塞尔达荒野之息地图',
         name: 'zeldaBotwMap',
       },
-      // {
-      //   label: '2048',
-      //   name: '2048',
-      // },
+      {
+        label: '2048',
+        name: '2048',
+      },
       // {
       //   label: '俄罗斯方块',
       //   name: 'tetris',
