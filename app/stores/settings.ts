@@ -29,6 +29,9 @@ export const useSettingsStore = defineStore('settings', () => {
         customCopyContent: '$url',
       },
     },
+    jsonEditor: {
+      syncCloud: false,
+    },
   })
 
   return {
