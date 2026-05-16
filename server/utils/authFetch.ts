@@ -2,6 +2,7 @@ import type { PublicUser, ResultDto } from '@zvonimirsun/iszy-common'
 import type { H3Event, HTTPHeaderName } from 'h3'
 import type { NitroFetchRequest, TypedInternalResponse } from 'nitropack'
 import type { FetchError } from 'ofetch'
+import type { SessionData } from '#server/types/session'
 import { getProxyRequestHeaders } from 'h3'
 
 // 透传请求
@@ -38,7 +39,7 @@ export async function proxyFetch(event: H3Event) {
   let res = await doRequest()
   if (sessionId && res.status === 401) {
     try {
-      await _refreshWithLock(sessionId, async () => _refreshToken(event))
+      useRedisSession(event, await _refreshWithLock(sessionId, async () => _refreshToken(event)))
     }
     catch (error) {
       await destroyRedisSession(event)
@@ -78,7 +79,7 @@ export async function authFetch<T = unknown>(event: H3Event, ...params: Paramete
   catch (error) {
     if (sessionId && (error as FetchError)?.response?.status === 401) {
       try {
-        await _refreshWithLock(sessionId, async () => _refreshToken(event))
+        useRedisSession(event, await _refreshWithLock(sessionId, async () => _refreshToken(event)))
         return doRequest()
       }
       catch (refreshError) {
@@ -90,7 +91,7 @@ export async function authFetch<T = unknown>(event: H3Event, ...params: Paramete
   }
 }
 
-async function _refreshToken(event: H3Event) {
+async function _refreshToken(event: H3Event): Promise<SessionData> {
   const sessionData = await getRedisSession(event)
   if (!sessionData) {
     throw new Error('REFRESH_FAILED')
@@ -110,21 +111,21 @@ async function _refreshToken(event: H3Event) {
   if (!res.success) {
     throw new Error('REFRESH_FAILED')
   }
-  await setRedisSession(event, {
+  return await rotateRedisSession(event, {
     access_token: res.data!.access_token,
     refresh_token: res.data!.refresh_token,
   })
 }
 
-const locks = new Map<string, Promise<void>>()
-async function _refreshWithLock(sessionId: string, fn: () => Promise<void>) {
+const locks = new Map<string, Promise<SessionData>>()
+async function _refreshWithLock(sessionId: string, fn: () => Promise<SessionData>) {
   if (locks.has(sessionId)) {
     return locks.get(sessionId)!
   }
 
   const p = (async () => {
     try {
-      await fn()
+      return await fn()
     }
     finally {
       locks.delete(sessionId)

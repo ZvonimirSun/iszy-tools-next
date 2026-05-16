@@ -4,10 +4,27 @@ import type { StringValue } from 'ms'
 import type { SessionData } from '#server/types/session'
 import ms from 'ms'
 
+const eventSessionIdKey = 'redisSessionId'
+const sessionIdLength = 32
+
+function getEventSessionId(event: H3Event): string | undefined {
+  return (event.context as Record<string, string | undefined>)[eventSessionIdKey]
+}
+
+function setEventSessionId(event: H3Event, sessionId?: string) {
+  const context = event.context as Record<string, string | undefined>
+  if (sessionId) {
+    context[eventSessionIdKey] = sessionId
+  }
+  else {
+    delete context[eventSessionIdKey]
+  }
+}
+
 export function getSessionId(event: H3Event): string | undefined {
   const { session: sessionConfig } = useRuntimeConfig()
   const cookieName = sessionConfig.cookieName
-  return getCookie(event, cookieName)
+  return getEventSessionId(event) || getCookie(event, cookieName)
 }
 
 export function getSessionKey(sessionId: string): string {
@@ -40,17 +57,19 @@ export async function setRedisSession(event: H3Event, data?: Optional<SessionDat
     if (sessionId) {
       await storage.removeItem(getSessionKey(sessionId))
       sessionId = undefined
+      setEventSessionId(event)
       deleteCookie(event, cookieName)
     }
   }
   else {
     if (!sessionId) {
-      sessionId = random()
+      sessionId = random(sessionIdLength)
     }
     const sessionData = setSessionId(sessionId, data)
     await storage.setItem(getSessionKey(sessionId), sessionData, {
       ttl,
     })
+    setEventSessionId(event, sessionId)
     setCookie(event, cookieName, sessionId, {
       maxAge: ttl,
       domain: sessionConfig.domain || undefined,
@@ -60,6 +79,50 @@ export async function setRedisSession(event: H3Event, data?: Optional<SessionDat
       priority: 'high',
     })
   }
+}
+
+export async function rotateRedisSession(event: H3Event, data: Optional<SessionData, 'id'>) {
+  const { session: sessionConfig } = useRuntimeConfig()
+
+  const cookieName = sessionConfig.cookieName
+  const ttl = ms(sessionConfig.maxAge as StringValue) / 1000
+  const storage = useStorage<SessionData>('redis')
+
+  const oldSessionId = getSessionId(event)
+  const sessionId = random(sessionIdLength)
+  const sessionData = setSessionId(sessionId, data)
+
+  await storage.setItem(getSessionKey(sessionId), sessionData, {
+    ttl,
+  })
+  if (oldSessionId) {
+    await storage.removeItem(getSessionKey(oldSessionId))
+  }
+
+  setEventSessionId(event, sessionId)
+  setCookie(event, cookieName, sessionId, {
+    maxAge: ttl,
+    domain: sessionConfig.domain || undefined,
+    sameSite: 'lax',
+    httpOnly: true,
+    secure: true,
+    priority: 'high',
+  })
+
+  return sessionData
+}
+
+export function useRedisSession(event: H3Event, session: SessionData) {
+  setEventSessionId(event, session.id)
+  const { session: sessionConfig } = useRuntimeConfig()
+  setCookie(event, sessionConfig.cookieName, session.id, {
+    maxAge: ms(sessionConfig.maxAge as StringValue) / 1000,
+    domain: sessionConfig.domain || undefined,
+    sameSite: 'lax',
+    httpOnly: true,
+    secure: true,
+    priority: 'high',
+  })
 }
 
 export async function destroyRedisSession(event: H3Event): Promise<void> {
