@@ -146,7 +146,7 @@ export const tools: OriginToolMenu[] = [
     label: 'GIS工具',
     children: [
       {
-        label: 'GeoJSON.io',
+        label: 'GeoJSON工具',
         name: 'geoJson',
       },
       {

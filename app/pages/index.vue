@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { OriginToolMenu } from '#shared/types/tool'
+import type { OriginToolItem, OriginToolMenu } from '#shared/types/tool'
 
 const input = useTemplateRef('input')
 
@@ -11,8 +11,14 @@ const toolMenus = computed(() => {
   return toolsStore.toolMenusFilter(searchStr.value)
 })
 const settings = settingsStore.general
-// const isFav = toolsStore.isFav
-// const updateFav = toolsStore.updateFav
+const isFav = toolsStore.isFav
+function toggleFav(tool: OriginToolItem) {
+  toolsStore.updateFav({
+    label: tool.label,
+    name: tool.name,
+    add: !isFav(tool.label),
+  })
+}
 
 const showUserToolMenus = useState('showUserToolMenus', () => false)
 const userToolMenus = computed<OriginToolMenu[]>(() => {
@@ -80,7 +86,7 @@ onMounted(() => {
       size="xl"
       icon="i-icon-park-outline:search"
       placeholder="搜索工具..."
-      class="w-full sticky top-[calc(var(--ui-header-height)+--spacing(4))] z-50 shadow-sm"
+      class="w-full sticky top-[calc(var(--ui-header-height)+(--spacing(4)))] z-50 shadow-sm"
       :ui="{
         base: 'bg-default/75 backdrop-blur',
       }"
@@ -102,11 +108,28 @@ onMounted(() => {
           <UPageCard
             v-for="(tool) in item.children"
             :key="tool.name"
-            class="bg-elevated border border-inverted hover:border-primary text-base"
-            :title="tool.label"
+            class="group relative bg-elevated border border-inverted hover:border-primary text-base"
             :to="tool.name"
             :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
-          />
+          >
+            <template #title>
+              <span class="block pr-8">
+                {{ tool.label }}
+              </span>
+            </template>
+            <UTooltip :text="isFav(tool.label) ? '取消收藏' : '收藏'">
+              <UButton
+                :aria-label="isFav(tool.label) ? '取消收藏' : '收藏'"
+                :color="isFav(tool.label) ? 'warning' : 'neutral'"
+                :variant="isFav(tool.label) ? 'soft' : 'ghost'"
+                :icon="isFav(tool.label) ? 'i-icon-park-solid:star' : 'i-icon-park-outline:star'"
+                size="xs"
+                square
+                class="absolute right-2 top-2 z-10 cursor-pointer opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+                @click.stop.prevent="toggleFav(tool)"
+              />
+            </UTooltip>
+          </UPageCard>
         </div>
         <div
           v-for="(item, index) in toolMenus"
@@ -119,11 +142,28 @@ onMounted(() => {
           <UPageCard
             v-for="(tool) in item.children"
             :key="tool.name"
-            class="bg-elevated border border-inverted hover:border-primary text-base"
-            :title="tool.label"
+            class="group relative bg-elevated border border-inverted hover:border-primary text-base"
             :to="tool.name"
             :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
-          />
+          >
+            <template #title>
+              <span class="block pr-8">
+                {{ tool.label }}
+              </span>
+            </template>
+            <UTooltip :text="isFav(tool.label) ? '取消收藏' : '收藏'">
+              <UButton
+                :aria-label="isFav(tool.label) ? '取消收藏' : '收藏'"
+                :color="isFav(tool.label) ? 'warning' : 'neutral'"
+                :variant="isFav(tool.label) ? 'soft' : 'ghost'"
+                :icon="isFav(tool.label) ? 'i-icon-park-solid:star' : 'i-icon-park-outline:star'"
+                size="xs"
+                square
+                class="absolute right-2 top-2 z-10 cursor-pointer opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+                @click.stop.prevent="toggleFav(tool)"
+              />
+            </UTooltip>
+          </UPageCard>
         </div>
       </TransitionGroup>
     </div>

@@ -1,5 +1,5 @@
-import type { ToolMenu } from '#shared/types/tool'
 import type { ResultDto } from '@zvonimirsun/iszy-common'
+import type { ToolMenu } from '#shared/types/tool'
 
 export const useOriginToolsStore = defineStore('originTools', {
   state: () => ({

@@ -1,5 +1,5 @@
-import type { ToolMenu } from '#shared/types/tool'
 import type { RouteLocationNormalizedLoadedGeneric } from 'vue-router'
+import type { ToolMenu } from '#shared/types/tool'
 
 export function getCurrentTool(toolsStore: { toolMenus: ToolMenu[], toolItemsMap: Record<string, ToolItem> }, route: RouteLocationNormalizedLoadedGeneric) {
   if (!toolsStore.toolMenus.length) {

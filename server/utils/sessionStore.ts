@@ -1,7 +1,7 @@
-import type { SessionData } from '#server/types/session'
 import type { Optional } from '@zvonimirsun/iszy-common'
 import type { H3Event } from 'h3'
 import type { StringValue } from 'ms'
+import type { SessionData } from '#server/types/session'
 import ms from 'ms'
 
 export function getSessionId(event: H3Event): string | undefined {

@@ -20,7 +20,7 @@ logs
 .vscode
 
 # Local env files
-!.env
+.env
 .env.*
 
 .claude/*.local.*

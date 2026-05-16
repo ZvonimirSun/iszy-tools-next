@@ -1,5 +1,5 @@
-import type { Favorite, Statistic, ToolMenu, ToolRecord } from '#shared/types/tool'
 import type { OptionalExcept } from '@zvonimirsun/iszy-common'
+import type { Favorite, Statistic, ToolMenu, ToolRecord } from '#shared/types/tool'
 
 export const useToolsStore = defineStore('tools', {
   state: () => ({
