@@ -2,8 +2,8 @@
 import type { GameRefs, GameState, GameUiState, GameView } from './children/2048.types'
 import GameManager from './children/ts/GameManager'
 
-defineOptions({
-  name: '2048Game',
+definePageMeta({
+  layout: 'full',
 })
 
 const gameStore = use2048Store()
@@ -71,6 +71,14 @@ onBeforeUnmount(() => {
   <div>
     <div class="panel">
       <div class="wrapper">
+        <div class="orientation-tip">
+          <div class="orientation-tip-title">
+            建议竖屏游玩
+          </div>
+          <div class="orientation-tip-text">
+            当前横屏高度较小，竖屏可以获得更完整的棋盘和操作空间。
+          </div>
+        </div>
         <div class="above-game">
           <div class="scores-container">
             <div
@@ -136,13 +144,13 @@ onBeforeUnmount(() => {
 
 :deep(.panel) {
 
-  $field-width: 50rem;
-  $grid-spacing: 1.5rem;
+  $field-width: 31.25rem;
+  $grid-spacing: .9375rem;
   $grid-row-cells: 4;
   $tile-size: math.div($field-width - $grid-spacing * ($grid-row-cells + 1), $grid-row-cells);
-  $tile-border-radius: .3rem;
+  $tile-border-radius: .1875rem;
 
-  $mobile-threshold: $field-width + 2rem;
+  $mobile-threshold: $field-width + 1.25rem;
 
   $text-color: #776E65;
   $bright-text-color: #f9f6f2;
@@ -151,19 +159,19 @@ onBeforeUnmount(() => {
   $tile-gold-color: #edc22e;
   $tile-gold-glow-color: color.adjust($tile-gold-color, $lightness: 15%);
 
-  $game-container-margin-top: 4rem;
+  $game-container-margin-top: 2.5rem;
   $game-container-background: #bbada0;
 
   $transition-speed: 100ms;
 
   @include keyframes(move-up) {
     0% {
-      top: 2.5rem;
+      top: 1.5625rem;
       opacity: 1;
     }
 
     100% {
-      top: -5rem;
+      top: -3.125rem;
       opacity: 0;
     }
   }
@@ -173,22 +181,22 @@ onBeforeUnmount(() => {
     box-sizing: content-box;
 
     * + * {
-      margin-left: .5rem;
+      margin-left: .3125rem;
     }
   }
 
   .score-container, .best-container {
-    $height: 2.5rem;
+    $height: 1.5625rem;
 
     position: relative;
     display: inline-block;
     background: $game-container-background;
-    padding: 1.5rem 2.5rem;
+    padding: .9375rem 1.5625rem;
     font-size: $height;
     height: $height;
-    line-height: $height + 2.2rem;
+    line-height: $height + 1.375rem;
     font-weight: bold;
-    border-radius: .3rem;
+    border-radius: .1875rem;
     color: white;
     text-align: center;
     box-sizing: content-box;
@@ -196,11 +204,11 @@ onBeforeUnmount(() => {
     &:after {
       position: absolute;
       width: 100%;
-      top: 1rem;
+      top: .625rem;
       left: 0;
       text-transform: uppercase;
-      font-size: 1.3rem;
-      line-height: 1.3rem;
+      font-size: .8125rem;
+      line-height: .8125rem;
       text-align: center;
       color: $tile-color;
       box-sizing: content-box;
@@ -208,7 +216,7 @@ onBeforeUnmount(() => {
 
     .score-addition {
       position: absolute;
-      right: 3rem;
+      right: 1.875rem;
       color: red;
       font-size: $height;
       line-height: $height;
@@ -233,7 +241,7 @@ onBeforeUnmount(() => {
 
   p {
     margin-top: 0;
-    margin-bottom: 1rem;
+    margin-bottom: .625rem;
     line-height: 1.65;
   }
 
@@ -252,17 +260,23 @@ onBeforeUnmount(() => {
 
   hr {
     border: none;
-    border-bottom: .1rem solid color.adjust($text-color, $lightness: 40%);
-    margin-top: 2rem;
-    margin-bottom: 3rem;
+    border-bottom: .0625rem solid color.adjust($text-color, $lightness: 40%);
+    margin-top: 1.25rem;
+    margin-bottom: 1.875rem;
   }
 
   .wrapper {
     font-family: var(--font-sans);
-    font-size: 1.8rem;
+    font-size: 1.125rem;
     color: $text-color;
     width: $field-width;
+    max-width: 100%;
     margin: 0 auto;
+    container-type: inline-size;
+  }
+
+  .orientation-tip {
+    display: none;
   }
 
   @include keyframes(fade-in) {
@@ -274,21 +288,27 @@ onBeforeUnmount(() => {
       opacity: 1;
     }
   }
+
+  // Styles for buttons
   @mixin button {
     display: inline-block;
     background: color.adjust($game-container-background, $lightness: -20%);
-    border-radius: .3rem;
-    padding: 0 2rem;
+    border-radius: .1875rem;
+    padding: 0 1.25rem;
     text-decoration: none;
     color: $bright-text-color;
-    height: 4rem;
-    line-height: 4.2rem;
+    height: 2.5rem;
+    line-height: 2.625rem;
   }
 
   .game-container {
+    --grid-spacing: clamp(.5rem, 3cqw, #{$grid-spacing});
+    --tile-size: calc((100cqw - var(--grid-spacing) * 5) / 4);
+    --tile-step: calc(var(--tile-size) + var(--grid-spacing));
+
     margin-top: $game-container-margin-top;
     position: relative;
-    padding: $grid-spacing;
+    padding: var(--grid-spacing);
 
     cursor: default;
     -webkit-touch-callout: none;
@@ -303,8 +323,9 @@ onBeforeUnmount(() => {
 
     background: $game-container-background;
     border-radius: $tile-border-radius * 2;
-    width: $field-width;
-    height: $field-width;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -323,21 +344,24 @@ onBeforeUnmount(() => {
       text-align: center;
 
       p {
-        font-size: 6rem;
+        font-size: 3.75rem;
         font-weight: bold;
-        height: 6rem;
-        line-height: 6rem;
-        margin-top: 22.2rem;
+        height: 3.75rem;
+        line-height: 3.75rem;
+        margin-top: 13.875rem;
+        // height: $field-width;
+        // line-height: $field-width;
       }
 
       .lower {
         display: block;
-        margin-top: 5.9rem;
+        margin-top: 3.6875rem;
       }
 
       a {
         @include button;
-        margin-left: .9rem;
+        margin-left: .5625rem;
+        // margin-top: 3.6875rem;
 
         &.keep-playing-button {
           display: none;
@@ -370,10 +394,10 @@ onBeforeUnmount(() => {
   }
 
   .grid-cell {
-    width: $tile-size;
-    height: $tile-size;
-    margin-right: $grid-spacing;
-    margin-bottom: $grid-spacing;
+    width: var(--tile-size);
+    height: var(--tile-size);
+    margin-right: var(--grid-spacing);
+    margin-bottom: var(--grid-spacing);
     float: left;
 
     border-radius: $tile-border-radius;
@@ -396,23 +420,27 @@ onBeforeUnmount(() => {
 
   .tile {
     &, .tile-inner {
-      width: math.ceil($tile-size);
-      height: math.ceil($tile-size);
-      line-height: math.ceil($tile-size);
+      width: var(--tile-size);
+      height: var(--tile-size);
+      line-height: var(--tile-size);
     }
+
     @for $x from 1 through $grid-row-cells {
       @for $y from 1 through $grid-row-cells {
         &.tile-position-#{$x}-#{$y} {
-          $xPos: math.floor(($tile-size + $grid-spacing) * ($x - 1));
-          $yPos: math.floor(($tile-size + $grid-spacing) * ($y - 1));
-          @include transform(translate($xPos, $yPos));
+          $xSteps: $x - 1;
+          $ySteps: $y - 1;
+          @include transform(translate(
+            calc(var(--tile-step) * #{$xSteps}),
+            calc(var(--tile-step) * #{$ySteps})
+          ));
         }
       }
     }
   }
 
   .tile {
-    position: absolute;
+    position: absolute; // Makes transforms relative to the top-left corner
 
     .tile-inner {
       border-radius: $tile-border-radius;
@@ -422,10 +450,11 @@ onBeforeUnmount(() => {
       font-weight: bold;
       z-index: 10;
 
-      font-size: 5.5rem;
+      font-size: 3.4375rem;
     }
 
     & {
+      // Movement transition
       @include transition($transition-speed ease-in-out);
       -webkit-transition-property: -webkit-transform;
       -moz-transition-property: -moz-transform;
@@ -435,21 +464,26 @@ onBeforeUnmount(() => {
     $base: 2;
     $exponent: 1;
     $limit: 11;
-    $special-colors: false false,
-    false false,
-    #f78e48 true,
-    #fc5e2e true,
-    #ff3333 true,
-    #ff0000 true,
-    false true,
-    false true,
-    false true,
-    false true,
-    false true;
+
+    // Colors for all 11 states, false = no special color
+    $special-colors: false false, // 2
+    false false, // 4
+    #f78e48 true, // 8
+    #fc5e2e true, // 16
+    #ff3333 true, // 32
+    #ff0000 true, // 64
+    false true, // 128
+    false true, // 256
+    false true, // 512
+    false true, // 1024
+    false true; // 2048
+
+    // Build tile colors
     @while $exponent <= $limit {
       $power: pow($base, $exponent);
 
       &.tile-#{$power} .tile-inner {
+        // Calculate base background color
         $gold-percent: math.div($exponent - 1, $limit - 1) * 100%;
         $mixed-background: color.mix($tile-gold-color, $tile-color, $gold-percent);
 
@@ -465,37 +499,47 @@ onBeforeUnmount(() => {
         @if $bright-color {
           color: $bright-text-color;
         }
+
+        // Set background
         background: $mixed-background;
+
+        // Add glow
         $glow-opacity: max(#{$exponent} - 4, 0) / ($limit - 4);
 
         @if not $special-background {
-          box-shadow: 0 0 3rem 1rem rgba($tile-gold-glow-color, $glow-opacity / 1.8),
-          inset 0 0 0 .1rem rgba(white, $glow-opacity / 3);
+          box-shadow: 0 0 1.875rem .625rem rgba($tile-gold-glow-color, $glow-opacity / 1.8),
+          inset 0 0 0 .0625rem rgba(white, $glow-opacity / 3);
         }
+
+        // Adjust font size for bigger numbers
         @if $power >= 100 and $power < 1000 {
-          font-size: 4.5rem;
+          font-size: 2.8125rem;
+
+          // Media queries placed here to avoid carrying over the rest of the logic
           @include smaller($mobile-threshold) {
-            font-size: 2.5rem;
+            font-size: 1.5625rem;
           }
         } @else if $power >= 1000 {
-          font-size: 3.5rem;
+          font-size: 2.1875rem;
 
           @include smaller($mobile-threshold) {
-            font-size: 1.5rem;
+            font-size: .9375rem;
           }
         }
       }
 
       $exponent: $exponent + 1;
     }
+
+    // Super tiles (above 2048)
     &.tile-super .tile-inner {
       color: $bright-text-color;
       background: color.mix(#333, $tile-gold-color, 95%);
 
-      font-size: 3rem;
+      font-size: 1.875rem;
 
       @include smaller($mobile-threshold) {
-        font-size: 1rem;
+        font-size: .625rem;
       }
     }
   }
@@ -546,7 +590,7 @@ onBeforeUnmount(() => {
 
   .game-intro {
     float: left;
-    line-height: 4.2rem;
+    line-height: 2.625rem;
     margin-bottom: 0;
   }
 
@@ -558,28 +602,28 @@ onBeforeUnmount(() => {
   }
 
   .game-explanation {
-    margin-top: 5rem;
+    margin-top: 3.125rem;
   }
 
   @include smaller($mobile-threshold) {
-    $field-width: 28rem;
-    $grid-spacing: 1rem;
     $grid-row-cells: 4;
-    $tile-size: math.div($field-width - $grid-spacing * ($grid-row-cells + 1), $grid-row-cells);
-    $tile-border-radius: .3rem;
-    $game-container-margin-top: 1.7rem;
+    $tile-border-radius: .1875rem;
+    $game-container-margin-top: 1.0625rem;
 
     .wrapper {
-      font-size: 1.5rem;
+      font-size: .9375rem;
       width: $field-width;
+      max-width: 100%;
       margin: 0 auto;
     }
 
     .score-container, .best-container {
       margin-top: 0;
-      padding: 1.5rem 1rem;
-      min-width: 4rem;
+      padding: .9375rem .625rem;
+      min-width: 2.5rem;
     }
+
+    // Show intro and restart button side by side
     .game-intro {
       width: 55%;
       display: block;
@@ -592,12 +636,13 @@ onBeforeUnmount(() => {
       padding: 0;
       display: block;
       box-sizing: border-box;
-      margin-top: .2rem;
+      margin-top: .125rem;
     }
+
     .game-container {
       margin-top: $game-container-margin-top;
       position: relative;
-      padding: $grid-spacing;
+      padding: var(--grid-spacing);
 
       cursor: default;
       -webkit-touch-callout: none;
@@ -612,8 +657,9 @@ onBeforeUnmount(() => {
 
       background: $game-container-background;
       border-radius: $tile-border-radius * 2;
-      width: $field-width;
-      height: $field-width;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1;
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
@@ -632,21 +678,24 @@ onBeforeUnmount(() => {
         text-align: center;
 
         p {
-          font-size: 6rem;
+          font-size: 3.75rem;
           font-weight: bold;
-          height: 6rem;
-          line-height: 6rem;
-          margin-top: 22.2rem;
+          height: 3.75rem;
+          line-height: 3.75rem;
+          margin-top: 13.875rem;
+          // height: $field-width;
+          // line-height: $field-width;
         }
 
         .lower {
           display: block;
-          margin-top: 5.9rem;
+          margin-top: 3.6875rem;
         }
 
         a {
           @include button;
-          margin-left: .9rem;
+          margin-left: .5625rem;
+          // margin-top: 3.6875rem;
 
           &.keep-playing-button {
             display: none;
@@ -679,10 +728,10 @@ onBeforeUnmount(() => {
     }
 
     .grid-cell {
-      width: $tile-size;
-      height: $tile-size;
-      margin-right: $grid-spacing;
-      margin-bottom: $grid-spacing;
+      width: var(--tile-size);
+      height: var(--tile-size);
+      margin-right: var(--grid-spacing);
+      margin-bottom: var(--grid-spacing);
       float: left;
 
       border-radius: $tile-border-radius;
@@ -705,35 +754,75 @@ onBeforeUnmount(() => {
 
     .tile {
       &, .tile-inner {
-        width: math.ceil($tile-size);
-        height: math.ceil($tile-size);
-        line-height: math.ceil($tile-size);
+        width: var(--tile-size);
+        height: var(--tile-size);
+        line-height: var(--tile-size);
       }
+
       @for $x from 1 through $grid-row-cells {
         @for $y from 1 through $grid-row-cells {
           &.tile-position-#{$x}-#{$y} {
-            $xPos: math.floor(($tile-size + $grid-spacing) * ($x - 1));
-            $yPos: math.floor(($tile-size + $grid-spacing) * ($y - 1));
-            @include transform(translate($xPos, $yPos));
+            $xSteps: $x - 1;
+            $ySteps: $y - 1;
+            @include transform(translate(
+              calc(var(--tile-step) * #{$xSteps}),
+              calc(var(--tile-step) * #{$ySteps})
+            ));
           }
         }
       }
     }
+
+    // Rest of the font-size adjustments in the tile class
     .tile .tile-inner {
-      font-size: 3.5rem;
+      font-size: 2.1875rem;
     }
 
     .game-message {
       p {
-        font-size: 3rem !important;
-        height: 3rem !important;
-        line-height: 3rem !important;
-        margin-top: 9rem !important;
+        font-size: 1.875rem !important;
+        height: 1.875rem !important;
+        line-height: 1.875rem !important;
+        margin-top: 5.625rem !important;
       }
 
       .lower {
-        margin-top: 3rem !important;
+        margin-top: 1.875rem !important;
       }
+    }
+  }
+
+  @media (orientation: landscape) and (max-height: 30rem) and (hover: none) and (pointer: coarse) {
+    .wrapper {
+      width: min($field-width, 100%);
+      padding: 0 .75rem;
+      box-sizing: border-box;
+    }
+
+    .orientation-tip {
+      display: block;
+      margin: 0 auto;
+      padding: .75rem .9rem;
+      border-radius: .25rem;
+      background: rgba($game-container-background, .22);
+      color: $text-color;
+      text-align: center;
+    }
+
+    .orientation-tip-title {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .orientation-tip-text {
+      margin-top: .25rem;
+      font-size: .78rem;
+      line-height: 1.35;
+    }
+
+    .above-game, .game-container {
+      display: none;
     }
   }
 }
