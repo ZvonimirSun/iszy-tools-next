@@ -64,7 +64,7 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  async function pullProfile(force?: boolean, headers?: any) {
+  async function pullProfile(force?: boolean, fetcher: Fetcher = $fetch) {
     // 1. 非强制刷新且已拉取成功，直接返回
     if (profilePulled.value && !force) {
       return true
@@ -99,21 +99,20 @@ export const useUserStore = defineStore('user', () => {
     try {
       // 创建 AbortController 用于中断请求
       pullProfileAbortController = new AbortController()
-      const res = await $fetch<ResultDto<{
+      const res = await fetcher<ResultDto<{
         logged: boolean
         profile?: PublicSimpleUser
       }>>(`/api/auth/check`, {
-        headers,
         signal: pullProfileAbortController.signal, // 关联中断信号
       })
       if (res && res.success) {
-        await updateProfile(res.data?.profile, headers)
+        await updateProfile(res.data?.profile, fetcher)
         profilePulled.value = true
         // 安全调用 resolve（避免空值）
         pullProfileResolve?.(res)
       }
       else {
-        await removeProfile(headers)
+        await removeProfile(fetcher)
         // 安全调用 reject
         pullProfileReject?.(new Error(res?.message || '拉取用户信息失败'))
       }
@@ -121,7 +120,7 @@ export const useUserStore = defineStore('user', () => {
     catch (error) {
       // 处理中断错误（无需提示，属于正常取消）
       if ((error as Error).name !== 'AbortError') {
-        await removeProfile(headers)
+        await removeProfile(fetcher)
         console.error('拉取用户信息异常:', error)
       }
       // 安全调用 reject
@@ -138,13 +137,13 @@ export const useUserStore = defineStore('user', () => {
     return pullProfilePromise
   }
 
-  async function updateProfile(data?: PublicSimpleUser, headers?: any) {
+  async function updateProfile(data?: PublicSimpleUser, fetcher?: Fetcher) {
     profile.value = data
-    return useOriginToolsStore().fetchTools(headers)
+    return useOriginToolsStore().fetchTools(fetcher)
   }
 
-  async function removeProfile(headers?: any) {
-    return updateProfile(undefined, headers)
+  async function removeProfile(fetcher?: Fetcher) {
+    return updateProfile(undefined, fetcher)
   }
 
   async function thirdPartyUnbind(type: string) {

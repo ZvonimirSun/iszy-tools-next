@@ -9,17 +9,15 @@ export const useOriginToolsStore = defineStore('originTools', () => {
     }).flat()
   })
 
-  async function init(headers?: any) {
+  async function init(fetcher?: Fetcher) {
     if (toolMenus.value.length) {
       return
     }
-    await fetchTools(headers)
+    await fetchTools(fetcher)
   }
 
-  async function fetchTools(headers?: any) {
-    toolMenus.value = (await $fetch<ResultDto<ToolMenu[]>>('/api/tools', {
-      headers,
-    })).data || []
+  async function fetchTools(fetcher: Fetcher = $fetch) {
+    toolMenus.value = (await fetcher<ResultDto<ToolMenu[]>>('/api/tools')).data || []
   }
 
   return {
