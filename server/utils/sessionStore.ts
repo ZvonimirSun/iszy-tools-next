@@ -7,27 +7,12 @@ import ms from 'ms'
 // 旧 session ID 在轮换后保留的过渡时间（秒），用于处理并发请求竞态
 const SESSION_TOMBSTONE_TTL = 30
 
-const eventSessionIdKey = 'redisSessionId'
 const sessionIdLength = 32
-
-function getEventSessionId(event: H3Event): string | undefined {
-  return (event.context as Record<string, string | undefined>)[eventSessionIdKey]
-}
-
-function setEventSessionId(event: H3Event, sessionId?: string) {
-  const context = event.context as Record<string, string | undefined>
-  if (sessionId) {
-    context[eventSessionIdKey] = sessionId
-  }
-  else {
-    delete context[eventSessionIdKey]
-  }
-}
 
 export function getSessionId(event: H3Event): string | undefined {
   const { session: sessionConfig } = useRuntimeConfig()
   const cookieName = sessionConfig.cookieName
-  return getEventSessionId(event) || getCookie(event, cookieName)
+  return getCookie(event, cookieName)
 }
 
 export function getSessionKey(sessionId: string): string {
@@ -78,7 +63,6 @@ export async function setRedisSession(event: H3Event, data?: Optional<SessionDat
     if (sessionId) {
       await storage.removeItem(getSessionKey(sessionId))
       sessionId = undefined
-      setEventSessionId(event)
       deleteCookie(event, cookieName)
     }
   }
@@ -90,7 +74,6 @@ export async function setRedisSession(event: H3Event, data?: Optional<SessionDat
     await storage.setItem(getSessionKey(sessionId), sessionData, {
       ttl,
     })
-    setEventSessionId(event, sessionId)
     setCookie(event, cookieName, sessionId, {
       maxAge: ttl,
       domain: sessionConfig.domain || undefined,
@@ -124,7 +107,6 @@ export async function rotateRedisSession(event: H3Event, data: Optional<SessionD
     )
   }
 
-  setEventSessionId(event, sessionId)
   setCookie(event, cookieName, sessionId, {
     maxAge: ttl,
     domain: sessionConfig.domain || undefined,
@@ -138,7 +120,6 @@ export async function rotateRedisSession(event: H3Event, data: Optional<SessionD
 }
 
 export function useRedisSession(event: H3Event, session: SessionData) {
-  setEventSessionId(event, session.id)
   const { session: sessionConfig } = useRuntimeConfig()
   setCookie(event, sessionConfig.cookieName, session.id, {
     maxAge: ms(sessionConfig.maxAge as StringValue) / 1000,
