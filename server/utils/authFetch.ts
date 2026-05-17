@@ -159,7 +159,11 @@ function _getDeviceInfoHeader(event: H3Event) {
 
 async function _pipeResponse(event: H3Event, res: Response) {
   setResponseStatus(event, res.status)
-  for (const [k, v] of res.headers) setHeader(event, k, v)
+  for (const [k, v] of res.headers) {
+    if (k.toLowerCase() === 'set-cookie')
+      continue
+    setHeader(event, k, v)
+  }
   if (res.body == null) {
     return send(event, '')
   }

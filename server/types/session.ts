@@ -3,3 +3,7 @@ export interface SessionData {
   access_token: string
   refresh_token: string
 }
+
+export interface SessionTombstone {
+  redirectTo: string
+}
