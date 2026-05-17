@@ -296,6 +296,7 @@ function updateMobileLayout() {
 }
 
 async function pullCloudDataIfNeeded() {
+  await useSettingsStore().afterSync()
   if (!store.syncCloud || syncPulled.value || isSyncLoading.value) {
     return
   }

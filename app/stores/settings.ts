@@ -35,6 +35,7 @@ export const useSettingsStore = defineStore('settings', () => {
       syncCloud: false,
     },
   })
+  const finishSync = ref(false)
 
   const syncData = debounce(() => {
     if (!useUserStore().logged) {
@@ -49,6 +50,23 @@ export const useSettingsStore = defineStore('settings', () => {
     }
   })
 
+  async function afterSync() {
+    if (!useUserStore().logged) {
+      return
+    }
+    if (finishSync.value) {
+      return
+    }
+    return new Promise<void>((resolve) => {
+      const { stop } = watch(finishSync, (val) => {
+        if (val) {
+          stop()
+          resolve()
+        }
+      })
+    })
+  }
+
   async function getSyncData() {
     if (!useUserStore().logged) {
       return
@@ -56,6 +74,7 @@ export const useSettingsStore = defineStore('settings', () => {
     try {
       const data = await $fetch<ResultDto<any>>('/api/tools/settings/tools-next')
       if (data.success) {
+        finishSync.value = true
         if (data.data) {
           merge(modules.value, data.data)
         }
@@ -73,6 +92,7 @@ export const useSettingsStore = defineStore('settings', () => {
   return {
     general,
     modules,
+    afterSync,
     getSyncData,
   }
 }, {
