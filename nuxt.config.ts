@@ -110,10 +110,7 @@ export default defineNuxtConfig({
   },
   scripts: {
     registry: {
-      cloudflareWebAnalytics: {
-        partytown: true,
-        trigger: 'onNuxtReady',
-      },
+      cloudflareWebAnalytics: { trigger: 'onNuxtReady' },
     },
   },
   pages: {
