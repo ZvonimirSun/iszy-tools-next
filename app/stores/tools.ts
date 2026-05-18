@@ -90,6 +90,17 @@ export const useToolsStore = defineStore('tools', () => {
     }
   }
 
+  function sortFavorite(ordered: Favorite[]) {
+    const orderedLabels = new Set(ordered.map(item => item.label))
+    let index = 0
+    favorite.value = favorite.value.map((item) => {
+      if (!orderedLabels.has(item.label)) {
+        return item
+      }
+      return ordered[index++] || item
+    })
+  }
+
   function access({ label, name }: ToolRecord) {
     const tmp = statistics.value.find(item => (item.label === label))
     if (tmp) {
@@ -146,6 +157,7 @@ export const useToolsStore = defineStore('tools', () => {
     recent,
     most,
     updateFav,
+    sortFavorite,
     access,
     clearHistory,
     fixFavorite,
