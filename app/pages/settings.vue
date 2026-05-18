@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { TableColumn } from '@nuxt/ui'
 import type { Device } from '@zvonimirsun/iszy-common'
 
 definePageMeta({
@@ -112,10 +113,54 @@ async function unbind(type: 'github' | 'linuxdo') {
 }
 
 /** ************** 登录设备管理 ***************/
-const devices = ref<(Device & {
+type DeviceRow = Device & {
   createTime?: string
   lastLoginTime?: string
-})[]>([])
+}
+
+const deviceColumns: TableColumn<DeviceRow>[] = [
+  {
+    accessorKey: 'name',
+    header: '设备名称',
+    size: 260,
+  },
+  {
+    accessorKey: 'lastLoginTime',
+    header: '最近登录时间',
+    meta: {
+      class: {
+        th: 'text-center',
+        td: 'text-center',
+      },
+    },
+    size: 180,
+  },
+  {
+    accessorKey: 'ip',
+    header: '登录 IP',
+    meta: {
+      class: {
+        th: 'text-center',
+        td: 'text-center',
+      },
+    },
+    size: 160,
+  },
+  {
+    id: 'operations',
+    header: '操作',
+    enableHiding: false,
+    meta: {
+      class: {
+        th: 'text-center',
+        td: 'text-center',
+      },
+    },
+    size: 120,
+  },
+]
+
+const devices = ref<DeviceRow[]>([])
 
 async function manageDevices() {
   try {
@@ -223,7 +268,12 @@ async function removeDevice(options: {
         </div>
       </div>
       <div class="flex gap-2">
-        <UModal title="管理登录设备">
+        <UModal
+          title="管理登录设备"
+          :ui="{
+            content: 'modal-container',
+          }"
+        >
           <UButton
             class="cursor-pointer"
             color="neutral"
@@ -233,8 +283,8 @@ async function removeDevice(options: {
             登录设备管理
           </UButton>
           <template #body>
-            <ul class="flex flex-col m-0 gap-2 p-0">
-              <li class="flex items-center gap-2">
+            <div class="flex flex-col gap-3">
+              <div class="flex justify-end">
                 <UButton
                   size="sm"
                   color="neutral"
@@ -243,56 +293,56 @@ async function removeDevice(options: {
                 >
                   登出所有
                 </UButton>
-              </li>
-              <li
-                v-for="(item, index) in devices"
-                :key="index"
-                class="w-full flex flex-col"
+              </div>
+
+              <UAlert
+                v-if="!devices.length"
+                color="neutral"
+                variant="subtle"
+                title="暂无登录设备"
+              />
+
+              <UTable
+                v-else
+                :data="devices"
+                :columns="deviceColumns"
+                :column-pinning="{ right: ['operations'] }"
+                sticky
+                class="w-full rounded-lg border border-muted"
+                :ui="{ tr: 'whitespace-nowrap' }"
               >
-                <div class="w-full inline-flex items-center gap-2">
-                  <span class="flex-1 overflow-hidden font-bold text-ellipsis text-nowrap" :title="item.name || item.id">{{ item.name || item.id }}</span>
-                  <span v-if="item.current">(当前设备)</span>
+                <template #name-cell="{ row }">
+                  <div class="flex items-center gap-2">
+                    <span class="overflow-hidden text-ellipsis font-medium" :title="row.original.name || row.original.id">
+                      {{ row.original.name || row.original.id }}
+                    </span>
+                    <UBadge v-if="row.original.current" color="primary" variant="subtle">
+                      当前设备
+                    </UBadge>
+                  </div>
+                </template>
+
+                <template #lastLoginTime-cell="{ row }">
+                  {{ row.original.lastLoginTime || '-' }}
+                </template>
+
+                <template #ip-cell="{ row }">
+                  <span class="font-mono">{{ row.original.ip || '未知' }}</span>
+                </template>
+
+                <template #operations-cell="{ row }">
                   <UButton
-                    v-else
+                    :disabled="row.original.current"
                     size="sm"
                     color="neutral"
                     variant="outline"
-                    @click="removeDevice({ deviceId: item.id })"
+                    @click="removeDevice({ deviceId: row.original.id })"
                   >
                     登出
                   </UButton>
-                </div>
-                <div class="w-full pl-6">
-                  <table>
-                    <tbody>
-                      <tr>
-                        <td class="text-right">
-                          IP:
-                        </td><td class="underline">
-                          {{ item.ip }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-right">
-                          首次登录时间:
-                        </td>
-                        <td class="underline">
-                          {{ item.createTime }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-right">
-                          最后登录时间:
-                        </td>
-                        <td class="underline">
-                          {{ item.lastLoginTime }}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </li>
-            </ul>
+                </template>
+              </UTable>
+            </div>
           </template>
         </UModal>
       </div>
