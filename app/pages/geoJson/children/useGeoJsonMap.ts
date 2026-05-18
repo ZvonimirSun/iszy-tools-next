@@ -13,7 +13,7 @@ interface GeoJsonMapOptions {
   maxTextLength?: number
   maxFeatures?: number
   maxCoordinates?: number
-  onFeatureClick?: (feature: unknown) => void
+  onFeatureClick?: (feature: unknown, index: number) => void
   onGeoJsonChange?: (geoJson: unknown) => void
 }
 
@@ -38,6 +38,7 @@ export function useGeoJsonMap(dom: HTMLDivElement, options: GeoJsonMapOptions = 
   const geoJsonLayerGroup = featureGroup().addTo(map)
   const markerIcon = getIcon()
   let geoJsonLayer: LeafletGeoJSON | undefined
+  let featureLayers: Layer[] = []
 
   ViewUtils.setHome(map as never, {
     center: [105, 35],
@@ -63,6 +64,7 @@ export function useGeoJsonMap(dom: HTMLDivElement, options: GeoJsonMapOptions = 
     cutPolygon: false,
   })
   map.on('pm:create', (event) => {
+    registerFeatureLayer(event.layer)
     bindLayerChangeEvents(event.layer)
     emitGeoJsonChange()
   })
@@ -73,6 +75,7 @@ export function useGeoJsonMap(dom: HTMLDivElement, options: GeoJsonMapOptions = 
   function clearGeoJson() {
     geoJsonLayerGroup.clearLayers()
     geoJsonLayer = undefined
+    featureLayers = []
   }
 
   function renderGeoJson(data: unknown): RenderGeoJsonResult {
@@ -116,8 +119,10 @@ export function useGeoJsonMap(dom: HTMLDivElement, options: GeoJsonMapOptions = 
           return marker(latlng, { icon: markerIcon })
         },
         onEachFeature(feature, layer) {
+          registerFeatureLayer(layer)
           layer.on('click', () => {
-            options.onFeatureClick?.(feature)
+            const featureIndex = featureLayers.indexOf(layer)
+            options.onFeatureClick?.(feature, featureIndex)
           })
           bindLayerChangeEvents(layer)
         },
@@ -154,8 +159,21 @@ export function useGeoJsonMap(dom: HTMLDivElement, options: GeoJsonMapOptions = 
 
   function bindLayerChangeEvents(layer: Layer) {
     layer.on('pm:update', emitGeoJsonChange)
-    layer.on('pm:remove', emitGeoJsonChange)
+    layer.on('pm:remove', () => {
+      unregisterFeatureLayer(layer)
+      emitGeoJsonChange()
+    })
     layer.on('pm:edit', emitGeoJsonChange)
+  }
+
+  function registerFeatureLayer(layer: Layer) {
+    if (!featureLayers.includes(layer)) {
+      featureLayers.push(layer)
+    }
+  }
+
+  function unregisterFeatureLayer(layer: Layer) {
+    featureLayers = featureLayers.filter(item => item !== layer)
   }
 
   function emitGeoJsonChange() {
@@ -164,11 +182,50 @@ export function useGeoJsonMap(dom: HTMLDivElement, options: GeoJsonMapOptions = 
     })
   }
 
+  function locateFeature(index: number): boolean {
+    const layer = featureLayers[index]
+    if (!layer) {
+      return false
+    }
+
+    const bounds = getLayerBounds(layer)
+    if (bounds?.isValid()) {
+      map.fitBounds(bounds, {
+        maxZoom: 17,
+        padding: [48, 48],
+      })
+      return true
+    }
+
+    const latLng = getLayerLatLng(layer)
+    if (latLng) {
+      map.setView(latLng, Math.max(map.getZoom(), 17), {
+        animate: true,
+      })
+      return true
+    }
+
+    return false
+  }
+
   return {
     map,
     clearGeoJson,
     renderGeoJson,
+    locateFeature,
     destroy,
+  }
+}
+
+function getLayerBounds(layer: Layer) {
+  if ('getBounds' in layer && typeof layer.getBounds === 'function') {
+    return layer.getBounds()
+  }
+}
+
+function getLayerLatLng(layer: Layer) {
+  if ('getLatLng' in layer && typeof layer.getLatLng === 'function') {
+    return layer.getLatLng()
   }
 }
 

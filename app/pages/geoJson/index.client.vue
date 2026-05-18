@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { TableRow } from '@nuxt/ui'
 import type { GeoJsonExportOptions, GeoJsonImportFormat } from './children/file/geoJson.types'
 import type { GeoJsonCollapsedSide } from '~/stores/geoJson'
 import { downloadBlob } from '~/utils/common'
@@ -354,6 +355,31 @@ function renderGeoJson(val: unknown) {
   }
 }
 
+function handlePropertyRowSelect(_event: Event, row: TableRow<{
+  __index?: string | number
+}>) {
+  const rowIndex = Number(row.original.__index)
+  if (!Number.isInteger(rowIndex)) {
+    return
+  }
+
+  const featureIndex = rowIndex - 1
+  if (!mapHandler?.locateFeature(featureIndex)) {
+    toast.add({
+      color: 'warning',
+      title: '未找到对应图斑',
+    })
+    return
+  }
+
+  if (isMobileLayout.value) {
+    collapsedSide.value = 'panel'
+  }
+  else if (collapsedSide.value === 'map') {
+    collapsedSide.value = null
+  }
+}
+
 onMounted(async () => {
   mediaQuery = window.matchMedia('(max-width: 1023px)')
   updateMobileLayout(mediaQuery)
@@ -488,6 +514,8 @@ async function createMapHandler(dom: HTMLDivElement) {
             :columns="propertyColumns"
             sticky
             class="min-h-0 flex-1 overflow-auto rounded-md border border-muted"
+            :ui="{ tr: 'cursor-pointer whitespace-nowrap' }"
+            @select="handlePropertyRowSelect"
           />
 
           <div
