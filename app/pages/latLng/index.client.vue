@@ -9,12 +9,14 @@ let handler: {
   update: (val: string) => void
 }
 
-watchOnce(mapContainer, async (newVal) => {
-  if (!newVal) {
+onMounted(async () => {
+  await nextTick()
+
+  if (!mapContainer.value) {
     return
   }
   const { useLatLngHandler } = await import('./children/useLatLngHandler')
-  handler = useLatLngHandler(newVal, (val: string) => {
+  handler = useLatLngHandler(mapContainer.value, (val: string) => {
     keyword.value = val
   })
 })

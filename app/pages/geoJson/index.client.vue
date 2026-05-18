@@ -384,13 +384,12 @@ onMounted(async () => {
   mediaQuery = window.matchMedia('(max-width: 1023px)')
   updateMobileLayout(mediaQuery)
   mediaQuery.addEventListener('change', updateMobileLayout)
-})
-
-watchOnce(mapContainer, async (val) => {
-  if (val) {
-    mapHandler = await createMapHandler(val)
-    mapHandler.renderGeoJson(geoJsonData.value)
+  await nextTick()
+  if (!mapContainer.value) {
+    return
   }
+  mapHandler = await createMapHandler(mapContainer.value)
+  mapHandler.renderGeoJson(geoJsonData.value)
 })
 
 onBeforeUnmount(() => {
