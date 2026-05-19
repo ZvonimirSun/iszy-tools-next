@@ -1,3 +1,4 @@
+import type { ZipItem } from 'but-unzip'
 import type { GeoJsonWorkerResponse, ImportedGeoJson } from './geoJson.types'
 import { mergeGeoJsonList, normalizeImportedGeoJson } from './geoJson.file'
 
@@ -90,7 +91,7 @@ async function parseShapefileZip(buffer: ArrayBuffer) {
   return layers.length === 1 ? layers[0] : layers
 }
 
-async function readShapefileEntries(entries: Iterable<{ filename: string, read: () => Promise<Uint8Array> }>) {
+async function readShapefileEntries(entries: Iterable<ZipItem>) {
   const result: Record<string, Uint8Array> = {}
   await Promise.all(Array.from(entries).map(async (entry) => {
     if (!shapefileEntryPattern.test(entry.filename) || entry.filename.includes('__MACOSX')) {

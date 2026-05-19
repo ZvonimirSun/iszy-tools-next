@@ -56,6 +56,7 @@
     "@zvonimirsun/map-sdk": "^1.2.1",
     "@zvonimirsun/pinia-plugin-persistedstate": "^1.1.2",
     "acorn": "^8.16.0",
+    "but-unzip": "^0.1.10",
     "china-area-data": "5.0.1",
     "codemirror": "^6.0.2",
     "colord": "^2.9.3",

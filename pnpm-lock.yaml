@@ -123,6 +123,9 @@ importers:
       acorn:
         specifier: ^8.16.0
         version: 8.16.0
+      but-unzip:
+        specifier: ^0.1.10
+        version: 0.1.10
       china-area-data:
         specifier: 5.0.1
         version: 5.0.1
