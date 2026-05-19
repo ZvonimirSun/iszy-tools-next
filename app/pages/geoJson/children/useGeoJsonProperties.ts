@@ -1,5 +1,5 @@
 import type { TableColumn } from '@nuxt/ui'
-import type { Feature } from '@zvonimirsun/map-sdk'
+import type { Feature } from '@zvonimirsun/map-sdk/2d'
 import type { PropertyRow } from './utils'
 import { formatPropertyValue, getProperties, normalizeGeoJsonObject } from './utils'
 

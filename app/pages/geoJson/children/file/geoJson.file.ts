@@ -1,6 +1,6 @@
-import type { Feature, GeoJSON, Geometry } from '@zvonimirsun/map-sdk'
+import type { CrsObject, Feature, FeatureCollection, GeoJSON, Geometry } from '@zvonimirsun/map-sdk/2d'
 import type { GeoJsonExportOptions, GeoJsonExportResult, GeoJsonImportFormat, GeoJsonImportFormatConfig } from './geoJson.types'
-import { isGeoJsonObject, isGeometry, toFeatureCollection } from '../utils'
+import { findGeoJsonCrs, getGeoJsonCrs, isGeoJsonObject, isGeometry, normalizeGeoJsonObject, toFeatureCollection, withTopLevelGeoJsonCrs } from '../utils'
 import { exportShapefileInWorker, importShapefileInWorker } from './useGeoJsonFileWorkers'
 
 const geoJsonImportFormatOrder = ['geojson', 'geojsonl', 'shapefile', 'topojson', 'wkt'] as const
@@ -60,19 +60,15 @@ export function guessImportFormat(file: File): GeoJsonImportFormat {
 
 export async function parseGeoJsonFile(file: File): Promise<GeoJSON> {
   const data = JSON.parse(await file.text()) as unknown
-  if (!isGeoJsonObject(data)) {
-    throw new Error('文件内容不是有效的 GeoJSON')
-  }
-
-  return data
+  return normalizeImportedGeoJson(data)
 }
 
 export async function parseGeoJsonLinesFile(file: File): Promise<GeoJSON> {
-  const features = (await file.text())
+  const items = (await file.text())
     .split(/\r?\n/)
     .map(line => line.trim())
     .filter(Boolean)
-    .flatMap((line, index) => {
+    .map((line, index) => {
       let data: unknown
       try {
         data = JSON.parse(line)
@@ -85,13 +81,10 @@ export async function parseGeoJsonLinesFile(file: File): Promise<GeoJSON> {
         throw new Error(`第 ${index + 1} 行不是有效的 GeoJSON`)
       }
 
-      return toFeatureCollection(data).features
+      return data
     })
 
-  return {
-    type: 'FeatureCollection',
-    features,
-  }
+  return normalizeImportedGeoJson(mergeGeoJsonList(items))
 }
 
 export async function parseTopoJsonFile(file: File): Promise<GeoJSON> {
@@ -105,7 +98,7 @@ export async function parseTopoJsonFile(file: File): Promise<GeoJSON> {
     return feature(topology as never, key) as unknown
   })
 
-  return normalizeImportedGeoJson(mergeGeoJsonList(geoJsonList))
+  return normalizeImportedGeoJson(withTopLevelGeoJsonCrs(mergeGeoJsonList(geoJsonList), getGeoJsonCrs(topology)))
 }
 
 export async function parseWktFile(file: File): Promise<GeoJSON> {
@@ -135,15 +128,12 @@ export function normalizeImportedGeoJson(data: unknown): GeoJSON {
     throw new Error('文件内容不是有效的 GeoJSON')
   }
 
-  return data
+  return withTopLevelGeoJsonCrs(data)
 }
 
 export function createGeoJsonExport(data: unknown, options: GeoJsonExportOptions): GeoJsonExportResult {
-  if (!isGeoJsonObject(data)) {
-    throw new Error('当前内容不是有效的 GeoJSON')
-  }
-
-  const output = options.featureBbox ? withFeatureBBoxes(data) : data
+  const geoJson = createDirectGeoJsonSource(data)
+  const output = options.featureBbox ? withFeatureBBoxes(geoJson) : geoJson
   return {
     blob: new Blob([JSON.stringify(output, null, options.pretty ? 2 : undefined)], {
       type: 'application/geo+json;charset=utf-8',
@@ -153,7 +143,7 @@ export function createGeoJsonExport(data: unknown, options: GeoJsonExportOptions
 }
 
 export function createGeoJsonLinesExport(data: unknown): GeoJsonExportResult {
-  const collection = toFeatureCollection(data)
+  const collection = withFeatureCrs(toFeatureCollection(data))
   if (!collection.features.length) {
     throw new Error('当前没有可导出的图斑')
   }
@@ -168,9 +158,15 @@ export function createGeoJsonLinesExport(data: unknown): GeoJsonExportResult {
 
 export async function createTopoJsonExport(data: unknown): Promise<GeoJsonExportResult> {
   const { topology } = await import('topojson-server')
-  const collection = createShapefileSource(data)
+  const geoJson = createDirectGeoJsonSource(data)
+  const crs = getGeoJsonCrs(geoJson)
+  const output = topology({ data: geoJson as never }) as unknown as Record<string, unknown>
+  if (crs) {
+    output.crs = crs
+  }
+
   return {
-    blob: new Blob([JSON.stringify(topology({ data: collection }))], {
+    blob: new Blob([JSON.stringify(output)], {
       type: 'application/topo+json;charset=utf-8',
     }),
     filename: 'geojson.topojson',
@@ -179,13 +175,7 @@ export async function createTopoJsonExport(data: unknown): Promise<GeoJsonExport
 
 export async function createWktExport(data: unknown): Promise<GeoJsonExportResult> {
   const wellknown = await import('wellknown')
-  const collection = createShapefileSource(data)
-  const geometry = collection.features.length === 1
-    ? collection.features[0]?.geometry
-    : {
-        type: 'GeometryCollection',
-        geometries: collection.features.map(feature => feature.geometry).filter(isGeometry),
-      }
+  const geometry = createWktGeometrySource(data)
   if (!isGeometry(geometry)) {
     throw new Error('当前没有可导出的 WKT 几何')
   }
@@ -203,12 +193,49 @@ export async function createWktExport(data: unknown): Promise<GeoJsonExportResul
 }
 
 export function createShapefileSource(data: unknown) {
-  const collection = toFeatureCollection(data)
+  const collection = withFeatureCrs(toFeatureCollection(data))
   if (!collection.features.length) {
     throw new Error('当前没有可导出的图斑')
   }
 
   return collection
+}
+
+export function createDirectGeoJsonSource(data: unknown): GeoJSON {
+  const geoJson = normalizeGeoJsonObject(data)
+  if (!isGeoJsonObject(geoJson)) {
+    throw new Error('当前内容不是有效的 GeoJSON')
+  }
+
+  return geoJson
+}
+
+export function createWktGeometrySource(data: unknown): Geometry {
+  const geoJson = createDirectGeoJsonSource(data)
+
+  if (isGeometry(geoJson)) {
+    return geoJson
+  }
+
+  if (geoJson.type === 'Feature') {
+    if (!isGeometry(geoJson.geometry)) {
+      throw new Error('当前没有可导出的 WKT 几何')
+    }
+
+    return geoJson.geometry
+  }
+
+  const collection = toFeatureCollection(geoJson)
+  const geometries = collection.features.map(feature => feature.geometry).filter(isGeometry)
+  if (geometries.length === 1 && geometries[0]) {
+    return geometries[0]
+  }
+
+  return {
+    ...(collection.crs ? { crs: collection.crs } : {}),
+    type: 'GeometryCollection',
+    geometries,
+  }
 }
 
 export async function exportGeoJsonFile(data: unknown, options: GeoJsonExportOptions): Promise<GeoJsonExportResult> {
@@ -229,8 +256,10 @@ export async function exportGeoJsonFile(data: unknown, options: GeoJsonExportOpt
   return exporters[options.format]()
 }
 
-export function mergeGeoJsonList(items: unknown[]) {
+export function mergeGeoJsonList(items: unknown[]): FeatureCollection {
+  const crs = items.map(item => findGeoJsonCrs(item)).find(Boolean)
   return {
+    ...(crs ? { crs } : {}),
     type: 'FeatureCollection',
     features: items.flatMap(item => toFeatureCollection(item).features),
   }
@@ -249,6 +278,26 @@ function withFeatureBBoxes(data: GeoJSON): GeoJSON {
   }
 
   return data
+}
+
+function withFeatureCrs(collection: FeatureCollection): FeatureCollection {
+  const crs = collection.crs
+  if (!crs) {
+    return collection
+  }
+
+  return {
+    ...collection,
+    crs,
+    features: collection.features.map(feature => withCrs(feature, crs)),
+  }
+}
+
+function withCrs<T extends Feature | Geometry>(item: T, crs: CrsObject): T {
+  return {
+    ...item,
+    crs,
+  }
 }
 
 function withFeatureBBox(feature: Feature): Feature {

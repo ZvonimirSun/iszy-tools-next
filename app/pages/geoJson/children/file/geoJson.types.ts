@@ -1,4 +1,4 @@
-import type { GeoJSON } from '@zvonimirsun/map-sdk'
+import type { GeoJSON } from '@zvonimirsun/map-sdk/2d'
 
 export type GeoJsonImportFormat = 'geojson' | 'geojsonl' | 'shapefile' | 'topojson' | 'wkt'
 export type GeoJsonExportFormat = 'geojson' | 'geojsonl' | 'shapefile' | 'topojson' | 'wkt'

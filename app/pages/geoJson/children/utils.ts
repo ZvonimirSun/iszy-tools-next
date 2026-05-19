@@ -1,22 +1,20 @@
-import type { Feature, FeatureCollection, GeoJSON, Geometry } from '@zvonimirsun/map-sdk'
+import type { CrsObject, Feature, FeatureCollection, GeoJSON, Geometry } from '@zvonimirsun/map-sdk/2d'
 
 export type PropertyRow = Record<string, string | number>
 
+export function createEmptyFeatureCollection(): FeatureCollection {
+  return {
+    type: 'FeatureCollection',
+    features: [],
+  }
+}
+
 export function getFeatures(data: unknown): Feature[] {
-  const geoJson = normalizeGeoJsonObject(data)
-  if (!geoJson) {
-    return []
-  }
+  return toFeatureCollection(data).features
+}
 
-  if (geoJson.type === 'Feature') {
-    return [geoJson as Feature]
-  }
-
-  if (geoJson.type === 'FeatureCollection' && Array.isArray(geoJson.features)) {
-    return geoJson.features.filter(isFeature)
-  }
-
-  return []
+export function hasGeoJsonFeatures(data: unknown): boolean {
+  return toFeatureCollection(data).features.length > 0
 }
 
 export function getProperties(feature: Feature): Record<string, unknown> {
@@ -58,31 +56,29 @@ export function isGeoJsonObject(data: unknown): data is GeoJSON {
 
 export function toFeatureCollection(data: unknown): FeatureCollection {
   const geoJson = normalizeGeoJsonObject(data)
+  const crs = getGeoJsonCrs(geoJson)
 
   if (geoJson?.type === 'FeatureCollection' && Array.isArray(geoJson.features)) {
     return {
       ...geoJson,
+      ...(crs ? { crs } : {}),
       type: 'FeatureCollection',
-      features: geoJson.features.filter(isFeature).map(feature => ({
-        ...feature,
-        properties: { ...getProperties(feature) },
-      })),
+      features: geoJson.features.filter(isFeature).map(feature => normalizeFeature(feature, crs)),
     }
   }
 
   if (geoJson?.type === 'Feature') {
     const feature = geoJson
     return {
+      ...(crs ? { crs } : {}),
       type: 'FeatureCollection',
-      features: [{
-        ...feature,
-        properties: { ...getProperties(feature) },
-      }],
+      features: [normalizeFeature(feature, crs)],
     }
   }
 
   if (isGeometry(geoJson)) {
     return {
+      ...(crs ? { crs } : {}),
       type: 'FeatureCollection',
       features: [{
         type: 'Feature',
@@ -92,9 +88,86 @@ export function toFeatureCollection(data: unknown): FeatureCollection {
     }
   }
 
+  return createEmptyFeatureCollection()
+}
+
+export function getGeoJsonCrs(data: unknown): CrsObject | undefined {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    return undefined
+  }
+
+  return normalizeGeoJsonCrs((data as { crs?: unknown }).crs)
+}
+
+export function findGeoJsonCrs(data: unknown): CrsObject | undefined {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    return undefined
+  }
+
+  const crs = getGeoJsonCrs(data)
+  if (crs) {
+    return crs
+  }
+
+  const item = data as {
+    features?: unknown
+    geometry?: unknown
+    geometries?: unknown
+    type?: unknown
+  }
+
+  if (item.type === 'Feature') {
+    return findGeoJsonCrs(item.geometry)
+  }
+
+  if (item.type === 'FeatureCollection' && Array.isArray(item.features)) {
+    return item.features.map(feature => findGeoJsonCrs(feature)).find(Boolean)
+  }
+
+  if (item.type === 'GeometryCollection' && Array.isArray(item.geometries)) {
+    return item.geometries.map(geometry => findGeoJsonCrs(geometry)).find(Boolean)
+  }
+
+  return undefined
+}
+
+export function withTopLevelGeoJsonCrs<T extends GeoJSON>(geoJson: T, crs = findGeoJsonCrs(geoJson)): T {
+  return crs && !getGeoJsonCrs(geoJson)
+    ? {
+        ...geoJson,
+        crs,
+      }
+    : geoJson
+}
+
+function normalizeGeoJsonCrs(crs: unknown): CrsObject | undefined {
+  if (!crs || typeof crs !== 'object' || Array.isArray(crs)) {
+    return undefined
+  }
+
+  const type = (crs as { type?: unknown }).type
+  const properties = (crs as { properties?: unknown }).properties
+  if (!properties || typeof properties !== 'object' || Array.isArray(properties)) {
+    return undefined
+  }
+
+  if (type === 'name' && typeof (properties as { name?: unknown }).name === 'string') {
+    return crs as CrsObject
+  }
+
+  if (type === 'EPSG' && typeof (properties as { code?: unknown }).code === 'string') {
+    return crs as CrsObject
+  }
+
+  return undefined
+}
+
+function normalizeFeature(feature: Feature, crs: CrsObject | undefined): Feature {
+  const { crs: _featureCrs, ...rest } = feature
   return {
-    type: 'FeatureCollection',
-    features: [],
+    ...rest,
+    ...(crs ? { crs } : {}),
+    properties: { ...getProperties(feature) },
   }
 }
 

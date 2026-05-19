@@ -1,4 +1,4 @@
-import type { FeatureCollection } from '@zvonimirsun/map-sdk'
+import type { FeatureCollection } from '@zvonimirsun/map-sdk/2d'
 import type { GeoJsonWorkerResponse, ImportedGeoJson } from './geoJson.types'
 
 type WorkerFactory = new () => Worker

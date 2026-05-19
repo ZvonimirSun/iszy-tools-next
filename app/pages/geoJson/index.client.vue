@@ -6,8 +6,9 @@ import { downloadBlob } from '~/utils/common'
 import GeoJsonExportDialog from './children/components/GeoJsonExportDialog.vue'
 import GeoJsonImportDialog from './children/components/GeoJsonImportDialog.vue'
 import { exportGeoJsonFile, guessImportFormat, importGeoJsonFileByFormat } from './children/file/geoJson.file'
+import { useGeoJsonData } from './children/useGeoJsonData'
 import { canShowGeoJsonPropertyTable, useGeoJsonProperties } from './children/useGeoJsonProperties'
-import { getFeatures, getProperties, isGeometry, normalizeGeoJsonObject, toFeatureCollection } from './children/utils'
+import { getProperties, toFeatureCollection } from './children/utils'
 import 'leaflet/dist/leaflet.css'
 
 definePageMeta({ layout: 'wide' })
@@ -19,10 +20,7 @@ const geoJsonStore = useGeoJsonStore()
 const mapContainer = useTemplateRef('mapContainer')
 const fileInput = useTemplateRef('fileInput')
 const activeTab = ref<TabValue>('json')
-const geoJsonData = shallowRef<unknown>({
-  type: 'FeatureCollection',
-  features: [],
-})
+const { geoJsonObject, geoJsonFeatureCollection, featureRows, hasFeatures, setGeoJsonObject, setFeatureCollection } = useGeoJsonData()
 const pendingImportFile = shallowRef<File | null>(null)
 const importDialogOpen = ref(false)
 const exportDialogOpen = ref(false)
@@ -41,13 +39,8 @@ const tabItems = [
   { label: 'JSON', value: 'json' as const },
   { label: '属性', value: 'properties' as const },
 ]
-const featureRows = computed(() => getFeatures(geoJsonData.value))
-const hasFeatures = computed(() => {
-  const data = normalizeGeoJsonObject(geoJsonData.value)
-  return featureRows.value.length > 0 || isGeometry(data)
-})
 const { propertyTableRows, propertyColumns } = useGeoJsonProperties(featureRows)
-const canShowPropertyTable = computed(() => canShowGeoJsonPropertyTable(geoJsonData.value))
+const canShowPropertyTable = computed(() => canShowGeoJsonPropertyTable(geoJsonObject.value))
 const collapsedSide = computed<GeoJsonCollapsedSide>({
   get() {
     return isMobileLayout.value ? geoJsonStore.mobileCollapsedSide : geoJsonStore.desktopCollapsedSide
@@ -146,7 +139,7 @@ function addProperty() {
     return
   }
 
-  const collection = toFeatureCollection(geoJsonData.value)
+  const collection = toFeatureCollection(geoJsonFeatureCollection.value)
   for (const feature of collection.features) {
     const properties = getProperties(feature)
     if (!(key in properties)) {
@@ -155,19 +148,19 @@ function addProperty() {
     feature.properties = properties
   }
 
-  geoJsonData.value = collection
-  renderGeoJson(collection)
+  setFeatureCollection(collection)
+  void renderGeoJson(collection)
   newPropertyKey.value = ''
   showAddPropertyDialog.value = false
 }
 
 function handleGeoJsonUpdate(val: unknown) {
-  geoJsonData.value = val
+  setGeoJsonObject(val)
   if (renderTimer) {
     clearTimeout(renderTimer)
   }
   renderTimer = setTimeout(() => {
-    renderGeoJson(val)
+    void renderGeoJson(val)
   }, 300)
 }
 
@@ -210,8 +203,8 @@ async function importSelectedFile(format: GeoJsonImportFormat) {
   try {
     const data = await importGeoJsonFileByFormat(pendingImportFile.value, format)
 
-    geoJsonData.value = data
-    renderGeoJson(data)
+    setGeoJsonObject(data)
+    await renderGeoJson(data)
     importDialogOpen.value = false
     pendingImportFile.value = null
     toast.add({
@@ -238,7 +231,7 @@ async function exportSelectedFile(options: GeoJsonExportOptions) {
 
   isExporting.value = true
   try {
-    const result = await exportGeoJsonFile(geoJsonData.value, options)
+    const result = await exportGeoJsonFile(geoJsonObject.value, options)
     downloadBlob(result.blob, result.filename)
 
     exportDialogOpen.value = false
@@ -344,12 +337,12 @@ function updateMobileLayout(event?: MediaQueryList | MediaQueryListEvent) {
   }
 }
 
-function renderGeoJson(val: unknown) {
-  const result = mapHandler?.renderGeoJson(val)
+async function renderGeoJson(val: unknown) {
+  const result = await mapHandler?.renderGeoJson(val)
 
   if (result?.message) {
     toast.add({
-      color: result.status === 'too-large' ? 'warning' : 'error',
+      color: 'error',
       title: result.message,
     })
   }
@@ -389,7 +382,7 @@ onMounted(async () => {
     return
   }
   mapHandler = await createMapHandler(mapContainer.value)
-  mapHandler.renderGeoJson(geoJsonData.value)
+  await mapHandler.renderGeoJson(geoJsonObject.value)
 })
 
 onBeforeUnmount(() => {
@@ -408,7 +401,7 @@ async function createMapHandler(dom: HTMLDivElement) {
       activeTab.value = 'properties'
     },
     onGeoJsonChange(geoJson) {
-      geoJsonData.value = geoJson
+      setFeatureCollection(geoJson)
     },
   })
 }
@@ -486,7 +479,7 @@ async function createMapHandler(dom: HTMLDivElement) {
       <div class="min-h-0 flex-1 overflow-hidden p-3">
         <JsonEditor
           v-show="activeTab === 'json'"
-          v-model="geoJsonData"
+          v-model="geoJsonObject"
           class="h-full min-h-80"
           mode="text"
           @update:model-value="handleGeoJsonUpdate"
