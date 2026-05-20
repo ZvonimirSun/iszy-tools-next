@@ -20,6 +20,10 @@ export const tools: OriginToolMenu[] = [
         label: 'JPG转PDF',
         name: 'jpgToPdf',
       },
+      {
+        label: 'Markdown编辑器',
+        name: 'markdownEditor',
+      },
     ],
   },
   {
