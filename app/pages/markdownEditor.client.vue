@@ -1,0 +1,3 @@
+<template>
+  <MarkdownEditor />
+</template>
