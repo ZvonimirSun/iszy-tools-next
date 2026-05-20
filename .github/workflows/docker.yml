@@ -32,13 +32,6 @@ jobs:
       - name: Build Nuxt output
         run: pnpm run build
 
-      - name: Log in to the Container registry
-        uses: docker/login-action@v4
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Read package.json
         id: package-version
         run: echo "version=$(node -p -e "require('./package.json').version")" >> $GITHUB_OUTPUT
@@ -53,10 +46,18 @@ jobs:
             type=semver,pattern={{major}}.{{minor}},value=${{ steps.package-version.outputs.version }}
             type=semver,pattern={{major}},value=${{ steps.package-version.outputs.version }}
 
-      - name: Build and push Docker image
+      - name: Log in to the Container registry
+        if: github.ref_name == env.MAIN_BRANCH
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image
         uses: docker/build-push-action@v7
         with:
           context: .
-          push: true
+          push: ${{ github.ref_name == env.MAIN_BRANCH }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
