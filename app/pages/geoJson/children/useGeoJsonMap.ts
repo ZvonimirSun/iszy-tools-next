@@ -3,7 +3,7 @@ import type { Layer, GeoJSON as LeafletGeoJSON, Map as LeafletMap } from 'leafle
 import { Config, GeojsonUtils, MapUtils, ViewUtils } from '@zvonimirsun/map-sdk/2d'
 import { control, featureGroup, marker } from 'leaflet'
 import { ensureGeoJsonCrsRegistered, transformFeatureCollectionToCrs } from './crs'
-import { isGeoJsonObject, toFeatureCollection } from './utils'
+import { isGeoJsonObject, toFeatureCollection } from './geoJsonUtils'
 import '@zvonimirsun/leaflet-geoman'
 import '@zvonimirsun/leaflet-geoman/dist/leaflet-geoman.css'
 

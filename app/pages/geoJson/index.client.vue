@@ -6,9 +6,9 @@ import { downloadBlob } from '~/utils/common'
 import GeoJsonExportDialog from './children/components/GeoJsonExportDialog.vue'
 import GeoJsonImportDialog from './children/components/GeoJsonImportDialog.vue'
 import { exportGeoJsonFile, guessImportFormat, importGeoJsonFileByFormat } from './children/file/geoJson.file'
+import { getProperties, toFeatureCollection } from './children/geoJsonUtils'
 import { useGeoJsonData } from './children/useGeoJsonData'
 import { canShowGeoJsonPropertyTable, useGeoJsonProperties } from './children/useGeoJsonProperties'
-import { getProperties, toFeatureCollection } from './children/utils'
 import 'leaflet/dist/leaflet.css'
 
 definePageMeta({ layout: 'wide' })

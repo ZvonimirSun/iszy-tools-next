@@ -1,5 +1,5 @@
 import type { FeatureCollection } from '@zvonimirsun/map-sdk/2d'
-import { createEmptyFeatureCollection, hasGeoJsonFeatures, toFeatureCollection } from './utils'
+import { createEmptyFeatureCollection, hasGeoJsonFeatures, toFeatureCollection } from './geoJsonUtils'
 
 export function useGeoJsonData(initialValue: unknown = createEmptyFeatureCollection()) {
   const geoJsonObject = shallowRef<unknown>(initialValue)

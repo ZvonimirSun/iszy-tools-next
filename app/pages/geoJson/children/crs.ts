@@ -1,6 +1,6 @@
 import type { CrsObject, FeatureCollection, GeoJSON } from '@zvonimirsun/map-sdk/2d'
 import { CrsUtils } from '@zvonimirsun/map-sdk/2d'
-import { getGeoJsonCrs, toFeatureCollection } from './utils'
+import { getGeoJsonCrs, toFeatureCollection } from './geoJsonUtils'
 
 const builtinCrsCodes = new Set(['4326', '3857', '4490', '4610'])
 const crsRegisterTasks = new Map<string, Promise<void>>()
@@ -39,6 +39,13 @@ export async function ensureGeoJsonCrsRegistered(geoJson: GeoJSON) {
   }
 
   await task
+}
+
+export async function getGeoJsonCrsWkt(data: unknown): Promise<string> {
+  const code = getGeoJsonCrsCode(data) ?? '4326'
+  return $fetch<string>(`/api/epsg/${code}.wkt`, {
+    responseType: 'text',
+  })
 }
 
 export async function transformFeatureCollectionToCrs(

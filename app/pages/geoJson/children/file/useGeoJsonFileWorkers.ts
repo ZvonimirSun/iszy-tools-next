@@ -47,10 +47,11 @@ export async function importShapefileInWorker(file: File): Promise<ImportedGeoJs
   })
 }
 
-export async function exportShapefileInWorker(geoJson: FeatureCollection): Promise<ArrayBuffer> {
+export async function exportShapefileInWorker(geoJson: FeatureCollection, prj?: string): Promise<ArrayBuffer> {
   const { default: ExportWorker } = await import('./geoJsonExport.worker?worker')
   return runWorkerTask<ArrayBuffer>(ExportWorker, {
     type: 'export-shapefile',
     geoJson,
+    prj,
   })
 }

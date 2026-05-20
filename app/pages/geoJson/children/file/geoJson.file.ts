@@ -1,6 +1,7 @@
 import type { CrsObject, Feature, FeatureCollection, GeoJSON, Geometry } from '@zvonimirsun/map-sdk/2d'
 import type { GeoJsonExportOptions, GeoJsonExportResult, GeoJsonImportFormat, GeoJsonImportFormatConfig } from './geoJson.types'
-import { findGeoJsonCrs, getGeoJsonCrs, isGeoJsonObject, isGeometry, normalizeGeoJsonObject, toFeatureCollection, withTopLevelGeoJsonCrs } from '../utils'
+import { getGeoJsonCrsWkt } from '../crs'
+import { findGeoJsonCrs, getGeoJsonCrs, isGeoJsonObject, isGeometry, normalizeGeoJsonObject, toFeatureCollection, withTopLevelGeoJsonCrs } from '../geoJsonUtils'
 import { exportShapefileInWorker, importShapefileInWorker } from './useGeoJsonFileWorkers'
 
 const geoJsonImportFormatOrder = ['geojson', 'geojsonl', 'shapefile', 'topojson', 'wkt'] as const
@@ -243,7 +244,8 @@ export async function exportGeoJsonFile(data: unknown, options: GeoJsonExportOpt
     geojson: () => createGeoJsonExport(data, options),
     geojsonl: () => createGeoJsonLinesExport(data),
     shapefile: async () => {
-      const buffer = await exportShapefileInWorker(createShapefileSource(data))
+      const source = createShapefileSource(data)
+      const buffer = await exportShapefileInWorker(source, await getGeoJsonCrsWkt(source))
       return {
         blob: new Blob([buffer], { type: 'application/zip' }),
         filename: 'shapefile.zip',
