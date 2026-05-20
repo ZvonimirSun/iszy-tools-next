@@ -124,6 +124,10 @@ function encodeText(value: string): ArrayBuffer {
 }
 
 function getPrjEpsgCode(prj: string) {
-  return prj.match(/AUTHORITY\s*\[\s*"EPSG"\s*,\s*"(\d+)"\s*\]/i)?.[1]
-    ?? prj.match(/ID\s*\[\s*"EPSG"\s*,\s*(\d+)\s*\]/i)?.[1]
+  const matches = Array.from(
+    prj.matchAll(/(?:AUTHORITY|ID)\s*\[\s*"EPSG"\s*,\s*"?(?<code>\d+)"?/gi),
+    match => match.groups?.code,
+  ).filter(Boolean)
+
+  return matches[matches.length - 1]
 }
