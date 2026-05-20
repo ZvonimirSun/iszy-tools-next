@@ -34,7 +34,6 @@ server {
     include mime.types;
     types {
         application/manifest+json webmanifest;
-        application/wasm wasm;
     }
 
     location / {
