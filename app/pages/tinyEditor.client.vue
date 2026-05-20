@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import css from '~/components/editor/lang-css'
-import html from '~/components/editor/lang-html'
 import js from '~/components/editor/lang-js'
+
+const css = import.meta.client
+  ? import('~/components/editor/lang-css').then(m => m.default)
+  : undefined
+const html = import.meta.client
+  ? import('~/components/editor/lang-html').then(m => m.default)
+  : undefined
 
 const store = useTinyEditorStore()
 
