@@ -5,6 +5,7 @@ import type { GeoJsonCollapsedSide } from '~/stores/geoJson'
 import { downloadBlob } from '~/utils/common'
 import GeoJsonExportDialog from './children/components/GeoJsonExportDialog.vue'
 import GeoJsonImportDialog from './children/components/GeoJsonImportDialog.vue'
+import { getGeoJsonCrsCode, normalizeEpsgCode, transformGeoJsonToEpsg, withGeoJsonEpsgCode } from './children/crs'
 import { exportGeoJsonFile, guessImportFormat, importGeoJsonFileByFormat } from './children/file/geoJson.file'
 import { getProperties, toFeatureCollection } from './children/geoJsonUtils'
 import { useGeoJsonData } from './children/useGeoJsonData'
@@ -29,6 +30,9 @@ const isImporting = ref(false)
 const isExporting = ref(false)
 const showAddPropertyDialog = ref(false)
 const newPropertyKey = ref('')
+const sourceEpsgCode = ref('')
+const targetEpsgCode = ref('')
+const isTransformingCrs = ref(false)
 const isDraggingDivider = ref(false)
 const isMobileLayout = ref(false)
 let mapHandler: Awaited<ReturnType<typeof createMapHandler>> | undefined
@@ -129,6 +133,12 @@ const collapseButton = computed(() => {
   }
 })
 
+watch(geoJsonObject, (value) => {
+  sourceEpsgCode.value = getGeoJsonCrsCode(value) ?? ''
+}, {
+  immediate: true,
+})
+
 function addProperty() {
   const key = newPropertyKey.value.trim()
   if (!key) {
@@ -152,6 +162,65 @@ function addProperty() {
   void renderGeoJson(collection)
   newPropertyKey.value = ''
   showAddPropertyDialog.value = false
+}
+
+async function applySourceEpsgCode() {
+  if (!sourceEpsgCode.value.trim()) {
+    return
+  }
+
+  const code = normalizeEpsgCode(sourceEpsgCode.value)
+  if (!code) {
+    toast.add({
+      color: 'error',
+      title: '请输入有效的 EPSG Code',
+    })
+    return
+  }
+
+  const nextGeoJson = withGeoJsonEpsgCode(geoJsonObject.value, code)
+  sourceEpsgCode.value = code
+  setGeoJsonObject(nextGeoJson)
+  await renderGeoJson(nextGeoJson)
+}
+
+async function transformCrs() {
+  if (isTransformingCrs.value) {
+    return
+  }
+
+  const sourceCode = normalizeEpsgCode(sourceEpsgCode.value) ?? '4326'
+  const targetCode = normalizeEpsgCode(targetEpsgCode.value)
+  if (!targetCode) {
+    toast.add({
+      color: 'error',
+      title: '请输入有效的目标 EPSG Code',
+    })
+    return
+  }
+
+  isTransformingCrs.value = true
+  try {
+    const collection = await transformGeoJsonToEpsg(geoJsonObject.value, sourceCode, targetCode)
+    sourceEpsgCode.value = targetCode
+    targetEpsgCode.value = ''
+    setFeatureCollection(collection)
+    await renderGeoJson(collection)
+    toast.add({
+      color: 'success',
+      title: '坐标转换完成',
+    })
+  }
+  catch (error) {
+    toast.add({
+      color: 'error',
+      title: '坐标转换失败',
+      description: (error as Error).message || '请检查 EPSG Code 是否正确',
+    })
+  }
+  finally {
+    isTransformingCrs.value = false
+  }
 }
 
 function handleGeoJsonUpdate(val: unknown) {
@@ -469,6 +538,38 @@ async function createMapHandler(dom: HTMLDivElement) {
       v-show="showPanelPane"
       class="flex min-h-0 flex-col overflow-hidden rounded-lg border border-muted bg-default"
     >
+      <div class="grid shrink-0 gap-2 p-3 pb-0 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
+        <UFormField label="当前 EPSG">
+          <UInput
+            v-model="sourceEpsgCode"
+            class="w-full"
+            placeholder="未定义"
+            @blur="applySourceEpsgCode"
+            @keydown.enter="applySourceEpsgCode"
+          />
+        </UFormField>
+        <UFormField label="目标 EPSG">
+          <UInput
+            v-model="targetEpsgCode"
+            class="w-full"
+            placeholder="例如 3857"
+            @keydown.enter="transformCrs"
+          />
+        </UFormField>
+        <div class="flex items-end">
+          <UButton
+            class="w-full sm:w-auto"
+            color="primary"
+            variant="soft"
+            icon="i-lucide:refresh-cw"
+            :loading="isTransformingCrs"
+            @click="transformCrs"
+          >
+            转换
+          </UButton>
+        </div>
+      </div>
+
       <UTabs
         v-model="activeTab"
         class="shrink-0 px-3 pt-3"

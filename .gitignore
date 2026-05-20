@@ -23,8 +23,5 @@ logs
 .env
 .env.*
 
-.claude/*.local.*
-.claude/cache/
-.claude/tmp/
-
+.claude
 .codex

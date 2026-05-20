@@ -11,7 +11,7 @@ interface ImportShapefileRequest {
 type WorkerRequest = ImportShapefileRequest
 
 const SHAPEFILE_DBF_ENCODING = 'gbk'
-const shapefileEntryPattern = /.+\.(?:shp|dbf|prj)$/i
+const shapefileEntryPattern = /.+\.(?:shp|dbf|prj|cpg)$/i
 
 globalThis.addEventListener('message', async (event: MessageEvent<WorkerRequest>) => {
   const payload = event.data
@@ -59,8 +59,10 @@ async function parseShapefileZip(buffer: ArrayBuffer) {
 
     const geometries = shpjs.parseShp(toArrayBuffer(shp))
     const dbf = entries[`${name}.dbf`]
+    const cpg = entries[`${name}.cpg`]
+    const dbfEncoding = cpg ? decodeText(cpg).trim() : SHAPEFILE_DBF_ENCODING
     const properties = dbf
-      ? shpjs.parseDbf(toArrayBuffer(dbf), encodeText(SHAPEFILE_DBF_ENCODING))
+      ? shpjs.parseDbf(toArrayBuffer(dbf), encodeText(dbfEncoding))
       : []
     const prjData = entries[`${name}.prj`]
     const prj = prjData ? decodeText(prjData).trim() : ''
@@ -105,7 +107,7 @@ async function readShapefileEntries(entries: Iterable<ZipItem>) {
 }
 
 function normalizeEntryName(name: string) {
-  return name.replace(/\\/g, '/').replace(/\.(shp|dbf|prj)$/i, match => match.toLowerCase())
+  return name.replace(/\\/g, '/').replace(/\.(shp|dbf|prj|cpg)$/i, match => match.toLowerCase())
 }
 
 function toArrayBuffer(data: Uint8Array): ArrayBuffer {
