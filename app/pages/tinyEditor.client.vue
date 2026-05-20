@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import js from '~/components/editor/lang-js'
-
+const js = import.meta.client
+  ? import('~/components/editor/lang-js').then(m => m.default)
+  : undefined
 const css = import.meta.client
   ? import('~/components/editor/lang-css').then(m => m.default)
   : undefined
