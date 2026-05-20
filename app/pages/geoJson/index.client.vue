@@ -33,6 +33,7 @@ const newPropertyKey = ref('')
 const sourceEpsgCode = ref('')
 const targetEpsgCode = ref('')
 const isTransformingCrs = ref(false)
+const selectedFeatureIndex = ref<number | null>(null)
 const isDraggingDivider = ref(false)
 const isMobileLayout = ref(false)
 let mapHandler: Awaited<ReturnType<typeof createMapHandler>> | undefined
@@ -43,7 +44,10 @@ const tabItems = [
   { label: 'JSON', value: 'json' as const },
   { label: '属性', value: 'properties' as const },
 ]
-const { propertyTableRows, propertyColumns } = useGeoJsonProperties(featureRows)
+const { propertyTableRows, propertyColumns, propertyTableMeta } = useGeoJsonProperties(featureRows, {
+  selectedFeatureIndex,
+  onUpdateProperty: updateFeatureProperty,
+})
 const canShowPropertyTable = computed(() => canShowGeoJsonPropertyTable(geoJsonObject.value))
 const collapsedSide = computed<GeoJsonCollapsedSide>({
   get() {
@@ -138,6 +142,11 @@ watch(geoJsonObject, (value) => {
 }, {
   immediate: true,
 })
+watch(featureRows, (rows) => {
+  if (selectedFeatureIndex.value != null && !rows[selectedFeatureIndex.value]) {
+    selectedFeatureIndex.value = null
+  }
+})
 
 function syncSourceEpsgCode(value: unknown) {
   sourceEpsgCode.value = getGeoJsonCrsCode(value) ?? ''
@@ -166,6 +175,49 @@ function addProperty() {
   void renderGeoJson(collection)
   newPropertyKey.value = ''
   showAddPropertyDialog.value = false
+}
+
+function updateFeatureProperty(featureIndex: number, key: string, value: string) {
+  const collection = toFeatureCollection(geoJsonFeatureCollection.value)
+  const feature = collection.features[featureIndex]
+  if (!feature) {
+    return
+  }
+
+  const properties = getProperties(feature)
+  feature.properties = {
+    ...properties,
+    [key]: normalizePropertyInputValue(value, properties[key]),
+  }
+  setFeatureCollection(collection)
+}
+
+function normalizePropertyInputValue(value: string, currentValue: unknown) {
+  if (typeof currentValue === 'number') {
+    const nextValue = Number(value)
+    return value.trim() && Number.isFinite(nextValue) ? nextValue : value
+  }
+
+  if (typeof currentValue === 'boolean') {
+    if (value === 'true') {
+      return true
+    }
+    if (value === 'false') {
+      return false
+    }
+    return value
+  }
+
+  if (currentValue && typeof currentValue === 'object') {
+    try {
+      return JSON.parse(value)
+    }
+    catch {
+      return value
+    }
+  }
+
+  return value
 }
 
 async function applySourceEpsgCode() {
@@ -425,13 +477,14 @@ async function renderGeoJson(val: unknown) {
 
 function handlePropertyRowSelect(_event: Event, row: TableRow<{
   __index?: string | number
+  __featureIndex?: string | number
 }>) {
-  const rowIndex = Number(row.original.__index)
-  if (!Number.isInteger(rowIndex)) {
+  const featureIndex = Number(row.original.__featureIndex)
+  if (!Number.isInteger(featureIndex)) {
     return
   }
 
-  const featureIndex = rowIndex - 1
+  selectFeature(featureIndex)
   if (!mapHandler?.locateFeature(featureIndex)) {
     toast.add({
       color: 'warning',
@@ -445,6 +498,24 @@ function handlePropertyRowSelect(_event: Event, row: TableRow<{
   }
   else if (collapsedSide.value === 'map') {
     collapsedSide.value = null
+  }
+}
+
+function selectFeature(featureIndex: number, revealRow = false) {
+  if (featureIndex < 0 || !featureRows.value[featureIndex]) {
+    selectedFeatureIndex.value = null
+    return
+  }
+
+  selectedFeatureIndex.value = featureIndex
+
+  if (revealRow) {
+    void nextTick(() => {
+      document.querySelector('.geo-json-property-row-selected')?.scrollIntoView({
+        block: 'nearest',
+        inline: 'nearest',
+      })
+    })
   }
 }
 
@@ -472,8 +543,9 @@ onBeforeUnmount(() => {
 async function createMapHandler(dom: HTMLDivElement) {
   const { useGeoJsonMap } = await import('./children/useGeoJsonMap')
   return useGeoJsonMap(dom, {
-    onFeatureClick() {
+    onFeatureClick(_feature, index) {
       activeTab.value = 'properties'
+      selectFeature(index, true)
     },
     onGeoJsonChange(geoJson) {
       setFeatureCollection(geoJson)
@@ -612,6 +684,7 @@ async function createMapHandler(dom: HTMLDivElement) {
             v-if="canShowPropertyTable && propertyColumns.length > 1"
             :data="propertyTableRows"
             :columns="propertyColumns"
+            :meta="propertyTableMeta"
             sticky
             class="min-h-0 flex-1 overflow-auto rounded-md border border-muted"
             :ui="{ tr: 'cursor-pointer whitespace-nowrap' }"
