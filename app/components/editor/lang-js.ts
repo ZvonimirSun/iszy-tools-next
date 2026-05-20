@@ -4,7 +4,7 @@ import { linter } from '@codemirror/lint'
 
 // Uses linter.mjs
 import * as eslint from 'eslint-linter-browserify'
-import { js as jsBeautify } from 'js-beautify'
+import beautify from 'js-beautify'
 
 // flat config format (ESLint v9+)
 const config = [
@@ -28,7 +28,7 @@ const config = [
 ]
 
 export function formatter(value: string, { indent = 2 } = {}) {
-  return jsBeautify(value, {
+  return beautify.js(value, {
     indent_size: indent,
   })
 }

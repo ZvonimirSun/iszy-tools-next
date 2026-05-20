@@ -1,9 +1,9 @@
 import type { EditorPlugin } from '#shared/types/editor'
 import { html } from '@codemirror/lang-html'
-import { html as htmlBeautify } from 'js-beautify'
+import beautify from 'js-beautify'
 
 export function formatter(value: string, { indent = 2 } = {}) {
-  return htmlBeautify(value, {
+  return beautify.html(value, {
     indent_size: indent,
   })
 }

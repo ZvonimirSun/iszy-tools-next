@@ -1,7 +1,5 @@
 <script setup lang="ts">
-const css = import.meta.client
-  ? import('~/components/editor/lang-css').then(m => m.default)
-  : undefined
+import css from '~/components/editor/lang-css'
 </script>
 
 <template>
