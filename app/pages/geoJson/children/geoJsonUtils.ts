@@ -155,7 +155,7 @@ function normalizeGeoJsonCrs(crs: unknown): CrsObject | undefined {
     return crs as CrsObject
   }
 
-  if (type === 'EPSG' && typeof (properties as { code?: unknown }).code === 'string') {
+  if (type === 'EPSG' && ['string', 'number'].includes(typeof (properties as { code?: unknown }).code)) {
     return crs as CrsObject
   }
 

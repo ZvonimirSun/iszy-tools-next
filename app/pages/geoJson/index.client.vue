@@ -134,10 +134,14 @@ const collapseButton = computed(() => {
 })
 
 watch(geoJsonObject, (value) => {
-  sourceEpsgCode.value = getGeoJsonCrsCode(value) ?? ''
+  syncSourceEpsgCode(value)
 }, {
   immediate: true,
 })
+
+function syncSourceEpsgCode(value: unknown) {
+  sourceEpsgCode.value = getGeoJsonCrsCode(value) ?? ''
+}
 
 function addProperty() {
   const key = newPropertyKey.value.trim()
@@ -225,6 +229,7 @@ async function transformCrs() {
 
 function handleGeoJsonUpdate(val: unknown) {
   setGeoJsonObject(val)
+  syncSourceEpsgCode(val)
   if (renderTimer) {
     clearTimeout(renderTimer)
   }
@@ -407,6 +412,7 @@ function updateMobileLayout(event?: MediaQueryList | MediaQueryListEvent) {
 }
 
 async function renderGeoJson(val: unknown) {
+  syncSourceEpsgCode(val)
   const result = await mapHandler?.renderGeoJson(val)
 
   if (result?.message) {
@@ -471,6 +477,7 @@ async function createMapHandler(dom: HTMLDivElement) {
     },
     onGeoJsonChange(geoJson) {
       setFeatureCollection(geoJson)
+      syncSourceEpsgCode(geoJson)
     },
   })
 }

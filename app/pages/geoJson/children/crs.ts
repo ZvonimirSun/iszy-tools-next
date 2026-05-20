@@ -5,7 +5,7 @@ const builtinCrsCodes = new Set(['4326', '3857', '4490', '4610'])
 const crsRegisterTasks = new Map<string, Promise<void>>()
 
 export function getGeoJsonCrsCode(data: unknown): string | undefined {
-  const crs = getGeoJsonCrs(data)
+  const crs = getGeoJsonCrs(normalizeGeoJsonObject(data) ?? data)
   if (!crs) {
     return undefined
   }
@@ -109,7 +109,10 @@ export async function transformFeatureCollectionToCrs(
   const { CrsUtils } = await import('@zvonimirsun/map-sdk/2d')
   const transformed = toFeatureCollection(CrsUtils.transformGeoJSON(4326, target, collection))
   transformGeoJsonBBoxes(transformed, '4326', target, CrsUtils.transformPoint)
-  return transformed
+  return {
+    ...transformed,
+    crs,
+  }
 }
 
 async function registerEpsgCrs(code: string) {
@@ -120,8 +123,8 @@ async function registerEpsgCrs(code: string) {
   CrsUtils.setCrs(Number(code), def)
 }
 
-export function normalizeEpsgCode(code: string | undefined) {
-  const value = code?.trim()
+export function normalizeEpsgCode(code: unknown) {
+  const value = code == null ? undefined : String(code).trim()
   return value && /^\d+$/.test(value) ? value : undefined
 }
 
