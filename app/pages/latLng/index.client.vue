@@ -2,11 +2,14 @@
 import 'leaflet/dist/leaflet.css'
 
 const keyword = ref('')
+const epsgCode = ref('4326')
+const epsgCodeInput = ref('4326')
+const epsgInputVersion = ref(0)
 const mapContainer = useTemplateRef('mapContainer')
 
 let handler: {
   keyword: globalThis.Ref<string, string>
-  update: (val: string) => void
+  update: (val: string) => Promise<void>
 }
 
 onMounted(async () => {
@@ -18,26 +21,54 @@ onMounted(async () => {
   const { useLatLngHandler } = await import('./children/useLatLngHandler')
   handler = useLatLngHandler(mapContainer.value, (val: string) => {
     keyword.value = val
-  })
+  }, epsgCode, epsgInputVersion)
 })
 
-function update() {
-  handler?.update(keyword.value)
+async function update() {
+  await handler?.update(keyword.value)
+}
+
+function cancelPendingEpsgRender() {
+  epsgInputVersion.value += 1
+}
+
+function commitEpsgCode() {
+  const nextCode = epsgCodeInput.value.trim() || '4326'
+  epsgCodeInput.value = nextCode
+  if (nextCode === epsgCode.value) {
+    return
+  }
+
+  epsgInputVersion.value += 1
+  epsgCode.value = nextCode
 }
 </script>
 
 <template>
   <div class="flex flex-col h-full w-full overflow-auto gap-2">
-    <div class="w-full flex gap-2 items-center">
-      <UInput
-        v-model="keyword"
-        class="flex-1"
-        placeholder="输入经纬度(如'116.4,36.9')或地址(如'北京市政府')"
-        allow-clear
-        @keydown.enter="update"
-      />
+    <div class="grid w-full grid-cols-1 items-end gap-2 sm:grid-cols-[minmax(0,1fr)_10rem_auto]">
+      <UFormField label="坐标或地址">
+        <UInput
+          v-model="keyword"
+          class="w-full"
+          placeholder="输入经纬度(如'116.4,36.9')或地址(如'北京市政府')"
+          allow-clear
+          @keydown.enter="update"
+        />
+      </UFormField>
+      <UFormField label="展示 EPSG">
+        <UInput
+          v-model="epsgCodeInput"
+          class="w-full"
+          placeholder="4326"
+          @change="commitEpsgCode"
+          @keydown.enter.prevent="commitEpsgCode"
+          @update:model-value="cancelPendingEpsgRender"
+        />
+      </UFormField>
       <UButton
         color="primary"
+        class="sm:mb-0"
         @click="update"
       >
         解析
