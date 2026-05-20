@@ -1,21 +1,3 @@
-# Build Stage 1
-
-FROM node:24-alpine AS build
-WORKDIR /app
-
-RUN corepack enable
-
-# Copy the entire project
-COPY . ./
-
-# Install dependencies
-RUN pnpm i
-
-# Build the project
-RUN pnpm run build
-
-# Build Stage 2
-
 FROM node:24-alpine
 WORKDIR /app
 
@@ -60,8 +42,8 @@ server {
 }
 EOF
 
-# Only `.output` folder is needed from the build stage
-COPY --from=build /app/.output/ ./
+# `.output` is built by CI before the image is assembled.
+COPY .output/ ./
 
 # Nuxt listens on localhost:3000, nginx is exposed on :80
 ENV PORT=3000

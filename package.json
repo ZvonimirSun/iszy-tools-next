@@ -7,7 +7,7 @@
   "author": "ZvonimirSun",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "nuxt build",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=12288 nuxt build",
     "dev": "nuxt dev",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -118,6 +118,7 @@
     "@typescript-eslint/eslint-plugin": "^8.59.3",
     "@typescript-eslint/parser": "^8.59.3",
     "baseline-browser-mapping": "^2.10.29",
+    "cross-env": "^10.1.0",
     "eslint": "^10.4.0",
     "ofetch": "^1.5.1",
     "sass": "^1.99.0",
