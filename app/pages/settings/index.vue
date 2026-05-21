@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
 import type { Device } from '@zvonimirsun/iszy-common'
+import AiChatSettings from './children/AiChatSettings.vue'
+import JsonEditorSettings from './children/JsonEditorSettings.vue'
 
 definePageMeta({
   layout: 'full',
@@ -10,8 +12,10 @@ const userStore = useUserStore()
 const { features: { publicRegister } } = usePublicConfig()
 const settingsStore = useSettingsStore()
 const settings = settingsStore.general
-const modules = settingsStore.modules
 const toast = useToast()
+const appSettingsOpen = reactive({
+  jsonEditor: false,
+})
 
 /** ************** 三方登录绑定 ***************/
 
@@ -374,12 +378,21 @@ async function removeDevice(options: {
     <h3 class="text-xl text-pretty font-semibold text-highlighted">
       应用设置
     </h3>
-    <h4 class="text-lg text-pretty font-semibold text-highlighted">
-      JSON编辑器
-    </h4>
-    <div class="flex items-center gap-2">
-      <USwitch v-model="modules.jsonEditor.syncCloud" />
-      <span class="text-sm text-muted">同步云端记录</span>
+    <div class="flex w-full flex-col gap-3">
+      <UCollapsible
+        v-model:open="appSettingsOpen.jsonEditor"
+        class="rounded-lg border border-muted bg-elevated/50"
+      >
+        <UButton color="neutral" variant="ghost" class="w-full justify-between px-4 py-3">
+          <span class="text-base font-medium text-highlighted">JSON编辑器</span>
+          <UIcon name="i-lucide:chevron-down" class="size-4 transition-transform" :class="{ 'rotate-180': appSettingsOpen.jsonEditor }" />
+        </UButton>
+        <template #content>
+          <div v-if="appSettingsOpen.jsonEditor" class="border-t border-muted p-4">
+            <JsonEditorSettings />
+          </div>
+        </template>
+      </UCollapsible>
     </div>
   </div>
 </template>

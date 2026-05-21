@@ -57,7 +57,9 @@ shared/               # Code shared between client & server, auto-imported as #s
 
 ### Key Patterns
 
-**Tool pages** live under `app/pages/`. Simple tools are a single `.vue` file (e.g., `base64.vue`). Complex tools use a directory with `index.vue` and a `children/` subdirectory containing page-specific services, types, workers, and tests. Tests are colocated in `children/` and named `*.test.ts`.
+**Tool pages** live under `app/pages/`. Simple tools with no companion files are a single `.vue` file (e.g., `base64.vue`). As soon as a tool needs its own folder for components, services, types, workers, tests, or other page-specific files, the page entry must be `app/pages/<tool>/index.vue`, and supporting files must live under `app/pages/<tool>/children/`. Do not create `app/pages/<tool>.vue` and `app/pages/<tool>/` at the same time.
+
+**Application settings** live under `app/pages/settings/`. The settings page entry is `app/pages/settings/index.vue`; app-specific settings UIs must be separate components in `app/pages/settings/children/` (e.g., `<ToolName>Settings.vue`) and should call that app's own store/composables for behavior. Keep `settings.vue`/`settings/index.vue` focused on page layout, account/global settings, and lazy/collapsible mounting of app settings.
 
 **Pages that begin with `_` or are inside `_*/` directories are excluded from routing** (configured in `nuxt.config.ts` via `pagePattern`).
 
