@@ -15,6 +15,7 @@ const settings = settingsStore.general
 const toast = useToast()
 const appSettingsOpen = reactive({
   jsonEditor: false,
+  aiChat: false,
 })
 
 /** ************** 三方登录绑定 ***************/
@@ -379,20 +380,59 @@ async function removeDevice(options: {
       应用设置
     </h3>
     <div class="flex w-full flex-col gap-3">
-      <UCollapsible
-        v-model:open="appSettingsOpen.jsonEditor"
-        class="rounded-lg border border-muted bg-elevated/50"
-      >
-        <UButton color="neutral" variant="ghost" class="w-full justify-between px-4 py-3">
-          <span class="text-base font-medium text-highlighted">JSON编辑器</span>
-          <UIcon name="i-lucide:chevron-down" class="size-4 transition-transform" :class="{ 'rotate-180': appSettingsOpen.jsonEditor }" />
-        </UButton>
-        <template #content>
-          <div v-if="appSettingsOpen.jsonEditor" class="border-t border-muted p-4">
-            <JsonEditorSettings />
-          </div>
-        </template>
-      </UCollapsible>
+      <div class="rounded-lg border border-muted bg-elevated/50">
+        <div class="flex items-center gap-2 px-2 py-2">
+          <UButton
+            color="neutral"
+            variant="ghost"
+            class="min-w-0 flex-1 justify-between px-2 py-1.5"
+            @click="appSettingsOpen.jsonEditor = !appSettingsOpen.jsonEditor"
+          >
+            <span class="truncate text-base font-medium text-highlighted">JSON编辑器</span>
+            <UIcon name="i-lucide:chevron-down" class="size-4 transition-transform" :class="{ 'rotate-180': appSettingsOpen.jsonEditor }" />
+          </UButton>
+          <ULink to="/jsonEditor">
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="soft"
+              icon="i-lucide:external-link"
+            >
+              打开
+            </UButton>
+          </ULink>
+        </div>
+        <div v-if="appSettingsOpen.jsonEditor" class="border-t border-muted p-4">
+          <JsonEditorSettings />
+        </div>
+      </div>
+
+      <div class="rounded-lg border border-muted bg-elevated/50">
+        <div class="flex items-center gap-2 px-2 py-2">
+          <UButton
+            color="neutral"
+            variant="ghost"
+            class="min-w-0 flex-1 justify-between px-2 py-1.5"
+            @click="appSettingsOpen.aiChat = !appSettingsOpen.aiChat"
+          >
+            <span class="truncate text-base font-medium text-highlighted">AI 对话</span>
+            <UIcon name="i-lucide:chevron-down" class="size-4 transition-transform" :class="{ 'rotate-180': appSettingsOpen.aiChat }" />
+          </UButton>
+          <ULink to="/aiChat">
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="soft"
+              icon="i-lucide:external-link"
+            >
+              打开
+            </UButton>
+          </ULink>
+        </div>
+        <div v-if="appSettingsOpen.aiChat" class="border-t border-muted p-4">
+          <AiChatSettings />
+        </div>
+      </div>
     </div>
   </div>
 </template>

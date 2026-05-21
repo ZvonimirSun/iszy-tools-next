@@ -1,6 +1,8 @@
 import type { ResultDto } from '@zvonimirsun/iszy-common'
+import type { AiChatSettings } from '#shared/types/aiChat'
 import type { ImgHostingConfig } from '~/pages/imgHosting/children/imgHosting'
 import { debounce, merge } from 'lodash-es'
+import { createDefaultAiChatSettings } from '#shared/data/aiChat'
 
 export const useSettingsStore = defineStore('settings', () => {
   const general = ref({
@@ -34,6 +36,9 @@ export const useSettingsStore = defineStore('settings', () => {
     jsonEditor: {
       syncCloud: false,
     },
+    aiChat: {
+      ...createDefaultAiChatSettings(),
+    } satisfies AiChatSettings,
   })
   const finishSync = ref(false)
 

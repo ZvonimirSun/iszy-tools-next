@@ -30,6 +30,10 @@ export const tools: OriginToolMenu[] = [
     label: '开发工具',
     children: [
       {
+        label: 'AI 对话',
+        name: 'aiChat',
+      },
+      {
         label: 'JSON编辑器',
         name: 'jsonEditor',
       },
