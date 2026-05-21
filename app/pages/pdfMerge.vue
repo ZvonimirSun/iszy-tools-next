@@ -11,6 +11,7 @@ interface FileItem {
 }
 
 const fileList = ref<FileItem[]>([])
+const { getDroppedFiles, isPdfFile } = useDroppedFiles()
 
 function addFiles(files: File[] | null | undefined) {
   if (!files) {
@@ -21,6 +22,10 @@ function addFiles(files: File[] | null | undefined) {
     name: file.name,
     file,
   })))
+}
+
+function onDrop(event: DragEvent) {
+  addFiles(getDroppedFiles(event, isPdfFile))
 }
 
 function removeFile(id: string) {
@@ -73,7 +78,7 @@ async function merge() {
         合并PDF
       </UButton>
     </div>
-    <ContainerToolItem class="flex-1 w-full h-full" content-class="overflow-auto h-full">
+    <ContainerToolItem class="flex-1 w-full h-full" content-class="overflow-auto h-full" @dragover.prevent @drop.prevent="onDrop">
       <draggable v-model="fileList" item-key="id" class="flex flex-wrap gap-4 justify-center w-full">
         <template #item="{ element }">
           <div class="group w-48 h-60 px-2 py-8 shadow border border-muted rounded-lg bg-default cursor-move relative">

@@ -32,6 +32,7 @@ const mergeSelection = ref(false) // false: 拆分为多个PDF, true: 合并为�
 
 // 处理状态
 const isProcessing = ref(false)
+const { getDroppedFiles, isPdfFile } = useDroppedFiles()
 
 // 选择文件
 function onUpload(file: File | null | undefined) {
@@ -42,6 +43,11 @@ function onUpload(file: File | null | undefined) {
   pdfFile.value = file
   pdfName.value = file.name.replace(PDF_REGEX, '')
   loadPdfInfo()
+}
+
+function onDrop(event: DragEvent) {
+  const [file] = getDroppedFiles(event, isPdfFile)
+  onUpload(file)
 }
 
 // 重置状态
@@ -275,7 +281,7 @@ async function downloadResults(results: { name: string, data: Uint8Array }[]) {
             </UButton>
           </div>
         </div>
-        <ContainerToolItem class="flex-1 w-full h-full" content-class="overflow-auto flex flex-wrap gap-4 justify-center w-full h-full">
+        <ContainerToolItem class="flex-1 w-full h-full" content-class="overflow-auto flex flex-wrap gap-4 justify-center w-full h-full" @dragover.prevent @drop.prevent="onDrop">
           <div
             v-for="(range, index) in ranges"
             :key="range.id"
@@ -331,7 +337,7 @@ async function downloadResults(results: { name: string, data: Uint8Array }[]) {
         </div>
 
         <!-- 页面预览网格 -->
-        <ContainerToolItem class="flex-1 w-full h-full" content-class="overflow-auto flex flex-wrap gap-4 justify-center w-full h-full">
+        <ContainerToolItem class="flex-1 w-full h-full" content-class="overflow-auto flex flex-wrap gap-4 justify-center w-full h-full" @dragover.prevent @drop.prevent="onDrop">
           <div
             v-for="page in pages"
             :key="page.pageNum"
@@ -361,7 +367,7 @@ async function downloadResults(results: { name: string, data: Uint8Array }[]) {
       </div>
     </template>
     <!-- 空状态 -->
-    <ContainerToolItem v-else class="flex-1 w-full h-full" content-class="flex items-center justify-center h-full">
+    <ContainerToolItem v-else class="flex-1 w-full h-full" content-class="flex items-center justify-center h-full" @dragover.prevent @drop.prevent="onDrop">
       <div class="text-center text-muted">
         <UIcon name="i-icon-park-outline:file-pdf-one" class="size-24 text-red-300 mb-4" />
         <p>请选择一个 PDF 文件开始拆分</p>
