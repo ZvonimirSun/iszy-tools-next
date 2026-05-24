@@ -25,6 +25,7 @@ export default defineNuxtConfig({
       image: '',
       cdnOrigin: '',
       apiOrigin: '',
+      adminOrigin: '',
       favicon: {
         small: '',
         medium: '',

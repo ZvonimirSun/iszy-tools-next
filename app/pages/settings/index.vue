@@ -9,13 +9,19 @@ definePageMeta({
 })
 
 const userStore = useUserStore()
-const { features: { publicRegister } } = usePublicConfig()
+const { adminOrigin, features: { publicRegister } } = usePublicConfig()
 const settingsStore = useSettingsStore()
 const settings = settingsStore.general
 const toast = useToast()
 const appSettingsOpen = reactive({
   jsonEditor: false,
   aiChat: false,
+})
+const adminRoleNames = new Set(['admin', 'superadmin'])
+const showAdminLink = computed(() => {
+  return !!adminOrigin && !!userStore.profile?.roles?.some((role) => {
+    return adminRoleNames.has(role.name)
+  })
 })
 
 /** ************** 三方登录绑定 ***************/
@@ -211,6 +217,20 @@ async function removeDevice(options: {
         <ULink to="/logout">
           <UButton class="cursor-pointer">
             登出
+          </UButton>
+        </ULink>
+        <ULink
+          v-if="showAdminLink"
+          :to="adminOrigin"
+          target="_blank"
+        >
+          <UButton
+            class="cursor-pointer"
+            color="neutral"
+            variant="outline"
+            icon="i-lucide:external-link"
+          >
+            管理后台
           </UButton>
         </ULink>
       </div>
