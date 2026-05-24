@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
 import type { Device } from '@zvonimirsun/iszy-common'
+import { RoleEnum } from '@zvonimirsun/iszy-common'
 import AiChatSettings from './children/AiChatSettings.vue'
 import JsonEditorSettings from './children/JsonEditorSettings.vue'
 
@@ -17,7 +18,7 @@ const appSettingsOpen = reactive({
   jsonEditor: false,
   aiChat: false,
 })
-const adminRoleNames = new Set(['admin', 'superadmin'])
+const adminRoleNames = new Set([RoleEnum.ADMIN, RoleEnum.SUPERADMIN]) as Set<string>
 const showAdminLink = computed(() => {
   return !!adminOrigin && !!userStore.profile?.roles?.some((role) => {
     return adminRoleNames.has(role.name)
