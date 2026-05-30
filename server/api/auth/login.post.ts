@@ -1,6 +1,17 @@
 import type { ResultDto } from '@zvonimirsun/iszy-common'
+import type { FetchError } from 'ofetch'
 
-export default defineEventHandler(async (event): Promise<ResultDto<PublicSimpleUser>> => {
+interface LoginFailureData {
+  code: 'LOGIN_FAILED' | 'LOGIN_BANNED'
+  failedCount?: number
+  remainingAttempts?: number
+  maxAttempts?: number
+  windowSeconds?: number
+  retryAfterSeconds?: number
+  bannedUntil?: string
+}
+
+export default defineEventHandler(async (event): Promise<ResultDto<PublicSimpleUser | LoginFailureData>> => {
   const body = await readBody<{
     userName: string
     password: string
@@ -37,9 +48,11 @@ export default defineEventHandler(async (event): Promise<ResultDto<PublicSimpleU
   }
   catch (e) {
     await destroyRedisSession(event)
+    const errorData = (e as FetchError<ResultDto<LoginFailureData>>).data
     return {
       success: false,
-      message: '登录失败',
+      message: errorData?.message || '登录失败',
+      data: errorData?.data,
     }
   }
 })

@@ -1,6 +1,23 @@
 import type { Device, ResultDto } from '@zvonimirsun/iszy-common'
 import dayjs from 'dayjs'
 
+interface LoginAttemptFailureData {
+  code: 'LOGIN_FAILED'
+  failedCount: number
+  remainingAttempts: number
+  maxAttempts: number
+  windowSeconds: number
+}
+
+interface LoginBanFailureData {
+  code: 'LOGIN_BANNED'
+  retryAfterSeconds: number
+  bannedUntil: string
+}
+
+type LoginFailureData = LoginAttemptFailureData | LoginBanFailureData
+type LoginResultData = PublicSimpleUser | LoginFailureData
+
 export const useUserStore = defineStore('user', () => {
   const profilePulled = ref(false)
   const profile = ref<PublicSimpleUser>()
@@ -23,7 +40,7 @@ export const useUserStore = defineStore('user', () => {
     let error = ''
     try {
       if (userName && password) {
-        const res = await $fetch<ResultDto<PublicSimpleUser>>(`/api/auth/login`, {
+        const res = await $fetch<ResultDto<LoginResultData>>(`/api/auth/login`, {
           method: 'post',
           body: {
             userName: userName.trim(),
@@ -32,17 +49,17 @@ export const useUserStore = defineStore('user', () => {
         })
         if (res.success) {
           profilePulled.value = true
-          await updateProfile(res.data)
+          await updateProfile(res.data as PublicSimpleUser)
           await useSettingsStore().getSyncData()
           return
         }
         else {
           removeProfile()
-          error = res.message
+          error = formatLoginFailureMessage(res.message, res.data)
         }
       }
       else {
-        error = '用户名或密码错误'
+        error = '请输入用户名和密码'
       }
     }
     catch (e) {
@@ -50,6 +67,22 @@ export const useUserStore = defineStore('user', () => {
       throw e
     }
     throw new Error(error)
+  }
+
+  function formatLoginFailureMessage(message: string, data?: LoginResultData) {
+    const fallbackMessage = message || '登录失败'
+    if (!data || !('code' in data)) {
+      return fallbackMessage === '用户名或密码错误'
+        ? '用户名或密码错误，请确认后重试。连续多次错误会临时锁定账号。'
+        : fallbackMessage
+    }
+
+    if (data.code === 'LOGIN_BANNED') {
+      const minutes = Math.max(1, Math.ceil(data.retryAfterSeconds / 60))
+      return `登录失败次数过多，账号已临时锁定，请约 ${minutes} 分钟后再试。`
+    }
+
+    return `${fallbackMessage}。剩余 ${data.remainingAttempts} 次尝试机会，连续错误 ${data.maxAttempts} 次将临时锁定账号。`
   }
 
   async function logout() {
