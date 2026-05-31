@@ -7,7 +7,7 @@ LABEL description="A Docker image for ISZY Tools Nuxt"
 RUN apk add --no-cache nginx \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
-# Configure nginx: serve static files from /app/public and proxy others to Nuxt
+# Configure nginx: serve user-mounted static files, then Nuxt assets, then proxy to Nuxt
 RUN mkdir -p /app/static && cat <<'EOF' > /etc/nginx/http.d/default.conf
 server {
     listen 80;
@@ -19,8 +19,8 @@ server {
     }
 
     location / {
-        root /app/static;
-        try_files $uri @nuxt;
+        root /app;
+        try_files /static$uri /public$uri @nuxt;
     }
 
     location @nuxt {
@@ -45,11 +45,10 @@ EOF
 # `.output` is built by CI before the image is assembled.
 COPY .output/ ./
 
-# Nuxt listens on localhost:3000, nginx is exposed on :80
-ENV PORT=3000
-ENV HOST=127.0.0.1
 ENV NODE_OPTIONS="--use-system-ca --use-env-proxy"
 
 EXPOSE 80
+VOLUME ["/app/static"]
 
-CMD ["sh", "-c", "node /app/server/index.mjs & exec nginx -g 'daemon off;'"]
+# Nuxt is an internal upstream for nginx. Keep its bind address aligned with proxy_pass.
+CMD ["sh", "-c", "NITRO_HOST=127.0.0.1 NITRO_PORT=3000 node /app/server/index.mjs & exec nginx -g 'daemon off;'"]
