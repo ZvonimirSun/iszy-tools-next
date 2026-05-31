@@ -9,6 +9,7 @@ export interface OriginToolMenu {
 }
 
 interface ToolMeta {
+  description?: string
   tags?: string[]
   requiresAuth?: boolean
   online?: boolean

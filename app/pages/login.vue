@@ -3,11 +3,21 @@ import type { AuthFormField, ButtonProps, FormSubmitEvent } from '@nuxt/ui'
 import type { LocationQuery } from 'vue-router'
 import * as z from 'zod'
 
-const { features: { publicRegister } } = usePublicConfig()
+const { title, features: { publicRegister } } = usePublicConfig()
 const router = useRouter()
 const route = useRoute()
 const toast = useToast()
 const userStore = useUserStore()
+const seoTitle = computed(() => `用户登录 - ${title}`)
+const seoDescription = '登录账号后可使用需要权限的在线工具，管理个人设置、第三方账号绑定和设备会话。'
+
+useSeoMeta({
+  title: () => seoTitle.value,
+  ogTitle: () => seoTitle.value,
+  description: seoDescription,
+  ogDescription: seoDescription,
+  robots: 'noindex,nofollow',
+})
 
 const redirect = ref<string>()
 const otherQuery = ref({})

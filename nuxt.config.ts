@@ -20,7 +20,8 @@ export default defineNuxtConfig({
     public: {
       url: 'http://localhost:3000',
       title: 'ISZY Tools Next',
-      description: 'ISZY Tools Next',
+      subtitle: '在线工具箱',
+      description: '提供开发调试、文档处理、编码转换、图片处理、GIS 查询等常用在线工具，适合日常办公与技术排查。',
       logo: '',
       image: '',
       cdnOrigin: '',
@@ -107,7 +108,7 @@ export default defineNuxtConfig({
   },
   sitemap: {
     xsl: false,
-    exclude: ['/settings', '/admin', '/api'],
+    exclude: ['/settings', '/login', '/logout', '/admin', '/api'],
   },
   scripts: {
     registry: {

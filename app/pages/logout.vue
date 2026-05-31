@@ -3,6 +3,17 @@ const userStore = useUserStore()
 const router = useRouter()
 const route = useRoute()
 const toast = useToast()
+const { title } = usePublicConfig()
+const seoTitle = computed(() => `退出登录 - ${title}`)
+const seoDescription = '正在退出账号并清理当前登录会话。'
+
+useSeoMeta({
+  title: () => seoTitle.value,
+  ogTitle: () => seoTitle.value,
+  description: seoDescription,
+  ogDescription: seoDescription,
+  robots: 'noindex,nofollow',
+})
 
 onMounted(() => {
   userStore.logout()

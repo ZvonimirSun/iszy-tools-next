@@ -1,12 +1,24 @@
 <script setup lang="ts">
 import { zh_cn } from '@nuxt/ui/locale'
 
-const { url, title, favicon, description, image } = usePublicConfig()
+const { url, title, subtitle, favicon, description, image } = usePublicConfig()
 const tool = useCurrentTool()
 const route = useRoute()
 
 const fullTitle = computed(() => {
-  return `${tool.value ? `${tool.value.label} - ` : ''}${title}`
+  if (tool.value) {
+    return `${tool.value.label} - ${title}`
+  }
+  if (route.path === '/' && subtitle) {
+    return `${title} - ${subtitle}`
+  }
+  return title
+})
+const pageDescription = computed(() => {
+  if (tool.value?.description) {
+    return tool.value.description
+  }
+  return description
 })
 const fullPath = computed(() => {
   return `${url}${route.path}`
@@ -47,8 +59,8 @@ useSeoMeta({
   title: () => fullTitle.value,
   ogTitle: () => fullTitle.value,
   ogUrl: () => fullPath.value,
-  description,
-  ogDescription: description,
+  description: () => pageDescription.value,
+  ogDescription: () => pageDescription.value,
 })
 
 if (image) {

@@ -9,8 +9,19 @@ definePageMeta({
   layout: 'full',
 })
 
+const { title, adminOrigin, features: { publicRegister } } = usePublicConfig()
+const seoTitle = computed(() => `个人设置 - ${title}`)
+const seoDescription = '管理个人偏好、首页展示、第三方登录绑定、应用配置和登录设备。'
+
+useSeoMeta({
+  title: () => seoTitle.value,
+  ogTitle: () => seoTitle.value,
+  description: seoDescription,
+  ogDescription: seoDescription,
+  robots: 'noindex,nofollow',
+})
+
 const userStore = useUserStore()
-const { adminOrigin, features: { publicRegister } } = usePublicConfig()
 const settingsStore = useSettingsStore()
 const settings = settingsStore.general
 const toast = useToast()
