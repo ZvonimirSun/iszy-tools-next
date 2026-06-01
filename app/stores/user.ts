@@ -72,17 +72,14 @@ export const useUserStore = defineStore('user', () => {
   function formatLoginFailureMessage(message: string, data?: LoginResultData) {
     const fallbackMessage = message || '登录失败'
     if (!data || !('code' in data)) {
-      return fallbackMessage === '用户名或密码错误'
-        ? '用户名或密码错误，请确认后重试。连续多次错误会临时锁定账号。'
-        : fallbackMessage
+      return fallbackMessage
     }
 
     if (data.code === 'LOGIN_BANNED') {
-      const minutes = Math.max(1, Math.ceil(data.retryAfterSeconds / 60))
-      return `登录失败次数过多，账号已临时锁定，请约 ${minutes} 分钟后再试。`
+      return '登录失败次数过多，请稍后再试。'
     }
 
-    return `${fallbackMessage}。剩余 ${data.remainingAttempts} 次尝试机会，连续错误 ${data.maxAttempts} 次将临时锁定账号。`
+    return fallbackMessage
   }
 
   async function logout() {
