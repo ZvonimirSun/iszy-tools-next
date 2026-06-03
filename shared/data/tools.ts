@@ -244,6 +244,11 @@ export const tools: OriginToolMenu[] = [
         name: 'idChinese',
         description: '在线解析中国居民身份证号码中的地区、出生日期、性别和校验信息，适合格式检查与基础信息识别。',
       },
+      {
+        label: '这是什么动漫',
+        name: 'whatAnimeIsThis',
+        description: '在线上传动漫截图并识别可能来源，返回作品名称、集数、时间位置和预览片段，适合查找截图出处。',
+      },
       // {
       //   label: 'glTF模型浏览',
       //   name: '3dView',
