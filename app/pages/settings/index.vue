@@ -25,6 +25,7 @@ const userStore = useUserStore()
 const settingsStore = useSettingsStore()
 const settings = settingsStore.general
 const toast = useToast()
+const feedbackUrl = 'https://github.com/ZvonimirSun/iszy-tools-next/discussions'
 const appSettingsOpen = reactive({
   jsonEditor: false,
   aiChat: false,
@@ -406,6 +407,23 @@ async function removeDevice(options: {
       <UCheckbox v-model="settings.showSearch" label="显示搜索" />
       <UCheckbox v-model="settings.showType" label="显示分类" />
       <UCheckbox v-model="settings.openInNewTab" label="新标签页打开工具" />
+    </div>
+    <h4 class="text-lg text-pretty font-semibold text-highlighted">
+      反馈与支持
+    </h4>
+    <div class="flex flex-wrap gap-2">
+      <ULink
+        :to="feedbackUrl"
+        target="_blank"
+      >
+        <UButton
+          color="neutral"
+          variant="outline"
+          icon="i-lucide:message-circle"
+        >
+          留言反馈
+        </UButton>
+      </ULink>
     </div>
     <USeparator />
     <h3 class="text-xl text-pretty font-semibold text-highlighted">
