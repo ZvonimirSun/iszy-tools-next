@@ -311,10 +311,11 @@ export const tools: OriginToolMenu[] = [
       //   label: '俄罗斯方块',
       //   name: 'tetris',
       // },
-      // {
-      //   label: '奥利奥生成器',
-      //   name: 'oreooo',
-      // },
+      {
+        label: '奥利奥生成器',
+        name: 'oreooo',
+        description: '在线生成自定义奥利奥堆叠图片，通过“奥”“利”“与”组合出趣味文字效果，适合表情图和娱乐分享。',
+      },
       // {
       //   label: 'PalWorld服务器设置',
       //   name: 'palServerSettings',
