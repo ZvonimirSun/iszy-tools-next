@@ -321,10 +321,11 @@ export const tools: OriginToolMenu[] = [
         name: 'oreooo',
         description: '在线生成自定义奥利奥堆叠图片，通过“奥”“利”“与”组合出趣味文字效果，适合表情图和娱乐分享。',
       },
-      // {
-      //   label: 'PalWorld服务器设置',
-      //   name: 'palServerSettings',
-      // },
+      {
+        label: 'PalWorld服务器设置',
+        name: 'palServerSettings',
+        description: '在线解析、编辑和生成 PalWorldSettings.ini 服务器配置，支持难度、倍率、掉落、联机和 RCON 等参数调整。',
+      },
     ],
   },
 ]
