@@ -249,10 +249,11 @@ export const tools: OriginToolMenu[] = [
         name: 'whatAnimeIsThis',
         description: '在线上传动漫截图并识别可能来源，返回作品名称、集数、时间位置和预览片段，适合查找截图出处。',
       },
-      // {
-      //   label: 'glTF模型浏览',
-      //   name: '3dView',
-      // },
+      {
+        label: 'glTF模型浏览',
+        name: '3dView',
+        description: '在线预览 glTF/GLB 三维模型，支持文件夹资源加载、轨道控制、动画播放、线框模式和模型统计信息查看。',
+      },
     ],
   },
   {
