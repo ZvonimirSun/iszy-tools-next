@@ -56,7 +56,7 @@ async function copyIni() {
 </script>
 
 <template>
-  <div class="flex h-full w-full flex-col gap-4">
+  <div class="flex min-h-full w-full flex-col gap-4 overflow-auto">
     <ContainerToolItem label="配置操作" content-class="flex flex-col gap-3">
       <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <UFileUpload
@@ -122,8 +122,8 @@ async function copyIni() {
       icon="i-lucide:circle-alert"
     />
 
-    <div class="grid min-h-0 flex-1 gap-4 xl:grid-cols-[minmax(0,1fr)_28rem]">
-      <ContainerToolItem label="服务器参数" class="min-h-0" content-class="min-h-0 overflow-auto">
+    <div class="grid min-h-128 flex-1 gap-4 xl:grid-cols-[minmax(0,1fr)_28rem]">
+      <ContainerToolItem label="服务器参数" class="min-h-0" content-class="min-h-0 flex-1 overflow-auto">
         <div class="grid gap-3 md:grid-cols-2 2xl:grid-cols-3">
           <UFormField
             v-for="setting in settings"
@@ -162,15 +162,16 @@ async function copyIni() {
         </div>
       </ContainerToolItem>
 
-      <ContainerToolItem label="生成结果" class="min-h-0" content-class="flex h-full min-h-0 flex-col gap-3">
+      <ContainerToolItem label="生成结果" class="min-h-0" content-class="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden">
         <UTextarea
           :model-value="generatedIni"
-          class="min-h-0 flex-1"
-          textarea-class="h-full font-mono text-xs"
+          class="w-full flex-1"
+          :ui="{
+            base: 'h-full resize-none',
+          }"
           readonly
-          resize
         />
-        <div class="flex justify-end gap-2">
+        <div class="flex shrink-0 justify-end gap-2">
           <UButton
             color="neutral"
             variant="outline"
