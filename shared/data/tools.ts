@@ -279,10 +279,6 @@ export const tools: OriginToolMenu[] = [
   {
     label: '系统与运维',
     children: [
-      // {
-      //   label: 'WebSSH',
-      //   name: 'webssh',
-      // },
       {
         label: 'Linux命令查询',
         name: 'linuxCommand',
@@ -313,10 +309,11 @@ export const tools: OriginToolMenu[] = [
         name: '2048',
         description: '在线游玩 2048 数字合成小游戏，通过方向操作合并相同数字并挑战更高分数，适合休闲练习和打发时间。',
       },
-      // {
-      //   label: '俄罗斯方块',
-      //   name: 'tetris',
-      // },
+      {
+        label: '俄罗斯方块',
+        name: 'tetris',
+        description: '在线游玩经典俄罗斯方块小游戏，支持键盘和触控操作，自动保存最高分并挑战更高等级。',
+      },
       {
         label: '奥利奥生成器',
         name: 'oreooo',
