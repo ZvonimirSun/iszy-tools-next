@@ -24,6 +24,9 @@ export const useSettingsStore = defineStore('settings', () => {
     tetris: {
       bestScore: 0,
     },
+    snake: {
+      bestScore: 0,
+    },
     imgHosting: {
       configs: [] as ImgHostingConfig[],
       activeConfigId: null as string | null,

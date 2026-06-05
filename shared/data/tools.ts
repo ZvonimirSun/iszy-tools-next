@@ -315,6 +315,11 @@ export const tools: OriginToolMenu[] = [
         description: '在线游玩经典俄罗斯方块小游戏，支持键盘和触控操作，自动保存最高分并挑战更高等级。',
       },
       {
+        label: '贪吃蛇',
+        name: 'snake',
+        description: '在线游玩经典贪吃蛇小游戏，控制蛇身吃掉食物并避免撞墙或撞到自己，自动保存最高分。',
+      },
+      {
         label: '奥利奥生成器',
         name: 'oreooo',
         description: '在线生成自定义奥利奥堆叠图片，通过“奥”“利”“与”组合出趣味文字效果，适合表情图和娱乐分享。',
