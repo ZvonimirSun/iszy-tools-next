@@ -125,6 +125,11 @@ export const tools: OriginToolMenu[] = [
         description: '在线格式化、校验和整理 YAML 内容，适合配置文件、接口示例和结构化数据的快速查看与排错。',
       },
       {
+        label: 'TOML格式化',
+        name: 'toml-formatter',
+        description: '在线格式化、校验和整理 TOML 内容，适合配置文件、项目元数据和结构化数据的快速查看与排错。',
+      },
+      {
         label: '查看网页源码',
         name: 'view-source-code',
         description: '在线输入网址查看网页 HTML 源码内容，适合检查页面结构、调试采集规则和分析网页返回结果。',
