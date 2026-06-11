@@ -2,191 +2,6 @@ import type { OriginToolMenu } from '#shared/types/tool'
 
 export const tools: OriginToolMenu[] = [
   {
-    label: '文档工具',
-    children: [
-      {
-        label: 'PDF合并',
-        name: 'pdf-merge',
-        description: '在线合并多个 PDF 文件，按上传顺序快速生成一个完整文档，适合资料整理、合同归档和报告汇总。',
-      },
-      {
-        label: 'PDF拆分',
-        name: 'pdf-split',
-        description: '在线按页码范围拆分 PDF 文件，从原始文档中提取指定页面，适合分发章节、附件和单独页面。',
-      },
-      {
-        label: 'PDF转JPG',
-        name: 'pdf-to-jpg',
-        description: '在线将 PDF 页面转换为 JPG 图片，支持多页文档批量导出，便于预览、分享和插入其他内容。',
-      },
-      {
-        label: 'JPG转PDF',
-        name: 'jpg-to-pdf',
-        description: '在线把 JPG 图片按顺序合成为 PDF 文档，适合扫描件整理、图片归档和多图打包分享。',
-      },
-      {
-        label: 'Markdown编辑器',
-        name: 'markdown-editor',
-        description: '在线编辑 Markdown 文档，支持源码、双栏和富文本编辑模式，适合快速编写、预览和整理文本内容。',
-      },
-    ],
-  },
-  {
-    label: '开发工具',
-    children: [
-      {
-        label: 'AI 对话',
-        name: 'ai-chat',
-        description: '在线配置 AI 模型并进行多轮对话，支持会话管理和模型切换，适合日常提问、文本处理和开发辅助。',
-      },
-      {
-        label: 'JSON编辑器',
-        name: 'json-editor',
-        description: '在线查看、格式化、编辑和校验 JSON 数据，支持文档管理和结构化预览，适合接口调试与数据整理。',
-      },
-      {
-        label: 'Mock工具',
-        name: 'mock',
-        description: '在线创建和管理接口 Mock 项目，配置模拟接口路径与响应数据，适合前后端联调和测试场景构造。',
-        requiresAuth: true,
-      },
-      {
-        label: 'TinyEditor',
-        name: 'tiny-editor',
-        description: '在线使用富文本编辑器编写和预览内容，适合快速测试排版、编辑 HTML 内容和整理文本片段。',
-      },
-      {
-        label: 'RunJS',
-        name: 'runjs',
-        description: '在线编写、运行和调试 JavaScript 代码片段，支持控制台输出与 ESM 依赖配置，适合快速验证逻辑。',
-      },
-      {
-        label: 'CSS格式化',
-        name: 'css-formatter',
-        description: '在线格式化、压缩和整理 CSS 代码，让样式表更易阅读、调试和发布，适合前端开发日常处理。',
-      },
-      {
-        label: 'XML格式化',
-        name: 'xml-formatter',
-        description: '在线格式化、压缩和整理 XML 内容，帮助查看层级结构、排查格式问题并处理接口返回数据。',
-      },
-      {
-        label: '时间计算',
-        name: 'time-compute',
-        description: '在线进行时间戳与日期时间互转，计算几天后的日期和两个日期之间的天数差，适合开发调试和日常换算。',
-      },
-      {
-        label: 'Cron解析',
-        name: 'cron-parser',
-        description: '在线解析 Cron 表达式，查看自然语言说明、字段含义和下一次执行时间，适合定时任务配置检查。',
-      },
-      {
-        label: '在线ASCII码对照表',
-        name: 'ascii',
-        description: '在线查询 ASCII 字符的十进制、十六进制、八进制、二进制和 HTML Code，支持关键词和字符分组筛选。',
-      },
-      {
-        label: '查看网页源码',
-        name: 'view-source-code',
-        description: '在线输入网址查看网页 HTML 源码内容，适合检查页面结构、调试采集规则和分析网页返回结果。',
-      },
-      {
-        label: '正则大全',
-        name: 'any-rule',
-        description: '在线查询常用正则表达式并输入内容测试匹配结果，覆盖手机号、邮箱、身份证、URL 等常见校验规则。',
-      },
-      {
-        label: '前端CDN搜索',
-        name: 'cdn-query',
-        description: '在线搜索前端 npm 包并查看 CDN 引用信息，支持包名与作者过滤，便于快速找到浏览器可用资源地址。',
-      },
-      {
-        label: '中国色',
-        name: 'chinese-color',
-        description: '在线浏览中国传统颜色，查看颜色名称、拼音、HEX、RGB 和 CMYK 数值，适合设计配色与文化色彩参考。',
-      },
-      {
-        label: '资源包',
-        name: 'https://lib.demos.pub',
-        requiresAuth: true,
-      },
-      {
-        label: '在线流程图',
-        name: 'https://app.diagrams.net/',
-      },
-    ],
-  },
-  {
-    label: '转换与编码',
-    children: [
-      {
-        label: '颜色转换器',
-        name: 'color-transform',
-        description: '在线转换 HEX、RGB、HSL 等颜色格式，快速查看颜色值和互转结果，适合前端开发与设计调色。',
-      },
-      {
-        label: 'Base64编解码',
-        name: 'base64',
-        description: '在线进行 Base64 文本编码和解码，支持 URL-safe Base64，适合接口调试、参数处理和文本转换。',
-      },
-      {
-        label: 'Base64转文件',
-        name: 'base64-file',
-        description: '在线将文件编码为 Base64 字符串，也可把 Base64 内容还原为文件，适合接口传输和文件内容调试。',
-      },
-      {
-        label: 'Base64图片编码',
-        name: 'image-base64',
-        description: '在线将图片转换为 Base64 或 Data URL，也可从 Base64 预览和还原图片，适合前端内联资源处理。',
-      },
-      {
-        label: '二维码编解码',
-        name: 'qrcode',
-        description: '在线生成二维码并识别二维码图片或摄像头画面，支持纠错等级、尺寸和边距设置，适合链接与文本分享。',
-      },
-      {
-        label: '哔哩哔哩AV、BV号转换',
-        name: 'bilibili-bv2av',
-        description: '在线进行哔哩哔哩 AV 号和 BV 号互相转换，并生成对应视频链接，适合 B 站视频编号查询与整理。',
-      },
-      {
-        label: '数字中文转换',
-        name: 'nzh',
-        description: '在线进行阿拉伯数字、中文数字和金额大写转换，适合票据、金额展示和文本格式处理。',
-      },
-      {
-        label: '亲戚关系计算器',
-        name: 'relationship',
-        description: '在线根据亲属关系链计算称呼，也可反向查询关系，适合家庭关系、称谓表达和中文亲属称呼参考。',
-      },
-      {
-        label: '文本HASH',
-        name: 'hash-text',
-        description: '在线计算文本内容的哈希摘要，支持常见 Hash 算法，适合校验字符串、签名调试和数据比对。',
-      },
-      {
-        label: '文件HASH',
-        name: 'hash-file',
-        description: '在线计算文件的哈希校验值，支持常见摘要算法，适合文件完整性检查、下载校验和版本比对。',
-      },
-      {
-        label: '在线JWT解密',
-        name: 'jwt',
-        description: '在线解析 JWT Token 的 Header、Payload 和签名结构，便于查看声明内容、排查认证问题和调试接口。',
-      },
-      {
-        label: 'GeoHash编解码',
-        name: 'geohash',
-        description: '在线进行经纬度与 GeoHash 编码互转，查看地理位置编码结果，适合地图开发、位置索引和空间数据调试。',
-      },
-      {
-        label: 'UUID生成器',
-        name: 'uuid',
-        description: '在线批量生成 UUID，支持 v1、v4、v7 和 NIL 格式，可选择是否保留连字符，适合开发测试和唯一标识生成。',
-      },
-    ],
-  },
-  {
     label: 'GIS工具',
     children: [
       {
@@ -220,6 +35,11 @@ export const tools: OriginToolMenu[] = [
         description: '在线查询地点经纬度、拾取地图坐标并进行地址解析，适合地图定位、坐标复制和地理信息核对。',
       },
       {
+        label: 'GeoHash编解码',
+        name: 'geohash',
+        description: '在线进行经纬度与 GeoHash 编码互转，查看地理位置编码结果，适合地图开发、位置索引和空间数据调试。',
+      },
+      {
         label: '切片方案计算',
         name: 'lod-calculator',
         description: '在线计算地图切片方案、比例尺、分辨率和层级参数，适合 WebGIS、瓦片服务和地图发布配置。',
@@ -231,33 +51,53 @@ export const tools: OriginToolMenu[] = [
     ],
   },
   {
-    label: '网页与数据',
+    label: '开发调试',
     children: [
       {
-        label: 'URL编解码',
-        name: 'url-encode',
-        description: '在线进行 URL 编码和解码，支持 encodeURIComponent 与 encodeURI，适合参数处理、链接调试和表单兼容转换。',
+        label: 'AI 对话',
+        name: 'ai-chat',
+        description: '在线配置 AI 模型并进行多轮对话，支持会话管理和模型切换，适合日常提问、文本处理和开发辅助。',
       },
       {
-        label: 'UserAgent解析',
-        name: 'user-agent',
-        description: '在线解析 User-Agent 字符串，识别浏览器、渲染引擎、操作系统、CPU 架构和设备类型等信息。',
+        label: 'RunJS',
+        name: 'runjs',
+        description: '在线编写、运行和调试 JavaScript 代码片段，支持控制台输出与 ESM 依赖配置，适合快速验证逻辑。',
       },
       {
-        label: 'WHOIS查询',
-        name: 'whois',
-        description: '在线查询域名 WHOIS 注册信息，查看注册商、注册时间、到期时间和域名状态，适合域名排查与备案前检查。',
+        label: 'TinyEditor',
+        name: 'tiny-editor',
+        description: '在线使用富文本编辑器编写和预览内容，适合快速测试排版、编辑 HTML 内容和整理文本片段。',
       },
       {
-        label: '短链接',
-        name: 'urls',
-        description: '在线创建和管理短链接，将长网址转换为便于分享的短地址，适合链接分发、记录和跳转管理。',
+        label: 'JSON编辑器',
+        name: 'json-editor',
+        description: '在线查看、格式化、编辑和校验 JSON 数据，支持文档管理和结构化预览，适合接口调试与数据整理。',
+      },
+      {
+        label: 'Mock工具',
+        name: 'mock',
+        description: '在线创建和管理接口 Mock 项目，配置模拟接口路径与响应数据，适合前后端联调和测试场景构造。',
         requiresAuth: true,
       },
       {
-        label: '随机数生成',
-        name: 'random',
-        description: '在线批量生成指定范围内的随机数，可设置数量、小数位和输出格式，适合抽样、测试数据和临时编号。',
+        label: '正则大全',
+        name: 'any-rule',
+        description: '在线查询常用正则表达式并输入内容测试匹配结果，覆盖手机号、邮箱、身份证、URL 等常见校验规则。',
+      },
+      {
+        label: 'Cron解析',
+        name: 'cron-parser',
+        description: '在线解析 Cron 表达式，查看自然语言说明、字段含义和下一次执行时间，适合定时任务配置检查。',
+      },
+      {
+        label: '前端CDN搜索',
+        name: 'cdn-query',
+        description: '在线搜索前端 npm 包并查看 CDN 引用信息，支持包名与作者过滤，便于快速找到浏览器可用资源地址。',
+      },
+      {
+        label: '颜色转换器',
+        name: 'color-transform',
+        description: '在线转换 HEX、RGB、HSL 等颜色格式，快速查看颜色值和互转结果，适合前端开发与设计调色。',
       },
       {
         label: '渐变色生成器',
@@ -265,24 +105,138 @@ export const tools: OriginToolMenu[] = [
         description: '在线生成和预览 CSS 渐变色，调整颜色与方向并复制样式代码，适合网页背景和界面配色。',
       },
       {
-        label: '身份证解析',
-        name: 'id-chinese',
-        description: '在线解析中国居民身份证号码中的地区、出生日期、性别和校验信息，适合格式检查与基础信息识别。',
+        label: '中国色',
+        name: 'chinese-color',
+        description: '在线浏览中国传统颜色，查看颜色名称、拼音、HEX、RGB 和 CMYK 数值，适合设计配色与文化色彩参考。',
       },
       {
-        label: '这是什么动漫',
-        name: 'what-anime-is-this',
-        description: '在线上传动漫截图并识别可能来源，返回作品名称、集数、时间位置和预览片段，适合查找截图出处。',
+        label: 'CSS格式化',
+        name: 'css-formatter',
+        description: '在线格式化、压缩和整理 CSS 代码，让样式表更易阅读、调试和发布，适合前端开发日常处理。',
+      },
+      {
+        label: 'XML格式化',
+        name: 'xml-formatter',
+        description: '在线格式化、压缩和整理 XML 内容，帮助查看层级结构、排查格式问题并处理接口返回数据。',
+      },
+      {
+        label: '查看网页源码',
+        name: 'view-source-code',
+        description: '在线输入网址查看网页 HTML 源码内容，适合检查页面结构、调试采集规则和分析网页返回结果。',
       },
       {
         label: 'glTF模型浏览',
         name: '3d-view',
         description: '在线预览 glTF/GLB 三维模型，支持文件夹资源加载、轨道控制、动画播放、线框模式和模型统计信息查看。',
       },
+      {
+        label: '在线流程图',
+        name: 'https://app.diagrams.net/',
+      },
+      {
+        label: '资源包',
+        name: 'https://lib.demos.pub',
+        requiresAuth: true,
+      },
     ],
   },
   {
-    label: '图像与视频',
+    label: '编码转换',
+    children: [
+      {
+        label: 'Base64编解码',
+        name: 'base64',
+        description: '在线进行 Base64 文本编码和解码，支持 URL-safe Base64，适合接口调试、参数处理和文本转换。',
+      },
+      {
+        label: 'Base64转文件',
+        name: 'base64-file',
+        description: '在线将文件编码为 Base64 字符串，也可把 Base64 内容还原为文件，适合接口传输和文件内容调试。',
+      },
+      {
+        label: 'Base64图片编码',
+        name: 'image-base64',
+        description: '在线将图片转换为 Base64 或 Data URL，也可从 Base64 预览和还原图片，适合前端内联资源处理。',
+      },
+      {
+        label: 'URL编解码',
+        name: 'url-encode',
+        description: '在线进行 URL 编码和解码，支持 encodeURIComponent 与 encodeURI，适合参数处理、链接调试和表单兼容转换。',
+      },
+      {
+        label: '二维码编解码',
+        name: 'qrcode',
+        description: '在线生成二维码并识别二维码图片或摄像头画面，支持纠错等级、尺寸和边距设置，适合链接与文本分享。',
+      },
+      {
+        label: '在线JWT解密',
+        name: 'jwt',
+        description: '在线解析 JWT Token 的 Header、Payload 和签名结构，便于查看声明内容、排查认证问题和调试接口。',
+      },
+      {
+        label: 'UUID生成器',
+        name: 'uuid',
+        description: '在线批量生成 UUID，支持 v1、v4、v7 和 NIL 格式，可选择是否保留连字符，适合开发测试和唯一标识生成。',
+      },
+      {
+        label: '文本HASH',
+        name: 'hash-text',
+        description: '在线计算文本内容的哈希摘要，支持常见 Hash 算法，适合校验字符串、签名调试和数据比对。',
+      },
+      {
+        label: '文件HASH',
+        name: 'hash-file',
+        description: '在线计算文件的哈希校验值，支持常见摘要算法，适合文件完整性检查、下载校验和版本比对。',
+      },
+      {
+        label: '哔哩哔哩AV、BV号转换',
+        name: 'bilibili-bv2av',
+        description: '在线进行哔哩哔哩 AV 号和 BV 号互相转换，并生成对应视频链接，适合 B 站视频编号查询与整理。',
+      },
+      {
+        label: '数字中文转换',
+        name: 'nzh',
+        description: '在线进行阿拉伯数字、中文数字和金额大写转换，适合票据、金额展示和文本格式处理。',
+      },
+      {
+        label: '在线ASCII码对照表',
+        name: 'ascii',
+        description: '在线查询 ASCII 字符的十进制、十六进制、八进制、二进制和 HTML Code，支持关键词和字符分组筛选。',
+      },
+    ],
+  },
+  {
+    label: '文档处理',
+    children: [
+      {
+        label: 'PDF合并',
+        name: 'pdf-merge',
+        description: '在线合并多个 PDF 文件，按上传顺序快速生成一个完整文档，适合资料整理、合同归档和报告汇总。',
+      },
+      {
+        label: 'PDF拆分',
+        name: 'pdf-split',
+        description: '在线按页码范围拆分 PDF 文件，从原始文档中提取指定页面，适合分发章节、附件和单独页面。',
+      },
+      {
+        label: 'PDF转JPG',
+        name: 'pdf-to-jpg',
+        description: '在线将 PDF 页面转换为 JPG 图片，支持多页文档批量导出，便于预览、分享和插入其他内容。',
+      },
+      {
+        label: 'JPG转PDF',
+        name: 'jpg-to-pdf',
+        description: '在线把 JPG 图片按顺序合成为 PDF 文档，适合扫描件整理、图片归档和多图打包分享。',
+      },
+      {
+        label: 'Markdown编辑器',
+        name: 'markdown-editor',
+        description: '在线编辑 Markdown 文档，支持源码、双栏和富文本编辑模式，适合快速编写、预览和整理文本内容。',
+      },
+    ],
+  },
+  {
+    label: '图片影音',
     children: [
       {
         label: '极简图床',
@@ -299,15 +253,36 @@ export const tools: OriginToolMenu[] = [
         name: 'screen-record',
         description: '在线录制屏幕、窗口或浏览器标签页，可配置音频、帧率、分辨率和光标显示，适合演示与问题复现。',
       },
+      {
+        label: '这是什么动漫',
+        name: 'what-anime-is-this',
+        description: '在线上传动漫截图并识别可能来源，返回作品名称、集数、时间位置和预览片段，适合查找截图出处。',
+      },
     ],
   },
   {
-    label: '系统与运维',
+    label: '网络运维',
     children: [
       {
         label: 'CIDR计算器',
         name: 'cidr-calculator',
         description: '在线解析 IPv4/IPv6 CIDR 网段，计算网络地址、地址范围、掩码和地址数量等信息。',
+      },
+      {
+        label: 'WHOIS查询',
+        name: 'whois',
+        description: '在线查询域名 WHOIS 注册信息，查看注册商、注册时间、到期时间和域名状态，适合域名排查与备案前检查。',
+      },
+      {
+        label: 'UserAgent解析',
+        name: 'user-agent',
+        description: '在线解析 User-Agent 字符串，识别浏览器、渲染引擎、操作系统、CPU 架构和设备类型等信息。',
+      },
+      {
+        label: '短链接',
+        name: 'urls',
+        description: '在线创建和管理短链接，将长网址转换为便于分享的短地址，适合链接分发、记录和跳转管理。',
+        requiresAuth: true,
       },
       {
         label: 'Linux命令查询',
@@ -317,8 +292,28 @@ export const tools: OriginToolMenu[] = [
     ],
   },
   {
-    label: '生活工具',
+    label: '生活实用',
     children: [
+      {
+        label: '时间计算',
+        name: 'time-compute',
+        description: '在线进行时间戳与日期时间互转，计算几天后的日期和两个日期之间的天数差，适合开发调试和日常换算。',
+      },
+      {
+        label: '随机数生成',
+        name: 'random',
+        description: '在线批量生成指定范围内的随机数，可设置数量、小数位和输出格式，适合抽样、测试数据和临时编号。',
+      },
+      {
+        label: '身份证解析',
+        name: 'id-chinese',
+        description: '在线解析中国居民身份证号码中的地区、出生日期、性别和校验信息，适合格式检查与基础信息识别。',
+      },
+      {
+        label: '亲戚关系计算器',
+        name: 'relationship',
+        description: '在线根据亲属关系链计算称呼，也可反向查询关系，适合家庭关系、称谓表达和中文亲属称呼参考。',
+      },
       {
         label: '房贷计算器',
         name: 'mtq-loans',
@@ -327,7 +322,7 @@ export const tools: OriginToolMenu[] = [
     ],
   },
   {
-    label: '娱乐游戏',
+    label: '游戏娱乐',
     children: [
       {
         label: '塞尔达荒野之息地图',
