@@ -205,6 +205,11 @@ export const tools: OriginToolMenu[] = [
         description: '在线根据 GeoJSON、WKT、TopoJSON 或 GeoJSONL 计算边界范围，输出 bbox、中心点、宽高和范围面。',
       },
       {
+        label: '坐标转换',
+        name: 'coordinate-transform',
+        description: '在线在 GCJ-02、BD-09、EPSG 坐标系以及自定义 proj4/WKT 坐标系之间转换坐标，支持多行批量处理。',
+      },
+      {
         label: '经纬度查询',
         name: 'lat-lng',
         description: '在线查询地点经纬度、拾取地图坐标并进行地址解析，适合地图定位、坐标复制和地理信息核对。',
