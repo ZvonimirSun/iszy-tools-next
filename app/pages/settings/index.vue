@@ -22,18 +22,39 @@ useSeoMeta({
 })
 
 const userStore = useUserStore()
+const toolsStore = useToolsStore()
 const settingsStore = useSettingsStore()
 const settings = settingsStore.general
 const toast = useToast()
 const feedbackUrl = 'https://github.com/ZvonimirSun/iszy-tools-next/discussions'
-const appSettingsOpen = reactive({
-  jsonEditor: false,
-  aiChat: false,
-})
+const appSettingItems = [
+  {
+    key: 'jsonEditor',
+    toolName: 'json-editor',
+    label: 'JSON编辑器',
+    path: '/json-editor',
+    component: JsonEditorSettings,
+  },
+  {
+    key: 'aiChat',
+    toolName: 'ai-chat',
+    label: 'AI 对话',
+    path: '/ai-chat',
+    component: AiChatSettings,
+  },
+] as const
+type AppSettingKey = typeof appSettingItems[number]['key']
+const openedAppSettingKey = ref<AppSettingKey>()
 const adminRoleNames = new Set([RoleEnum.ADMIN, RoleEnum.SUPERADMIN]) as Set<string>
 const showAdminLink = computed(() => {
   return !!adminOrigin && !!userStore.profile?.roles?.some((role) => {
     return adminRoleNames.has(role.name)
+  })
+})
+const visibleAppSettingItems = computed(() => {
+  return appSettingItems.filter((item) => {
+    const tool = toolsStore.toolItemsMap[item.toolName]
+    return !!tool && !tool.noAccess
   })
 })
 
@@ -430,18 +451,22 @@ async function removeDevice(options: {
       应用设置
     </h3>
     <div class="flex w-full flex-col gap-3">
-      <div class="rounded-lg border border-muted bg-elevated/50">
+      <div
+        v-for="item in visibleAppSettingItems"
+        :key="item.key"
+        class="rounded-lg border border-muted bg-elevated/50"
+      >
         <div class="flex items-center gap-2 px-2 py-2">
           <UButton
             color="neutral"
             variant="ghost"
             class="min-w-0 flex-1 justify-between px-2 py-1.5"
-            @click="appSettingsOpen.jsonEditor = !appSettingsOpen.jsonEditor"
+            @click="openedAppSettingKey = openedAppSettingKey === item.key ? undefined : item.key"
           >
-            <span class="truncate text-base font-medium text-highlighted">JSON编辑器</span>
-            <UIcon name="i-lucide:chevron-down" class="size-4 transition-transform" :class="{ 'rotate-180': appSettingsOpen.jsonEditor }" />
+            <span class="truncate text-base font-medium text-highlighted">{{ item.label }}</span>
+            <UIcon name="i-lucide:chevron-down" class="size-4 transition-transform" :class="{ 'rotate-180': openedAppSettingKey === item.key }" />
           </UButton>
-          <ULink to="/json-editor">
+          <ULink :to="item.path">
             <UButton
               size="sm"
               color="neutral"
@@ -452,35 +477,8 @@ async function removeDevice(options: {
             </UButton>
           </ULink>
         </div>
-        <div v-if="appSettingsOpen.jsonEditor" class="border-t border-muted p-4">
-          <JsonEditorSettings />
-        </div>
-      </div>
-
-      <div class="rounded-lg border border-muted bg-elevated/50">
-        <div class="flex items-center gap-2 px-2 py-2">
-          <UButton
-            color="neutral"
-            variant="ghost"
-            class="min-w-0 flex-1 justify-between px-2 py-1.5"
-            @click="appSettingsOpen.aiChat = !appSettingsOpen.aiChat"
-          >
-            <span class="truncate text-base font-medium text-highlighted">AI 对话</span>
-            <UIcon name="i-lucide:chevron-down" class="size-4 transition-transform" :class="{ 'rotate-180': appSettingsOpen.aiChat }" />
-          </UButton>
-          <ULink to="/ai-chat">
-            <UButton
-              size="sm"
-              color="neutral"
-              variant="soft"
-              icon="i-lucide:external-link"
-            >
-              打开
-            </UButton>
-          </ULink>
-        </div>
-        <div v-if="appSettingsOpen.aiChat" class="border-t border-muted p-4">
-          <AiChatSettings />
+        <div v-if="openedAppSettingKey === item.key" class="border-t border-muted p-4">
+          <component :is="item.component" />
         </div>
       </div>
     </div>
