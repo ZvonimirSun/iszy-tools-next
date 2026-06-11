@@ -21,6 +21,7 @@ const props = withDefaults(defineProps<{
 
 const emits = defineEmits<{
   (e: 'change', v: string): void
+  (e: 'ready'): void
 }>()
 
 const isDark = useIsDark()
@@ -32,6 +33,7 @@ defineExpose({
 
 const editor = ref<HTMLDivElement>()
 let cm: EditorView
+let pendingInput: string | undefined
 const themeCompartment = new Compartment()
 const highLightCompartment = new Compartment()
 
@@ -57,6 +59,11 @@ onMounted(async () => {
     }),
     parent: editor.value,
   })
+  if (pendingInput !== undefined) {
+    setInput(pendingInput)
+    pendingInput = undefined
+  }
+  emits('ready')
 })
 
 onUnmounted(() => {
@@ -80,6 +87,7 @@ function onChange(update: ViewUpdate) {
 
 function setInput(val: string) {
   if (!cm) {
+    pendingInput = val
     return
   }
   cm.dispatch({

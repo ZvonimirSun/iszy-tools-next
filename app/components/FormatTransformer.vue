@@ -56,6 +56,15 @@ const isValid = computed(() => resolvedPlugin.value?.isValid || (() => true))
 
 const valid = computed(() => isValid.value(state.input))
 
+function syncOutput() {
+  if (valid.value) {
+    editor.value?.setInput(formatter.value(state.input, props.options))
+  }
+  else {
+    editor.value?.setInput('')
+  }
+}
+
 watch(inputDefault, (val) => {
   state.input = val
 })
@@ -67,15 +76,12 @@ watch(plugin, async (val) => {
 }, {
   immediate: true,
 })
-watch([valid, () => props.options, editor, state, resolvedPlugin], () => {
-  if (valid.value) {
-    editor.value?.setInput(formatter.value(state.input, props.options))
-  }
-  else {
-    editor.value?.setInput('')
-  }
+watch([valid, () => props.options, state, resolvedPlugin], () => {
+  syncOutput()
 }, {
   deep: true,
+  flush: 'post',
+  immediate: true,
 })
 
 function validate(): FormError[] {
@@ -115,6 +121,7 @@ function validate(): FormError[] {
         ref="editor"
         :plugin="resolvedPlugin"
         :readonly="true"
+        @ready="syncOutput"
       />
     </UFormField>
   </UForm>
