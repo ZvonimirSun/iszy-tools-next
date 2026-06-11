@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { GeoJSON, Geometry } from '@zvonimirsun/map-sdk/2d'
-import { createWktGeometrySource } from '../geoJson/children/file/geoJson.file'
-import { isGeoJsonObject, isGeometry } from '../geoJson/children/geoJsonUtils'
+import { createWktGeometrySource } from '../geo-json/children/file/geoJson.file'
+import { isGeoJsonObject, isGeometry } from '../geo-json/children/geoJsonUtils'
 
 type ConvertMode = 'wkt-to-geojson' | 'geojson-to-wkt'
 

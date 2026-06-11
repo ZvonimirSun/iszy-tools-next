@@ -1,4 +1,21 @@
+import { kebabCase } from 'scule'
+
 export default defineNuxtRouteMiddleware(async (to, _from) => {
+  const normalizedPath = to.path
+    .split('/')
+    .map(segment => kebabCase(segment))
+    .join('/')
+
+  if (normalizedPath !== to.path) {
+    return navigateTo({
+      path: normalizedPath,
+      query: to.query,
+      hash: to.hash,
+    }, {
+      redirectCode: 301,
+    })
+  }
+
   const toolsStore = useToolsStore()
   const currentTool = getCurrentTool(toolsStore, to)
   if (!currentTool || !currentTool.noAccess) {

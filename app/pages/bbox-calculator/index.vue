@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Feature, FeatureCollection, GeoJSON, Geometry } from '@zvonimirsun/map-sdk/2d'
-import { mergeGeoJsonList, normalizeImportedGeoJson } from '../geoJson/children/file/geoJson.file'
-import { getGeoJsonCrs, isGeoJsonObject, isGeometry, withTopLevelGeoJsonCrs } from '../geoJson/children/geoJsonUtils'
+import { mergeGeoJsonList, normalizeImportedGeoJson } from '../geo-json/children/file/geoJson.file'
+import { getGeoJsonCrs, isGeoJsonObject, isGeometry, withTopLevelGeoJsonCrs } from '../geo-json/children/geoJsonUtils'
 
 type InputFormat = 'auto' | 'geojson' | 'wkt' | 'topojson' | 'geojsonl'
 type BBox = [number, number, number, number]

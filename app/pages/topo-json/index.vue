@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { GeoJSON } from '@zvonimirsun/map-sdk/2d'
-import { createDirectGeoJsonSource, mergeGeoJsonList, normalizeImportedGeoJson } from '../geoJson/children/file/geoJson.file'
-import { getGeoJsonCrs, withTopLevelGeoJsonCrs } from '../geoJson/children/geoJsonUtils'
+import { createDirectGeoJsonSource, mergeGeoJsonList, normalizeImportedGeoJson } from '../geo-json/children/file/geoJson.file'
+import { getGeoJsonCrs, withTopLevelGeoJsonCrs } from '../geo-json/children/geoJsonUtils'
 
 type ConvertMode = 'geojson-to-topojson' | 'topojson-to-geojson'
 

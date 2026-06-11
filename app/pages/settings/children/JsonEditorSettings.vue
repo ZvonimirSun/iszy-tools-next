@@ -8,4 +8,3 @@ const modules = useSettingsStore().modules
     <span class="text-sm text-muted">同步云端记录</span>
   </div>
 </template>
-

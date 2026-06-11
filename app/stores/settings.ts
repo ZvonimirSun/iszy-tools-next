@@ -1,6 +1,6 @@
 import type { ResultDto } from '@zvonimirsun/iszy-common'
 import type { AiChatSettings } from '#shared/types/aiChat'
-import type { ImgHostingConfig } from '~/pages/imgHosting/children/imgHosting'
+import type { ImgHostingConfig } from '~/pages/img-hosting/children/imgHosting'
 import { debounce, merge } from 'lodash-es'
 import { createDefaultAiChatSettings } from '#shared/data/aiChat'
 

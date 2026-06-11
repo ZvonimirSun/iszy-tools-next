@@ -441,7 +441,7 @@ async function removeDevice(options: {
             <span class="truncate text-base font-medium text-highlighted">JSON编辑器</span>
             <UIcon name="i-lucide:chevron-down" class="size-4 transition-transform" :class="{ 'rotate-180': appSettingsOpen.jsonEditor }" />
           </UButton>
-          <ULink to="/jsonEditor">
+          <ULink to="/json-editor">
             <UButton
               size="sm"
               color="neutral"
@@ -468,7 +468,7 @@ async function removeDevice(options: {
             <span class="truncate text-base font-medium text-highlighted">AI 对话</span>
             <UIcon name="i-lucide:chevron-down" class="size-4 transition-transform" :class="{ 'rotate-180': appSettingsOpen.aiChat }" />
           </UButton>
-          <ULink to="/aiChat">
+          <ULink to="/ai-chat">
             <UButton
               size="sm"
               color="neutral"

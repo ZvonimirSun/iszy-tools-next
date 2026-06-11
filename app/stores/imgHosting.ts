@@ -1,5 +1,5 @@
-import type { ImgHostingConfig } from '~/pages/imgHosting/children/imgHosting.d'
-import { getUploader } from '~/pages/imgHosting/children/imgHosting.service'
+import type { ImgHostingConfig } from '~/pages/img-hosting/children/imgHosting.d'
+import { getUploader } from '~/pages/img-hosting/children/imgHosting.service'
 
 export const useImgHostingStore = defineStore('imgHosting', () => {
   const userImgHosting = computed(() => useSettingsStore().modules.imgHosting)

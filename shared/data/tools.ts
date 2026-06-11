@@ -6,27 +6,27 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: 'PDF合并',
-        name: 'pdfMerge',
+        name: 'pdf-merge',
         description: '在线合并多个 PDF 文件，按上传顺序快速生成一个完整文档，适合资料整理、合同归档和报告汇总。',
       },
       {
         label: 'PDF拆分',
-        name: 'pdfSplit',
+        name: 'pdf-split',
         description: '在线按页码范围拆分 PDF 文件，从原始文档中提取指定页面，适合分发章节、附件和单独页面。',
       },
       {
         label: 'PDF转JPG',
-        name: 'pdfToJpg',
+        name: 'pdf-to-jpg',
         description: '在线将 PDF 页面转换为 JPG 图片，支持多页文档批量导出，便于预览、分享和插入其他内容。',
       },
       {
         label: 'JPG转PDF',
-        name: 'jpgToPdf',
+        name: 'jpg-to-pdf',
         description: '在线把 JPG 图片按顺序合成为 PDF 文档，适合扫描件整理、图片归档和多图打包分享。',
       },
       {
         label: 'Markdown编辑器',
-        name: 'markdownEditor',
+        name: 'markdown-editor',
         description: '在线编辑 Markdown 文档，支持源码、双栏和富文本编辑模式，适合快速编写、预览和整理文本内容。',
       },
     ],
@@ -36,12 +36,12 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: 'AI 对话',
-        name: 'aiChat',
+        name: 'ai-chat',
         description: '在线配置 AI 模型并进行多轮对话，支持会话管理和模型切换，适合日常提问、文本处理和开发辅助。',
       },
       {
         label: 'JSON编辑器',
-        name: 'jsonEditor',
+        name: 'json-editor',
         description: '在线查看、格式化、编辑和校验 JSON 数据，支持文档管理和结构化预览，适合接口调试与数据整理。',
       },
       {
@@ -52,7 +52,7 @@ export const tools: OriginToolMenu[] = [
       },
       {
         label: 'TinyEditor',
-        name: 'tinyEditor',
+        name: 'tiny-editor',
         description: '在线使用富文本编辑器编写和预览内容，适合快速测试排版、编辑 HTML 内容和整理文本片段。',
       },
       {
@@ -62,17 +62,17 @@ export const tools: OriginToolMenu[] = [
       },
       {
         label: 'CSS格式化',
-        name: 'cssFormatter',
+        name: 'css-formatter',
         description: '在线格式化、压缩和整理 CSS 代码，让样式表更易阅读、调试和发布，适合前端开发日常处理。',
       },
       {
         label: 'XML格式化',
-        name: 'xmlFormatter',
+        name: 'xml-formatter',
         description: '在线格式化、压缩和整理 XML 内容，帮助查看层级结构、排查格式问题并处理接口返回数据。',
       },
       {
         label: '时间计算',
-        name: 'timeCompute',
+        name: 'time-compute',
         description: '在线进行时间戳与日期时间互转，计算几天后的日期和两个日期之间的天数差，适合开发调试和日常换算。',
       },
       {
@@ -82,22 +82,22 @@ export const tools: OriginToolMenu[] = [
       },
       {
         label: '查看网页源码',
-        name: 'viewSourceCode',
+        name: 'view-source-code',
         description: '在线输入网址查看网页 HTML 源码内容，适合检查页面结构、调试采集规则和分析网页返回结果。',
       },
       {
         label: '正则大全',
-        name: 'anyRule',
+        name: 'any-rule',
         description: '在线查询常用正则表达式并输入内容测试匹配结果，覆盖手机号、邮箱、身份证、URL 等常见校验规则。',
       },
       {
         label: '前端CDN搜索',
-        name: 'cdnQuery',
+        name: 'cdn-query',
         description: '在线搜索前端 npm 包并查看 CDN 引用信息，支持包名与作者过滤，便于快速找到浏览器可用资源地址。',
       },
       {
         label: '中国色',
-        name: 'chineseColor',
+        name: 'chinese-color',
         description: '在线浏览中国传统颜色，查看颜色名称、拼音、HEX、RGB 和 CMYK 数值，适合设计配色与文化色彩参考。',
       },
       {
@@ -116,7 +116,7 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: '颜色转换器',
-        name: 'colorTransform',
+        name: 'color-transform',
         description: '在线转换 HEX、RGB、HSL 等颜色格式，快速查看颜色值和互转结果，适合前端开发与设计调色。',
       },
       {
@@ -126,12 +126,12 @@ export const tools: OriginToolMenu[] = [
       },
       {
         label: 'Base64转文件',
-        name: 'base64File',
+        name: 'base64-file',
         description: '在线将文件编码为 Base64 字符串，也可把 Base64 内容还原为文件，适合接口传输和文件内容调试。',
       },
       {
         label: 'Base64图片编码',
-        name: 'imageBase64',
+        name: 'image-base64',
         description: '在线将图片转换为 Base64 或 Data URL，也可从 Base64 预览和还原图片，适合前端内联资源处理。',
       },
       {
@@ -141,7 +141,7 @@ export const tools: OriginToolMenu[] = [
       },
       {
         label: '哔哩哔哩AV、BV号转换',
-        name: 'bilibiliBv2av',
+        name: 'bilibili-bv2av',
         description: '在线进行哔哩哔哩 AV 号和 BV 号互相转换，并生成对应视频链接，适合 B 站视频编号查询与整理。',
       },
       {
@@ -156,12 +156,12 @@ export const tools: OriginToolMenu[] = [
       },
       {
         label: '文本HASH',
-        name: 'hashText',
+        name: 'hash-text',
         description: '在线计算文本内容的哈希摘要，支持常见 Hash 算法，适合校验字符串、签名调试和数据比对。',
       },
       {
         label: '文件HASH',
-        name: 'hashFile',
+        name: 'hash-file',
         description: '在线计算文件的哈希校验值，支持常见摘要算法，适合文件完整性检查、下载校验和版本比对。',
       },
       {
@@ -186,32 +186,32 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: 'GeoJSON工具',
-        name: 'geoJson',
+        name: 'geo-json',
         description: '在线查看、编辑、导入和导出 GeoJSON 数据，支持属性表、坐标系和 Shapefile 转换，适合 GIS 数据处理。',
       },
       {
         label: 'WKT/GeoJSON转换',
-        name: 'wktGeoJson',
+        name: 'wkt-geo-json',
         description: '在线进行 WKT 与 GeoJSON 几何数据互相转换，支持点、线、面和 GeometryCollection 等常见空间格式。',
       },
       {
         label: 'GeoJSON/TopoJSON转换',
-        name: 'topoJson',
+        name: 'topo-json',
         description: '在线进行 GeoJSON 与 TopoJSON 数据互相转换，支持压缩拓扑结构和还原为标准 GeoJSON。',
       },
       {
         label: 'BBox计算器',
-        name: 'bboxCalculator',
+        name: 'bbox-calculator',
         description: '在线根据 GeoJSON、WKT、TopoJSON 或 GeoJSONL 计算边界范围，输出 bbox、中心点、宽高和范围面。',
       },
       {
         label: '经纬度查询',
-        name: 'latLng',
+        name: 'lat-lng',
         description: '在线查询地点经纬度、拾取地图坐标并进行地址解析，适合地图定位、坐标复制和地理信息核对。',
       },
       {
         label: '切片方案计算',
-        name: 'lodCalculator',
+        name: 'lod-calculator',
         description: '在线计算地图切片方案、比例尺、分辨率和层级参数，适合 WebGIS、瓦片服务和地图发布配置。',
       },
       {
@@ -225,12 +225,12 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: 'URL编解码',
-        name: 'urlEncode',
+        name: 'url-encode',
         description: '在线进行 URL 编码和解码，支持 encodeURIComponent 与 encodeURI，适合参数处理、链接调试和表单兼容转换。',
       },
       {
         label: 'UserAgent解析',
-        name: 'userAgent',
+        name: 'user-agent',
         description: '在线解析 User-Agent 字符串，识别浏览器、渲染引擎、操作系统、CPU 架构和设备类型等信息。',
       },
       {
@@ -251,22 +251,22 @@ export const tools: OriginToolMenu[] = [
       },
       {
         label: '渐变色生成器',
-        name: 'gradientColor',
+        name: 'gradient-color',
         description: '在线生成和预览 CSS 渐变色，调整颜色与方向并复制样式代码，适合网页背景和界面配色。',
       },
       {
         label: '身份证解析',
-        name: 'idChinese',
+        name: 'id-chinese',
         description: '在线解析中国居民身份证号码中的地区、出生日期、性别和校验信息，适合格式检查与基础信息识别。',
       },
       {
         label: '这是什么动漫',
-        name: 'whatAnimeIsThis',
+        name: 'what-anime-is-this',
         description: '在线上传动漫截图并识别可能来源，返回作品名称、集数、时间位置和预览片段，适合查找截图出处。',
       },
       {
         label: 'glTF模型浏览',
-        name: '3dView',
+        name: '3d-view',
         description: '在线预览 glTF/GLB 三维模型，支持文件夹资源加载、轨道控制、动画播放、线框模式和模型统计信息查看。',
       },
     ],
@@ -276,7 +276,7 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: '极简图床',
-        name: 'imgHosting',
+        name: 'img-hosting',
         description: '在线上传和管理图片资源，支持配置图床服务、查看图片列表和复制访问地址，适合轻量图片托管。',
       },
       {
@@ -286,7 +286,7 @@ export const tools: OriginToolMenu[] = [
       },
       {
         label: '屏幕录制',
-        name: 'screenRecord',
+        name: 'screen-record',
         description: '在线录制屏幕、窗口或浏览器标签页，可配置音频、帧率、分辨率和光标显示，适合演示与问题复现。',
       },
     ],
@@ -296,7 +296,7 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: 'Linux命令查询',
-        name: 'linuxCommand',
+        name: 'linux-command',
         description: '在线查询 Linux 命令说明、参数和使用示例，适合运维排查、脚本编写和命令行学习参考。',
       },
     ],
@@ -306,7 +306,7 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: '房贷计算器',
-        name: 'mtqLoans',
+        name: 'mtq-loans',
         description: '在线计算商业贷款、公积金贷款和组合贷款的还款计划，支持等额本息、等额本金和利息明细估算。',
       },
     ],
@@ -316,7 +316,7 @@ export const tools: OriginToolMenu[] = [
     children: [
       {
         label: '塞尔达荒野之息地图',
-        name: 'zeldaBotwMap',
+        name: 'zelda-botw-map',
         description: '在线查看塞尔达传说荒野之息地图资源，支持地图浏览和标记参考，适合游戏探索路线规划。',
       },
       {
@@ -341,7 +341,7 @@ export const tools: OriginToolMenu[] = [
       },
       {
         label: 'PalWorld服务器设置',
-        name: 'palServerSettings',
+        name: 'pal-server-settings',
         description: '在线解析、编辑和生成 PalWorldSettings.ini 服务器配置，支持难度、倍率、掉落、联机和 RCON 等参数调整。',
       },
     ],
