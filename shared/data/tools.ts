@@ -57,6 +57,7 @@ export const tools: OriginToolMenu[] = [
         label: 'AI 对话',
         name: 'ai-chat',
         description: '在线配置 AI 模型并进行多轮对话，支持会话管理和模型切换，适合日常提问、文本处理和开发辅助。',
+        requiresAuth: true,
       },
       {
         label: 'RunJS',
