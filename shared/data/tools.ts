@@ -115,6 +115,16 @@ export const tools: OriginToolMenu[] = [
         description: '在线格式化、压缩和整理 CSS 代码，让样式表更易阅读、调试和发布，适合前端开发日常处理。',
       },
       {
+        label: 'HTML格式化',
+        name: 'html-formatter',
+        description: '在线格式化和整理 HTML 代码，帮助查看标签层级、调整缩进并快速处理页面片段。',
+      },
+      {
+        label: 'JS格式化',
+        name: 'js-formatter',
+        description: '在线格式化和整理 JavaScript 代码，调整缩进与代码结构，适合脚本片段阅读和调试。',
+      },
+      {
         label: 'XML格式化',
         name: 'xml-formatter',
         description: '在线格式化、压缩和整理 XML 内容，帮助查看层级结构、排查格式问题并处理接口返回数据。',
