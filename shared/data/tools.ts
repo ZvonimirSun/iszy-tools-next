@@ -76,6 +76,11 @@ export const tools: OriginToolMenu[] = [
         description: '在线进行时间戳与日期时间互转，计算几天后的日期和两个日期之间的天数差，适合开发调试和日常换算。',
       },
       {
+        label: 'Cron解析',
+        name: 'cron-parser',
+        description: '在线解析 Cron 表达式，查看自然语言说明、字段含义和下一次执行时间，适合定时任务配置检查。',
+      },
+      {
         label: '在线ASCII码对照表',
         name: 'ascii',
         description: '在线查询 ASCII 字符的十进制、十六进制、八进制、二进制和 HTML Code，支持关键词和字符分组筛选。',

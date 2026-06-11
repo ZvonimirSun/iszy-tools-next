@@ -60,6 +60,8 @@
     "china-area-data": "5.0.1",
     "codemirror": "^6.0.2",
     "colord": "^2.9.3",
+    "croner": "^10.0.1",
+    "cronstrue": "^3.14.0",
     "crypto-js": "^4.2.0",
     "culori": "^4.0.2",
     "dayjs": "^1.11.21",
