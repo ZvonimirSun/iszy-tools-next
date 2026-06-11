@@ -123,7 +123,7 @@ function cloneMatrix(matrix: number[][]) {
 
 function randomPieceName(): TetrominoName {
   const names = Object.keys(tetrominoes) as TetrominoName[]
-  return names[Math.floor(Math.random() * names.length)]
+  return names[Math.floor(Math.random() * names.length)] ?? 't'
 }
 
 function createPiece(name: TetrominoName): Piece {
@@ -161,18 +161,24 @@ function isValid(piece: Piece) {
 
 function applyPieceToDisplay(target: DisplayCell[][], piece: Piece, value: DisplayCell) {
   eachBlock(piece, ({ x, y }) => {
-    if (y < 0 || y >= target.length || x < 0 || x >= target[y].length) {
+    const row = target[y]
+    if (!row || x < 0 || x >= row.length) {
       return
     }
-    if (value === 'ghost' && target[y][x]) {
+    if (value === 'ghost' && row[x]) {
       return
     }
-    target[y][x] = value
+    row[x] = value
   })
 }
 
 function rotateMatrix(matrix: number[][]) {
-  return matrix[0].map((_, index) => matrix.map(row => row[index]).reverse())
+  const firstRow = matrix[0]
+  if (!firstRow) {
+    return []
+  }
+
+  return firstRow.map((_, index) => matrix.map(row => row[index] ?? 0).reverse())
 }
 
 function rotatePiece() {
@@ -232,10 +238,12 @@ function lockPiece() {
   if (!currentPiece.value) {
     return
   }
+  const pieceName = currentPiece.value.name
   const nextBoard = board.value.map(row => [...row])
   eachBlock(currentPiece.value, ({ x, y }) => {
-    if (y >= 0 && y < boardHeight && x >= 0 && x < boardWidth) {
-      nextBoard[y][x] = currentPiece.value?.name ?? ''
+    const row = nextBoard[y]
+    if (row && x >= 0 && x < row.length) {
+      row[x] = pieceName
     }
   })
   board.value = nextBoard
@@ -254,7 +262,7 @@ function clearLines() {
   const additions = Array.from({ length: cleared }, () => Array.from<Cell>({ length: boardWidth }).fill(''))
   board.value = [...additions, ...remaining]
   clearedLines.value += cleared
-  score.value += [0, 100, 300, 500, 800][cleared] * level.value
+  score.value += ([0, 100, 300, 500, 800][cleared] ?? 0) * level.value
   updateBestScore()
 }
 

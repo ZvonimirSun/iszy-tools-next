@@ -157,6 +157,9 @@ function step() {
   direction.value = pendingDirection.value
   const offset = directionOffset[direction.value]
   const head = snake.value[0]
+  if (!head) {
+    return
+  }
   const nextHead = { x: head.x + offset.x, y: head.y + offset.y }
   const willEat = samePoint(nextHead, food.value)
   const bodyForCollision = willEat ? snake.value : snake.value.slice(0, -1)
