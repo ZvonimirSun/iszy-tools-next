@@ -1,78 +1,123 @@
-# AGENTS.md
+# ISZY Tools Next Agent 指南
 
-This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
+本文档用于帮助协作 Agent 快速理解 `iszy-tools-next`。本项目是当前工具站主线，基于 Nuxt 4 实现在线工具集合，并通过 Nitro 服务端接口对接认证、工具权限和部分后端能力。
 
-## Commands
+## 常用命令
 
-Do not run `pnpm build` casually as a default verification step. Prefer targeted checks such as `pnpm lint`, `pnpm typecheck`, or focused tests, and only run `pnpm build` when explicitly requested or when a production build is genuinely necessary.
+不要把 `pnpm build` 当作默认验证步骤。日常改动优先使用 `pnpm lint`、`pnpm typecheck` 或聚焦测试；只有用户明确要求、排查生产构建问题，或改动确实影响构建产物时再执行生产构建。
 
-| Task | Command |
-|------|---------|
-| Install dependencies | `pnpm install` |
-| Start dev server (port 3000) | `pnpm dev` |
-| Production build | `pnpm build` |
-| Preview production build | `pnpm preview` |
-| Lint | `pnpm lint` |
-| Lint with auto-fix | `pnpm lint:fix` |
-| Type-check | `pnpm typecheck` |
-| Run all tests | `pnpm test` |
-| Run tests in watch mode | `pnpm test:watch` |
-| Run a single test file | `pnpm vitest run path/to/file.test.ts` |
-| Test with coverage | `pnpm test:coverage` |
+| 任务 | 命令 |
+| --- | --- |
+| 安装依赖 | `pnpm install` |
+| 启动开发服务 | `pnpm dev` |
+| 生产构建 | `pnpm build` |
+| 预览生产构建 | `pnpm preview` |
+| 代码检查 | `pnpm lint` |
+| 自动修复 lint | `pnpm lint:fix` |
+| 类型检查 | `pnpm typecheck` |
+| 运行全部测试 | `pnpm test` |
+| 测试监听模式 | `pnpm test:watch` |
+| 单文件测试 | `pnpm vitest run path/to/file.test.ts` |
+| 测试覆盖率 | `pnpm test:coverage` |
 
-## Architecture
+## 技术栈
 
-### Stack
-- **Nuxt 4.x** with **Vue 3.5**, **TypeScript 6**, **pnpm** (workspace)
-- **Nuxt UI v4** (Reka UI under the hood) + **TailwindCSS v4**
-- **Pinia** for state management, with a custom persisted-state plugin (`@zvonimirsun/pinia-plugin-persistedstate`) using IndexedDB
-- **Vitest** for unit tests, **ESLint** with `@antfu/eslint-config`
-- **Nitro** server (built into Nuxt) with Redis-backed session storage
+- Nuxt 4、Vue 3、TypeScript、pnpm。
+- Nuxt UI v4、Tailwind CSS v4。
+- Pinia 管理客户端状态，持久化使用项目自定义 IndexedDB 持久化插件。
+- Nitro server 负责服务端 API、认证代理和 session 中间件。
+- Redis 用于服务端 session 存储。
+- Vitest 负责单元测试，ESLint 使用 Antfu 风格配置。
 
-### Directory Layout
+## 目录结构
 
-```
-app/                  # Frontend — pages, components, stores, composables, plugins, middleware
-  pages/              # File-based routing. Each tool is a page (e.g. pages/base64.vue)
-    <tool>/           # Multi-file tools use the Nuxt "children" pattern
-      children/       # Page-specific logic: services, types, workers, tests
-      index.vue
-  components/         # Shared components (editor/, app/Header, app/Footer, etc.)
-  stores/             # Pinia stores (tools, user, settings, etc.)
-  composables/        # Shared composables (useCopy, useCurrentTool, usePdfManager, etc.)
-  middleware/          # Global route middleware (auth checks)
-  plugins/            # Nuxt plugins (init: pulls user profile + tools on load)
-  libs/               # Wrapper modules for third-party libs (pdf-lib, leaflet, qr-scanner)
-server/               # Nitro server
-  api/                # API routes (auth/*, tools/*, oauth/*)
-  middleware/          # Server middleware (session.ts — attaches Redis session to every request)
-  plugins/            # Nitro plugins (redisStorage — mounts Redis driver for unstorage)
-  utils/              # Server utilities (authFetch, sessionStore, stateStore)
-  types/              # Server-only types
-shared/               # Code shared between client & server, auto-imported as #shared
-  data/tools.ts       # Tool catalog definition (static list of all tools with labels, categories)
-  types/              # Shared TypeScript interfaces (tool, user, editor)
-  utils/              # Shared utilities
+```text
+app/
+  pages/              # 工具页面和应用页面
+  components/         # 通用组件
+  composables/        # 通用组合式函数
+  stores/             # Pinia stores
+  middleware/         # Nuxt 路由中间件
+  plugins/            # 客户端/服务端插件
+  libs/               # 第三方库封装
+server/
+  api/                # Nitro API 路由
+  middleware/         # Nitro 中间件
+  plugins/            # Nitro 插件
+  utils/              # 服务端工具函数
+  types/              # 服务端类型
+shared/
+  data/tools.ts       # 工具目录定义
+  types/              # 前后端共享类型
+  utils/              # 前后端共享工具
 ```
 
-### Key Patterns
+## 工具页面约定
 
-**Tool pages** live under `app/pages/`. Simple tools with no companion files are a single `.vue` file (e.g., `base64.vue`). As soon as a tool needs its own folder for components, services, types, workers, tests, or other page-specific files, the page entry must be `app/pages/<tool>/index.vue`, and supporting files must live under `app/pages/<tool>/children/`. Do not create `app/pages/<tool>.vue` and `app/pages/<tool>/` at the same time.
+- 工具目录统一维护在 `shared/data/tools.ts`。
+- 工具 `name` 同时作为站内路由路径使用，应使用短横线格式，例如 `bbox-calculator`、`geo-json`、`pdf-to-jpg`。
+- 旧的驼峰路径由全局中间件兼容跳转到短横线格式；新增工具时不要新增驼峰路由。
+- 简单工具可以放在 `app/pages/<tool-name>.vue`。
+- 复杂工具应使用目录形式：`app/pages/<tool-name>/index.vue`，页面专属逻辑放在 `app/pages/<tool-name>/children/`。
+- 不要同时创建 `app/pages/<tool-name>.vue` 和 `app/pages/<tool-name>/`。
+- `children/` 目录不会作为页面路由使用；测试、类型、worker、服务函数、页面内组件都优先放在这里。
+- 以 `_` 开头的页面或目录会被 `nuxt.config.ts` 中的 `pagePattern` 排除出路由。
 
-**Application settings** live under `app/pages/settings/`. The settings page entry is `app/pages/settings/index.vue`; app-specific settings UIs must be separate components in `app/pages/settings/children/` (e.g., `<ToolName>Settings.vue`) and should call that app's own store/composables for behavior. Keep `settings.vue`/`settings/index.vue` focused on page layout, account/global settings, and lazy/collapsible mounting of app settings.
+## 设置页约定
 
-**Pages that begin with `_` or are inside `_*/` directories are excluded from routing** (configured in `nuxt.config.ts` via `pagePattern`).
+- 设置页入口是 `app/pages/settings/index.vue`。
+- 工具专属设置组件放在 `app/pages/settings/children/`。
+- 设置组件应调用对应 store 或 composable，不要把工具业务逻辑塞进设置页入口。
+- `settings/index.vue` 主要负责账号、全局设置和各工具设置的装载/折叠。
 
-**Auth flow**: The global middleware `auth.global.ts` checks if the current tool requires authentication (`noAccess` flag). If not logged in, it redirects to `/login`. If logged in but lacking privileges, it throws 403. The `useOriginToolsStore` fetches the filtered tool list from `/api/tools` based on the user's privileges (privilege-driven access control: `tool:<name>:access` or `tool:all:access`).
+## 认证与权限
 
-**Session management**: Server middleware `server/middleware/session.ts` runs on every request, persisting the session cookie to Redis. Server utilities `authFetch.ts` proxies authenticated requests to an external API. `server/utils/sessionStore.ts` provides `getRedisSession`/`setRedisSession`/`destroyRedisSession`.
+- 工具是否需要登录由 `shared/data/tools.ts` 中的 `requiresAuth` 标记控制。
+- `server/api/tools/index.get.ts` 会按用户权限过滤工具列表，并设置工具的 `noAccess` 状态。
+- 工具权限使用 `tool:<tool-name>:access` 形式，超级权限使用项目既有的全量工具权限语义。
+- `app/middleware/auth.global.ts` 根据当前路由匹配工具并执行访问控制：未登录跳转登录页，权限不足抛出 403。
+- 服务端持有后端访问凭据，浏览器侧通过 httpOnly session cookie 维持登录态；不要把后端 token 暴露给客户端状态。
 
-**Pinia stores** use `persist: true` to opt into IndexedDB persistence (configured in `nuxt.config.ts` runtimeConfig). Stores accept HMR via `acceptHMRUpdate`.
+## 服务端与配置
 
-**Icons**: Custom SVG icons live in `app/assets/icons/` and are available via the `custom:` prefix (e.g., `i-custom-<name>`).
+- 外部 API 地址通过运行时配置注入，代码中不要硬编码具体域名。
+- 服务端请求后端接口应优先使用 `server/utils/authFetch.ts` 等既有工具，以继承 session、凭据和错误处理逻辑。
+- `server/middleware/session.ts` 负责 session 读写；`server/utils/sessionStore.ts` 提供 session 存取封装。
+- 新增服务端接口时注意区分公开接口和需要登录的接口，不要绕过既有认证约定。
 
-**Docker**: Two-stage build — stage 1 builds the Nuxt `.output`, stage 2 runs it behind nginx (serves static files directly, proxies dynamic requests to Nuxt on `127.0.0.1:3000`).
+## UI 与样式约定
 
-### External Dependencies
+- 优先使用 Nuxt UI 组件和项目现有布局模式。
+- 不要无必要覆盖 Nuxt UI 内部样式。
+- Tailwind spacing 类可以使用项目尺度，例如 `w-44`、`gap-4`、`p-3`；避免随意写不可统一维护的固定像素类。
+- 页面应直接提供可用工具体验，不做不必要的营销式落地页。
+- 表格、画布、编辑器、游戏等固定结构 UI 要注意移动端可用性和内部滚动边界。
+- 图标优先使用已安装的 iconify/lucide 图标。
 
-The project depends on an external API (`api.ovooo.cc`) — configured via `NUXT_PUBLIC_API_ORIGIN` — for authentication, user profiles, and OAuth. Server API routes proxy these calls using `authFetch()` which attaches the user's session token.
+## 状态与持久化
+
+- Pinia store 使用组合式写法，需持久化时使用 `persist: true`。
+- 修改 store schema 时要考虑 IndexedDB 中已有用户数据的兼容性。
+- 收藏、访问记录等工具关联数据通过工具 `label` 和 `name` 修正；修改工具名时要确认迁移/修正逻辑仍能工作。
+
+## 依赖与共享类型
+
+- 优先复用项目已有依赖和工具函数，不要为小逻辑引入重复库。
+- 如果直接在源码中使用传递依赖，应把它加入 `package.json` 的显式依赖。
+- 涉及共享 DTO、用户、权限、枚举等模型时，优先从 `@zvonimirsun/iszy-common` 导入。
+- GIS 相关类型和工具优先复用现有 map-sdk、GeoJSON 工具模块和页面内 `children/` 逻辑。
+
+## 验证建议
+
+- 普通前端改动：优先跑 `pnpm lint` 和 `pnpm typecheck`。
+- 工具内部算法改动：补充或运行对应 `*.test.ts`。
+- UI 交互、布局、移动端体验相关改动：启动开发服务并用浏览器实际检查。
+- 依赖、路由、Nuxt 配置或服务端 API 改动：至少跑类型检查，并按风险补充开发服务验证。
+- 不要在用户未要求时为了验证而长时间保留后台 dev server；需要启动时，结束前确认是否应关闭。
+
+## Git 与改动范围
+
+- 本仓库可能有用户未提交改动，修改前先看 `git status`。
+- 不要回滚用户改动；如果无关，保持不动。
+- 大规模重命名时，先说明范围，并在验证中区分纯重命名和内容变更。
+- 避免无关格式化和批量整理，尤其不要因为小改动重排整个文件或更新无关 lockfile 元数据。
