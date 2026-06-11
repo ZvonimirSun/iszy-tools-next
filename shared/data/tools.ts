@@ -305,6 +305,11 @@ export const tools: OriginToolMenu[] = [
     label: '系统与运维',
     children: [
       {
+        label: 'CIDR计算器',
+        name: 'cidr-calculator',
+        description: '在线解析 IPv4/IPv6 CIDR 网段，计算网络地址、地址范围、掩码和地址数量等信息。',
+      },
+      {
         label: 'Linux命令查询',
         name: 'linux-command',
         description: '在线查询 Linux 命令说明、参数和使用示例，适合运维排查、脚本编写和命令行学习参考。',
