@@ -135,6 +135,11 @@ export const tools: OriginToolMenu[] = [
         description: '在线格式化、校验和整理 YAML 内容，适合配置文件、接口示例和结构化数据的快速查看与排错。',
       },
       {
+        label: 'JSON/YAML转换',
+        name: 'json-yaml',
+        description: '在线进行 JSON 与 YAML 双向转换，支持缩进设置、示例填充和结果复制，适合配置文件与接口数据转换。',
+      },
+      {
         label: 'TOML格式化',
         name: 'toml-formatter',
         description: '在线格式化、校验和整理 TOML 内容，适合配置文件、项目元数据和结构化数据的快速查看与排错。',
