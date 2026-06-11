@@ -190,6 +190,11 @@ export const tools: OriginToolMenu[] = [
         description: '在线查看、编辑、导入和导出 GeoJSON 数据，支持属性表、坐标系和 Shapefile 转换，适合 GIS 数据处理。',
       },
       {
+        label: 'WKT/GeoJSON转换',
+        name: 'wktGeoJson',
+        description: '在线进行 WKT 与 GeoJSON 几何数据互相转换，支持点、线、面和 GeometryCollection 等常见空间格式。',
+      },
+      {
         label: '经纬度查询',
         name: 'latLng',
         description: '在线查询地点经纬度、拾取地图坐标并进行地址解析，适合地图定位、坐标复制和地理信息核对。',
