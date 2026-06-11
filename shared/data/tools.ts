@@ -195,6 +195,11 @@ export const tools: OriginToolMenu[] = [
         description: '在线进行 WKT 与 GeoJSON 几何数据互相转换，支持点、线、面和 GeometryCollection 等常见空间格式。',
       },
       {
+        label: 'GeoJSON/TopoJSON转换',
+        name: 'topoJson',
+        description: '在线进行 GeoJSON 与 TopoJSON 数据互相转换，支持压缩拓扑结构和还原为标准 GeoJSON。',
+      },
+      {
         label: '经纬度查询',
         name: 'latLng',
         description: '在线查询地点经纬度、拾取地图坐标并进行地址解析，适合地图定位、坐标复制和地理信息核对。',
