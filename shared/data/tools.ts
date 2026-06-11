@@ -200,6 +200,11 @@ export const tools: OriginToolMenu[] = [
         description: '在线进行 GeoJSON 与 TopoJSON 数据互相转换，支持压缩拓扑结构和还原为标准 GeoJSON。',
       },
       {
+        label: 'BBox计算器',
+        name: 'bboxCalculator',
+        description: '在线根据 GeoJSON、WKT、TopoJSON 或 GeoJSONL 计算边界范围，输出 bbox、中心点、宽高和范围面。',
+      },
+      {
         label: '经纬度查询',
         name: 'latLng',
         description: '在线查询地点经纬度、拾取地图坐标并进行地址解析，适合地图定位、坐标复制和地理信息核对。',
