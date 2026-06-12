@@ -19,5 +19,6 @@ export interface MockData {
   response: string
   projectId: string
   createdAt?: string
+  updatedAt?: string
   url?: string
 }

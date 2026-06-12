@@ -3,11 +3,14 @@ import type { TableColumn } from '@nuxt/ui'
 import type { MockData } from './mock'
 import { createData, deleteData, editData, getNewMockData, mockData, selectedProject, setProject } from './mockData.service'
 
+type TableSortingState = Array<{ id: string, desc: boolean }>
+
 const toast = useToast()
 const { copy } = useCopy({ text: '复制成功' })
 
 const { apiOrigin } = usePublicConfig()
 const showDataDialog = ref(false)
+const sorting = ref<TableSortingState>([{ id: 'updatedAt', desc: true }])
 const dataForm: MockData & { response: any } = reactive(getNewMockData())
 
 const columns: TableColumn<MockData>[] = [
@@ -37,14 +40,15 @@ const columns: TableColumn<MockData>[] = [
     size: 300,
   },
   {
-    accessorKey: 'createdAt',
-    header: '创建时间',
+    accessorKey: 'updatedAt',
+    header: '更新时间',
     size: 200,
   },
   {
     id: 'operations',
     header: '操作',
     enableHiding: false,
+    enableSorting: false,
     size: 200,
   },
 ]
@@ -68,6 +72,27 @@ async function handleDeleteData(data: MockData, close?: () => void) {
   if (status) {
     close?.()
   }
+}
+
+function formatDateTime(value?: string) {
+  if (!value) {
+    return '-'
+  }
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) {
+    return value
+  }
+
+  return new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).format(date)
 }
 
 function openCreateDataDialog() {
@@ -170,9 +195,11 @@ async function createOrEditData(data: MockData & { response: any }) {
     </div>
 
     <UTable
+      v-model:sorting="sorting"
       :data="mockData"
       :columns="columns"
       :column-pinning="{ right: ['operations'] }"
+      :sorting-options="{ enableMultiSort: false }"
       sticky
       class="flex-1 h-full w-full bg-elevated/50 rounded-lg shadow border border-muted"
     >
@@ -186,6 +213,9 @@ async function createOrEditData(data: MockData & { response: any }) {
       </template>
       <template #path-cell="{ row }">
         <CopyableText :val="row.original.path" />
+      </template>
+      <template #updatedAt-cell="{ row }">
+        <span class="font-mono text-sm">{{ formatDateTime(row.original.updatedAt) }}</span>
       </template>
       <template #operations-cell="{ row }">
         <div class="flex items-center gap-2">
