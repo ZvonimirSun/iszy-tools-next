@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
 import type { MockData } from './mock'
+import { h, resolveComponent } from 'vue'
 import { createData, deleteData, editData, getNewMockData, mockData, selectedProject, setProject } from './mockData.service'
 
 type TableSortingState = Array<{ id: string, desc: boolean }>
+type SortableColumn = Parameters<NonNullable<TableColumn<MockData>['header']>>[0]['column']
 
 const toast = useToast()
 const { copy } = useCopy({ text: '复制成功' })
+const UButton = resolveComponent('UButton')
 
 const { apiOrigin } = usePublicConfig()
 const showDataDialog = ref(false)
@@ -16,32 +19,32 @@ const dataForm: MockData & { response: any } = reactive(getNewMockData())
 const columns: TableColumn<MockData>[] = [
   {
     accessorKey: 'name',
-    header: '名称',
+    header: ({ column }) => renderSortableHeader(column, '名称'),
     size: 300,
   },
   {
     accessorKey: 'type',
-    header: 'Type',
+    header: ({ column }) => renderSortableHeader(column, 'Type'),
     size: 100,
   },
   {
     accessorKey: 'enabled',
-    header: '请求状态',
+    header: ({ column }) => renderSortableHeader(column, '请求状态'),
     size: 100,
   },
   {
     accessorKey: 'path',
-    header: '接口地址',
+    header: ({ column }) => renderSortableHeader(column, '接口地址'),
     size: 300,
   },
   {
     accessorKey: 'description',
-    header: '接口描述',
+    header: ({ column }) => renderSortableHeader(column, '接口描述'),
     size: 300,
   },
   {
     accessorKey: 'updatedAt',
-    header: '更新时间',
+    header: ({ column }) => renderSortableHeader(column, '更新时间'),
     size: 200,
   },
   {
@@ -66,6 +69,24 @@ const contentTypeOptions = [
   { label: 'XML', value: 'text/xml' },
   { label: 'HTML', value: 'text/html' },
 ]
+
+function renderSortableHeader(column: SortableColumn, label: string) {
+  const sorted = column.getIsSorted()
+
+  return h(UButton, {
+    color: 'neutral',
+    variant: 'ghost',
+    size: 'sm',
+    label,
+    icon: sorted
+      ? sorted === 'asc'
+        ? 'i-lucide:arrow-up-narrow-wide'
+        : 'i-lucide:arrow-down-wide-narrow'
+      : 'i-lucide:arrow-up-down',
+    class: '-mx-2.5',
+    onClick: () => column.toggleSorting(sorted === 'asc'),
+  })
+}
 
 async function handleDeleteData(data: MockData, close?: () => void) {
   const status = await deleteData(data)
