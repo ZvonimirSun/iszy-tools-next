@@ -41,7 +41,7 @@ export const useToolsStore = defineStore('tools', () => {
         return {
           ...item,
           children: item.children.filter((child: ToolItem) => {
-            return child.label.toLowerCase().includes(tmp) || child.name.toLowerCase().includes(tmp) || (child.tags || []).some(tag => tag.toLowerCase().includes(tmp))
+            return getToolSearchText(child).includes(tmp)
           }),
         }
       }).filter((item: ToolMenu) => {
@@ -168,4 +168,15 @@ export const useToolsStore = defineStore('tools', () => {
 
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useToolsStore, import.meta.hot))
+}
+
+function getToolSearchText(tool: ToolItem) {
+  return [
+    tool.label,
+    tool.name,
+    tool.description,
+    ...(tool.tags || []),
+    ...(tool.aliases || []),
+    ...(tool.keywords || []),
+  ].filter(Boolean).join(' ').toLowerCase()
 }

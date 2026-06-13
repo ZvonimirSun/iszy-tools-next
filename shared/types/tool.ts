@@ -11,7 +11,10 @@ export interface OriginToolMenu {
 interface ToolMeta {
   description?: string
   tags?: string[]
+  aliases?: string[]
+  keywords?: string[]
   requiresAuth?: boolean
+  requiresNetwork?: boolean
   online?: boolean
 
   noAccess?: boolean

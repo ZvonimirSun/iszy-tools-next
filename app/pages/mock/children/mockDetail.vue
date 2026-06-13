@@ -5,7 +5,8 @@ import { h, resolveComponent } from 'vue'
 import { createData, deleteData, editData, getNewMockData, mockData, selectedProject, setProject } from './mockData.service'
 
 type TableSortingState = Array<{ id: string, desc: boolean }>
-type SortableColumn = Parameters<NonNullable<TableColumn<MockData>['header']>>[0]['column']
+type TableHeaderRenderer = Extract<TableColumn<MockData>['header'], (...args: any) => any>
+type SortableColumn = Parameters<TableHeaderRenderer>[0]['column']
 
 const toast = useToast()
 const { copy } = useCopy({ text: '复制成功' })
