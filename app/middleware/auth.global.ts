@@ -18,6 +18,15 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
 
   const toolsStore = useToolsStore()
   const currentTool = getCurrentTool(toolsStore, to)
+  if (import.meta.client && currentTool?.requiresNetwork && !navigator.onLine) {
+    return navigateTo({
+      path: '/offline',
+      query: {
+        redirect: to.fullPath,
+      },
+    })
+  }
+
   if (!currentTool || !currentTool.noAccess) {
     return
   }
