@@ -36,17 +36,21 @@ export const useToolsStore = defineStore('tools', () => {
 
   const toolMenusFilter = computed(() => {
     return (keyword: string): ToolMenu[] => {
-      const tmp = keyword.trim().toLowerCase()
+      const keywords = normalizeSearchKeywords(keyword)
       return toolMenus.value.map((item: ToolMenu) => {
         return {
           ...item,
-          children: item.children.filter((child: ToolItem) => {
-            return getToolSearchText(child).includes(tmp)
-          }),
+          children: filterToolsBySearchKeywords(item.children, keywords),
         }
       }).filter((item: ToolMenu) => {
         return item.children.length
       })
+    }
+  })
+
+  const toolsFilter = computed(() => {
+    return (tools: ToolItem[], keyword: string): ToolItem[] => {
+      return filterToolsBySearchKeywords(tools, normalizeSearchKeywords(keyword))
     }
   })
 
@@ -153,6 +157,7 @@ export const useToolsStore = defineStore('tools', () => {
     toolItemsMap,
     toolMenus,
     toolMenusFilter,
+    toolsFilter,
     isFav,
     recent,
     most,
@@ -170,8 +175,24 @@ if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useToolsStore, import.meta.hot))
 }
 
-function getToolSearchText(tool: ToolItem) {
-  return [
+function normalizeSearchKeywords(keyword: string) {
+  return keyword
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean)
+}
+
+function filterToolsBySearchKeywords(tools: ToolItem[], keywords: string[]) {
+  if (!keywords.length) {
+    return tools
+  }
+
+  return tools.filter(tool => matchAllSearchKeywords(tool, keywords))
+}
+
+function matchAllSearchKeywords(tool: ToolItem, keywords: string[]) {
+  const searchText = [
     tool.label,
     tool.name,
     tool.description,
@@ -179,4 +200,6 @@ function getToolSearchText(tool: ToolItem) {
     ...(tool.aliases || []),
     ...(tool.keywords || []),
   ].filter(Boolean).join(' ').toLowerCase()
+
+  return keywords.every(keyword => searchText.includes(keyword))
 }

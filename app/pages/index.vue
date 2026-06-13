@@ -56,13 +56,10 @@ const userToolMenus = computed<UserToolMenu[]>(() => {
       })
     }
   }
-  const keyword = searchStr.value.trim().toLowerCase()
   return tmp.map((item) => {
     return {
       ...item,
-      children: item.children.filter((child) => {
-        return child.label.toLowerCase().includes(keyword) || child.name.toLowerCase().includes(keyword)
-      }),
+      children: toolsStore.toolsFilter(item.children, searchStr.value),
     }
   }).filter((item) => {
     return item.children.length
