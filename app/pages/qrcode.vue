@@ -2,6 +2,8 @@
 import type { QrScanner as QrScannerInstance } from '~/libs/qr-scanner'
 import { renderSVG } from 'uqr'
 
+definePageMeta({ layout: 'bounded' })
+
 type Mode = 'encode' | 'decode'
 type DecodeSource = 'image' | 'camera'
 type EccLevel = 'L' | 'M' | 'Q' | 'H'

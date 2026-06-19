@@ -14,10 +14,6 @@ const redirectTarget = computed(() => {
   return redirect
 })
 
-definePageMeta({
-  layout: 'full',
-})
-
 useSeoMeta({
   title: () => seoTitle.value,
   ogTitle: () => seoTitle.value,

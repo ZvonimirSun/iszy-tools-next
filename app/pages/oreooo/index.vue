@@ -15,10 +15,6 @@ interface DrawItem {
   height: number
 }
 
-definePageMeta({
-  layout: 'full',
-})
-
 const output = ref(false)
 const loading = ref(true)
 const oreoArr = ref<OreoLayer[]>([])

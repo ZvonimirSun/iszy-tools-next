@@ -1,4 +1,6 @@
 <script setup lang="ts">
+definePageMeta({ layout: 'bounded' })
+
 const targetUrl = ref('')
 const sourceHtml = ref('')
 const highlightedHtml = ref('')

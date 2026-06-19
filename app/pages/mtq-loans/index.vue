@@ -3,6 +3,8 @@ import type { TableColumn } from '@nuxt/ui'
 import type { ScheduleRow } from './children/mtqLoans.types'
 import { useMtqLoans } from './children/useMtqLoans'
 
+definePageMeta({ layout: 'bounded' })
+
 const {
   data,
   repaymentPeriodItems,

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import yaml from '~/components/editor/lang-yaml'
 
+definePageMeta({ layout: 'bounded' })
+
 const value = ref('a:\n - b: 1\n   c: true\n - b: 2\n   c: false\n')
 </script>
 

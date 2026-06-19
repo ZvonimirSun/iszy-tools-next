@@ -241,10 +241,6 @@ onBeforeUnmount(() => {
   stopTimer()
   window.removeEventListener('keydown', handleKeydown)
 })
-
-definePageMeta({
-  layout: 'full',
-})
 </script>
 
 <template>

@@ -10,10 +10,6 @@ import type {
 import dayjs from 'dayjs'
 import { createShortUrl, deleteShortUrl, fetchShortUrls, updateShortUrl } from './children/urls.service'
 
-definePageMeta({
-  layout: 'full',
-})
-
 const toast = useToast()
 const { copy } = useCopy()
 const { apiOrigin, shortUrlOrigin } = usePublicConfig()

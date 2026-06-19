@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { downloadBlob } from '~/utils/common'
 
-definePageMeta({
-  layout: 'full',
-})
-
 const toast = useToast()
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)

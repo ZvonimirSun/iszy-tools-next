@@ -5,10 +5,6 @@ import { RoleEnum } from '@zvonimirsun/iszy-common'
 import AiChatSettings from './children/AiChatSettings.vue'
 import JsonEditorSettings from './children/JsonEditorSettings.vue'
 
-definePageMeta({
-  layout: 'full',
-})
-
 const { title, adminOrigin, features: { publicRegister } } = usePublicConfig()
 const seoTitle = computed(() => `个人设置 - ${title}`)
 const seoDescription = '管理个人偏好、首页展示、第三方登录绑定、应用配置和登录设备。'

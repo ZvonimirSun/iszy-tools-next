@@ -2,6 +2,8 @@
 import type { AlgoNames } from './children/hashFile.service'
 import { useHashFile } from './children/useHashFile'
 
+definePageMeta({ layout: 'bounded' })
+
 const { copy, copied } = useClipboard()
 const { post, cancel, terminate, data, error, isCalculating, progress, isCanceled } = useHashFile()
 

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import Nzh from 'nzh'
 
+definePageMeta({ layout: 'bounded' })
+
 const num = ref('')
 
 const s = computed({

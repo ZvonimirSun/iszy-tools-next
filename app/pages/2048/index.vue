@@ -2,10 +2,6 @@
 import type { GameRefs, GameState, GameUiState, GameView } from './children/2048.types'
 import GameManager from './children/ts/GameManager'
 
-definePageMeta({
-  layout: 'full',
-})
-
 const gameStore = use2048Store()
 const settingsStore = useSettingsStore()
 const state = shallowRef<GameUiState | null>(null)

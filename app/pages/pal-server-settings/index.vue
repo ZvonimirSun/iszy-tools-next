@@ -3,6 +3,8 @@ import type { SettingObject } from './children/palServerSettings.types'
 import { downloadBlob } from '~/utils/common'
 import { getEmptySettings, iniToSettings, settingsToIni } from './children/palServerSettings.service'
 
+definePageMeta({ layout: 'bounded' })
+
 const toast = useToast()
 const { copy } = useCopy()
 

@@ -5,8 +5,6 @@ import ImgHostingList from './children/imgHostingList.vue'
 import ImgHostingSettings from './children/imgHostingSettings.vue'
 import ImgHostingUpload from './children/imgHostingUpload.vue'
 
-definePageMeta({ layout: 'full' })
-
 const store = useImgHostingStore()
 const toast = useToast()
 

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+definePageMeta({ layout: 'bounded' })
+
 const formInfo = reactive<{
   ppi: string
   pixelSize: string

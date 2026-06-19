@@ -22,6 +22,8 @@ import {
   stopStream,
 } from './children/screenRecord.stream'
 
+definePageMeta({ layout: 'bounded' })
+
 const text = {
   unsupported: '当前浏览器不支持屏幕录制，请使用较新的 Chromium 浏览器重试。',
   previewResult: '当前显示为录制结果预览，可清除或下载。',

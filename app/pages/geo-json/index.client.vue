@@ -12,7 +12,7 @@ import { useGeoJsonData } from './children/useGeoJsonData'
 import { canShowGeoJsonPropertyTable, useGeoJsonProperties } from './children/useGeoJsonProperties'
 import 'leaflet/dist/leaflet.css'
 
-definePageMeta({ layout: 'wide' })
+definePageMeta({ layout: 'bounded-wide' })
 
 type TabValue = 'json' | 'properties'
 

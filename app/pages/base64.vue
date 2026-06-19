@@ -1,6 +1,8 @@
 <script setup lang="ts">
 type Mode = 'encode' | 'decode'
 
+definePageMeta({ layout: 'bounded' })
+
 const BASE64_PLUS_REGEX = /\+/g
 const BASE64_SLASH_REGEX = /\//g
 const BASE64_PADDING_REGEX = /=+$/g

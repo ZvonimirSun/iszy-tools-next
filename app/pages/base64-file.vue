@@ -1,6 +1,8 @@
 <script setup lang="ts">
 type Mode = 'encode' | 'decode'
 
+definePageMeta({ layout: 'bounded' })
+
 const DEFAULT_DECODE_BASE_NAME = 'decoded_file'
 const DEFAULT_DECODE_FILE_NAME = 'decoded_file.bin'
 const DATA_URL_PREFIX = 'data:'

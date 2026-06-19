@@ -10,6 +10,8 @@ useSeoMeta({
   ogDescription: seoDescription,
   robots: 'noindex,nofollow',
 })
+
+definePageMeta({ layout: 'bounded' })
 </script>
 
 <template>

@@ -2,6 +2,8 @@
 import type { DiffRow } from './children/textDiff.service'
 import { createGitDiff, diffText } from './children/textDiff.service'
 
+definePageMeta({ layout: 'bounded' })
+
 const leftText = ref('')
 const rightText = ref('')
 const ignoreWhitespace = ref(false)

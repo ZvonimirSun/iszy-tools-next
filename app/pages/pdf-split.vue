@@ -1,4 +1,6 @@
 <script setup lang="ts">
+definePageMeta({ layout: 'bounded' })
+
 const PDF_REGEX = /\.pdf$/i
 
 // PDF 文件状态

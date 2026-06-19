@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import js from '~/components/editor/lang-js'
 
+definePageMeta({ layout: 'bounded' })
+
 const value = ref('function a(){const b=1;if(b){return c=>c+b}}')
 </script>
 

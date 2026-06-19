@@ -2,7 +2,7 @@
 import { recordContentToEditorValue, valueToStoreValue } from './children/jsonEditor.utils'
 import JsonEditorPane from './children/JsonEditorPane.vue'
 
-definePageMeta({ layout: 'wide' })
+definePageMeta({ layout: 'bounded-wide' })
 
 type CollapsedSide = 'left' | 'right' | null
 

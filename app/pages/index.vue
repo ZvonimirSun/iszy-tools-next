@@ -75,10 +75,6 @@ const favoriteSortableItems = computed({
 
 const isSearching = computed(() => Boolean(searchStr.value.trim()))
 
-definePageMeta({
-  layout: 'full',
-})
-
 defineShortcuts({
   '/': () => {
     input.value?.inputRef?.focus()

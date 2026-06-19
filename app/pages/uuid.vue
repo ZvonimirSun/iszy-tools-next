@@ -1,10 +1,6 @@
 <script lang="ts" setup>
 import { NIL as NIL_UUID, v1 as uuidv1, v4 as uuidv4, v7 as uuidv7 } from 'uuid'
 
-definePageMeta({
-  layout: 'full',
-})
-
 const toast = useToast()
 
 const formState = ref({

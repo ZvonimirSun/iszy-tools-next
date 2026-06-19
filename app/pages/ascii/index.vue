@@ -3,6 +3,8 @@ import type { TableColumn } from '@nuxt/ui'
 import type { AsciiGroup, AsciiRow } from './children/ascii.data'
 import { asciiRows, asciiSearchIndex } from './children/ascii.data'
 
+definePageMeta({ layout: 'bounded' })
+
 type BaseFilter = 'all' | 'dec' | 'hex' | 'oct' | 'bin' | 'html'
 type GroupFilter = 'all' | AsciiGroup
 

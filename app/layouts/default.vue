@@ -1,5 +1,5 @@
 <template>
-  <UContainer class="h-[calc(100vh-var(--ui-header-height))] py-4 overflow-y-auto">
+  <UContainer class="py-4">
     <slot />
   </UContainer>
 </template>

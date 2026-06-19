@@ -4,7 +4,7 @@ import colors from './children/colors.json'
 import textureUrl from './children/texture.png'
 
 definePageMeta({
-  layout: 'wide',
+  layout: 'bounded-wide',
 })
 
 interface ChineseColor {
