@@ -118,6 +118,14 @@ export const tools: OriginToolMenu[] = [
         keywords: ['schema', '接口数据', '结构化数据'],
       },
       {
+        label: '文本差异对比',
+        name: 'text-diff',
+        description: '在线对比两段文本或本地文本文件差异，支持忽略空白、忽略大小写、行级和词级高亮，适合代码片段和文档比对。',
+        tags: ['文本', 'Diff', '对比'],
+        aliases: ['文本对比', 'diff', '差异比较'],
+        keywords: ['text diff', 'compare', 'difference'],
+      },
+      {
         label: 'Mock工具',
         name: 'mock',
         description: '在线创建和管理接口 Mock 项目，配置模拟接口路径与响应数据，适合前后端联调和测试场景构造。',
