@@ -4,12 +4,8 @@ import css from '~/components/editor/lang-css'
 
 <template>
   <FormatTransformer
-    class="w-full h-full overflow-auto"
+    class="h-full w-full overflow-auto"
     :plugin="css"
     target="CSS"
   />
 </template>
-
-<style scoped lang="scss">
-
-</style>

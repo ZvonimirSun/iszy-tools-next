@@ -27,7 +27,7 @@ const props = withDefaults(
   },
 )
 
-defineEmits<{
+const emits = defineEmits<{
   (e: 'format', data: string): void
 }>()
 
@@ -48,25 +48,81 @@ const { _inputLabel, _inputPlaceholder, _invalidMessage, _outputLabel } = props.
       _outputLabel: props.outputLabel,
     }
 const editor = useComponentRef(EditorMini)
+const fileInput = useTemplateRef<HTMLInputElement>('fileInput')
+const { copy } = useCopy()
 const state = reactive({
   input: inputDefault.value,
+  indent: Number(props.options.indent ?? 2),
 })
 const formatter = computed(() => resolvedPlugin.value?.formatter || identity<string>)
+const compactor = computed(() => resolvedPlugin.value?.compactor)
+const hasCompactor = computed(() => typeof compactor.value === 'function')
 const isValid = computed(() => resolvedPlugin.value?.isValid || (() => true))
 
 const valid = computed(() => isValid.value(state.input))
+const toolbarOptions = computed(() => ({
+  ...props.options,
+  indent: state.indent,
+}))
+const output = ref('')
 
-function syncOutput() {
+function updateOutput(value: string) {
+  output.value = value
+  editor.value?.setInput(value)
+}
+
+function formatInput() {
   if (valid.value) {
-    editor.value?.setInput(formatter.value(state.input, props.options))
+    const result = formatter.value(state.input, toolbarOptions.value)
+    updateOutput(result)
+    emits('format', result)
   }
   else {
-    editor.value?.setInput('')
+    updateOutput('')
   }
+}
+
+function compactInput() {
+  if (!compactor.value) {
+    return
+  }
+
+  if (valid.value) {
+    const result = compactor.value(state.input, toolbarOptions.value)
+    updateOutput(result)
+    emits('format', result)
+  }
+  else {
+    updateOutput('')
+  }
+}
+
+function copyOutput() {
+  if (output.value) {
+    copy(output.value)
+  }
+}
+
+function openFilePicker() {
+  fileInput.value?.click()
+}
+
+async function readFile(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ''
+
+  if (!file) {
+    return
+  }
+
+  state.input = await file.text()
+  updateOutput('')
 }
 
 watch(inputDefault, (val) => {
   state.input = val
+  updateOutput('')
 })
 watch(plugin, async (val) => {
   if (import.meta.server && val instanceof Promise) {
@@ -76,12 +132,11 @@ watch(plugin, async (val) => {
 }, {
   immediate: true,
 })
-watch([valid, () => props.options, state, resolvedPlugin], () => {
-  syncOutput()
-}, {
-  deep: true,
-  flush: 'post',
-  immediate: true,
+watch(() => props.options.indent, (val) => {
+  const nextIndent = Number(val)
+  if (Number.isFinite(nextIndent)) {
+    state.indent = nextIndent
+  }
 })
 
 function validate(): FormError[] {
@@ -98,31 +153,65 @@ function validate(): FormError[] {
 
 <template>
   <UForm
-    class="w-full flex gap-4"
+    class="flex w-full flex-col gap-3"
     :state="state"
     :validate="validate"
   >
-    <UFormField :label="_inputLabel" name="input" class="w-1/2">
-      <UTextarea
-        v-model="state.input"
-        class="w-full"
-        :placeholder="_inputPlaceholder"
-        :rows="20"
-      />
-    </UFormField>
-    <UFormField
-      :label="_outputLabel"
-      class="flex flex-col w-1/2"
-      :ui="{
-        container: 'flex-1 overflow-auto',
-      }"
-    >
-      <EditorMini
-        ref="editor"
-        :plugin="resolvedPlugin"
-        :readonly="true"
-        @ready="syncOutput"
-      />
-    </UFormField>
+    <div class="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-muted bg-muted/30 p-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <UButton icon="i-lucide:file-up" color="neutral" variant="soft" @click="openFilePicker">
+          选择文件
+        </UButton>
+        <UButton icon="i-lucide:wand-sparkles" color="primary" @click="formatInput">
+          格式化
+        </UButton>
+        <UButton v-if="hasCompactor" icon="i-lucide:minimize-2" color="neutral" variant="outline" @click="compactInput">
+          压缩
+        </UButton>
+        <UButton icon="i-lucide:copy" color="neutral" variant="outline" :disabled="!output" @click="copyOutput">
+          复制
+        </UButton>
+      </div>
+      <div class="flex items-center gap-2">
+        <UInputNumber
+          v-model="state.indent"
+          class="w-24"
+          :min="0"
+          :max="10"
+          :step="1"
+        />
+        <span class="text-sm text-muted">空格</span>
+      </div>
+      <input
+        ref="fileInput"
+        type="file"
+        class="hidden"
+        @change="readFile"
+      >
+    </div>
+
+    <div class="grid min-h-0 flex-1 gap-4 lg:grid-cols-2">
+      <UFormField :label="_inputLabel" name="input" class="flex min-w-0 flex-col">
+        <UTextarea
+          v-model="state.input"
+          class="w-full flex-1 font-mono"
+          :placeholder="_inputPlaceholder"
+          :rows="20"
+        />
+      </UFormField>
+      <UFormField
+        :label="_outputLabel"
+        class="flex min-w-0 flex-col"
+        :ui="{
+          container: 'flex-1 overflow-auto',
+        }"
+      >
+        <EditorMini
+          ref="editor"
+          :plugin="resolvedPlugin"
+          :readonly="true"
+        />
+      </UFormField>
+    </div>
   </UForm>
 </template>

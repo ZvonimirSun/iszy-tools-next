@@ -7,5 +7,5 @@ export interface EditorPlugin {
   miniExtensions?: Extension[]
   isValid?: (v: string) => boolean
   formatter?: (v: string, options?: Record<string, any>) => string
-  compactor?: (v: string) => string
+  compactor?: (v: string, options?: Record<string, any>) => string
 }

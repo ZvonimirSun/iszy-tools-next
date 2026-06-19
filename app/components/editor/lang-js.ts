@@ -33,8 +33,16 @@ export function formatter(value: string, { indent = 2 } = {}) {
   })
 }
 
+export function compactor(value: string) {
+  return value
+    .replace(/\s+/g, ' ')
+    .replace(/\s*([{}()[\],:;=+\-*/<>?&|])\s*/g, '$1')
+    .trim()
+}
+
 const plugin: EditorPlugin = {
   formatter,
+  compactor,
   miniExtensions: [
     javascript(),
   ],

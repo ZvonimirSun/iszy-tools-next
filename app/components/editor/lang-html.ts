@@ -10,6 +10,9 @@ export function formatter(value: string, { indent = 2 } = {}) {
 
 export function compactor(value: string) {
   return value
+    .replace(/>\s+</g, '><')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
 }
 
 const plugin: EditorPlugin = {
