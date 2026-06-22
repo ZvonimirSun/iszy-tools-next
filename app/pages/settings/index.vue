@@ -382,7 +382,7 @@ async function removeDevice(options: {
                 </template>
 
                 <template #ip-cell="{ row }">
-                  <span class="block max-w-56 truncate font-mono" :title="row.original.ip || '未知'">{{ row.original.ip || '未知' }}</span>
+                  <span class="font-mono" :title="row.original.ip || '未知'">{{ row.original.ip || '未知' }}</span>
                 </template>
 
                 <template #operations-cell="{ row }">
