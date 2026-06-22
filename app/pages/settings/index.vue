@@ -178,14 +178,14 @@ const deviceColumns: TableColumn<DeviceRow>[] = [
   },
   {
     accessorKey: 'ip',
-    header: '登录 IP',
+    header: '登录网段',
     meta: {
       class: {
         th: 'text-center',
         td: 'text-center',
       },
     },
-    size: 160,
+    size: 240,
   },
   {
     id: 'operations',
@@ -382,7 +382,7 @@ async function removeDevice(options: {
                 </template>
 
                 <template #ip-cell="{ row }">
-                  <span class="font-mono">{{ row.original.ip || '未知' }}</span>
+                  <span class="block max-w-56 truncate font-mono" :title="row.original.ip || '未知'">{{ row.original.ip || '未知' }}</span>
                 </template>
 
                 <template #operations-cell="{ row }">

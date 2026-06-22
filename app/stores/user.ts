@@ -197,13 +197,8 @@ export const useUserStore = defineStore('user', () => {
       createTime?: string
       lastLoginTime?: string
     }) => {
-      const ip = device.ip
-      if (!ip) {
+      if (!device.ip) {
         device.ip = '未知'
-      }
-      else {
-        const tmp = ip.split('.')
-        device.ip = `${tmp[0]}.${tmp[1]}.${tmp[2]}.***`
       }
       device.createTime = dayjs(device.createdAt!).format('YYYY年MM月DD日 HH:mm')
       device.lastLoginTime = dayjs(device.updatedAt!).format('YYYY年MM月DD日 HH:mm')
