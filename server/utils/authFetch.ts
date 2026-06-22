@@ -138,7 +138,7 @@ async function _refreshWithLock(sessionId: string, fn: () => Promise<SessionData
 function _getForwardRequestHeaders(event: H3Event) {
   const headers = getProxyRequestHeaders(event, { host: false })
   const remoteAddr = getRequestIP(event, { xForwardedFor: true })!
-  const xForwardedFor = headers['x-forwarded-for'] ? `${headers['x-forwarded-for']},${remoteAddr}` : remoteAddr
+  const xForwardedFor = headers['x-forwarded-for'] || remoteAddr
 
   delete headers.cookie
   delete headers.authorization
