@@ -105,7 +105,7 @@ describe('createDefaultConfig', () => {
     const config = createDefaultConfig('aliyun')
     expect(config.type).toBe('aliyun')
     expect(config.id).toBeTruthy()
-    expect(config.name).toBe('')
+    expect(config.name).toBe('阿里云 OSS')
     expect(config.config).toEqual({})
   })
 
@@ -113,5 +113,7 @@ describe('createDefaultConfig', () => {
     const config = createDefaultConfig('s3')
     expect(config.type).toBe('s3')
     expect(config.id).toBeTruthy()
+    expect(config.name).toBe('Amazon S3 / 兼容S3')
+    expect(config.config).toEqual({})
   })
 })
