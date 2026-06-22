@@ -1,5 +1,5 @@
 import type { PublicUser, ResultDto } from '@zvonimirsun/iszy-common'
-import type { H3Event, HTTPHeaderName } from 'h3'
+import type { H3Event } from 'h3'
 import type { NitroFetchRequest, TypedInternalResponse } from 'nitropack'
 import type { FetchError } from 'ofetch'
 import type { SessionData } from '#server/types/session'
@@ -12,8 +12,7 @@ export async function proxyFetch(event: H3Event) {
   const { apiOrigin } = usePublicConfig()
   const target = apiOrigin + event.path.slice(4)
 
-  const headers = getProxyRequestHeaders(event, { host: false })
-  delete headers.cookie
+  const headers = _getForwardRequestHeaders(event)
   // 禁用后端压缩
   headers['accept-encoding'] = 'identity'
 
@@ -58,7 +57,7 @@ export async function authFetch<T = unknown>(event: H3Event, ...params: Paramete
   const { apiOrigin } = usePublicConfig()
   const [url, opts = {}] = params
   const headers: any = {
-    ..._getDeviceInfoHeader(event),
+    ..._getForwardRequestHeaders(event),
     ...opts.headers,
   }
   opts.headers = headers
@@ -104,7 +103,7 @@ async function _refreshToken(event: H3Event): Promise<SessionData> {
   }>>(`${apiOrigin}/auth/refresh`, {
     method: 'POST',
     headers: {
-      ..._getDeviceInfoHeader(event),
+      ..._getForwardRequestHeaders(event),
       Authorization: `Bearer ${sessionData.refresh_token}`,
     },
   })
@@ -136,23 +135,16 @@ async function _refreshWithLock(sessionId: string, fn: () => Promise<SessionData
   return p
 }
 
-function _getDeviceInfoHeader(event: H3Event) {
-  const originalHeader = getRequestHeaders(event)
+function _getForwardRequestHeaders(event: H3Event) {
+  const headers = getProxyRequestHeaders(event, { host: false })
   const remoteAddr = getRequestIP(event, { xForwardedFor: true })!
-  const xForwardedFor = originalHeader['x-forwarded-for'] ? `${originalHeader['x-forwarded-for']},${remoteAddr}` : remoteAddr
-  const ua = originalHeader['user-agent']
-  // const referer = originalHeader.referer
+  const xForwardedFor = headers['x-forwarded-for'] ? `${headers['x-forwarded-for']},${remoteAddr}` : remoteAddr
 
-  const headers: Partial<Record<HTTPHeaderName, string>> = {
-    'x-forwarded-for': xForwardedFor,
-    'x-real-ip': remoteAddr,
-  }
-  if (ua) {
-    headers['user-agent'] = ua
-  }
-  // if (referer) {
-  //   headers['x-forwarded-for'] = referer
-  // }
+  delete headers.cookie
+  delete headers.authorization
+
+  headers['x-forwarded-for'] = xForwardedFor
+  headers['x-real-ip'] = remoteAddr
 
   return headers
 }
