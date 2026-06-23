@@ -16,7 +16,7 @@ const settingsPath = computed(() => {
     }"
   >
     <template #left>
-      <div class="flex gap-1.5 items-center whitespace-nowrap overflow-hidden">
+      <h1 class="m-0 flex gap-1.5 items-center whitespace-nowrap overflow-hidden p-0 text-base font-normal leading-normal">
         <UAvatar v-if="logo" :src="logo" size="md" />
         <ULink
           to="/"
@@ -28,7 +28,7 @@ const settingsPath = computed(() => {
           <span>-</span>
           <span class="text-default overflow-hidden text-ellipsis">{{ tool.label }}</span>
         </template>
-      </div>
+      </h1>
     </template>
     <template #right>
       <ColorModeButtonExtend />

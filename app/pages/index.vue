@@ -75,6 +75,10 @@ const favoriteSortableItems = computed({
 
 const isSearching = computed(() => Boolean(searchStr.value.trim()))
 
+function getMenuHash(label: string) {
+  return `menu-${label}`
+}
+
 defineShortcuts({
   '/': () => {
     input.value?.inputRef?.focus()
@@ -112,9 +116,17 @@ onMounted(() => {
           :key="`user${index}`"
           class="flex flex-col gap-4"
         >
-          <div class="text-muted">
+          <NuxtLink
+            :id="getMenuHash(item.label)"
+            :to="`#${getMenuHash(item.label)}`"
+            class="group col-span-full scroll-mt-20 text-muted transition-colors hover:text-highlighted"
+          >
             {{ item.label }}
-          </div>
+            <UIcon
+              name="i-lucide:hash"
+              class="ml-1 inline-block size-3.5 align-[-2px] opacity-0 transition-opacity group-hover:opacity-60 group-focus-visible:opacity-60"
+            />
+          </NuxtLink>
           <draggable
             v-if="item.kind === 'favorite' && !isSearching"
             v-model="favoriteSortableItems"
@@ -251,9 +263,17 @@ onMounted(() => {
           :key="index"
           class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
         >
-          <div class="col-span-full text-muted">
+          <NuxtLink
+            :id="getMenuHash(item.label)"
+            :to="`#${getMenuHash(item.label)}`"
+            class="group col-span-full scroll-mt-20 text-muted transition-colors hover:text-highlighted"
+          >
             {{ item.label }}
-          </div>
+            <UIcon
+              name="i-lucide:hash"
+              class="ml-1 inline-block size-3.5 align-[-2px] opacity-0 transition-opacity group-hover:opacity-60 group-focus-visible:opacity-60"
+            />
+          </NuxtLink>
           <UTooltip
             v-for="(tool) in item.children"
             :key="tool.name"
