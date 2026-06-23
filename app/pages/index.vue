@@ -279,6 +279,10 @@ onMounted(() => {
             :key="tool.name"
             :text="tool.description"
             :delay-duration="500"
+            :ui="{
+              content: 'h-auto min-h-6 max-w-72 items-start py-2',
+              text: 'overflow-visible whitespace-normal text-clip break-words text-left leading-5',
+            }"
           >
             <UPageCard
               class="group relative bg-elevated border border-inverted hover:border-primary text-base"
