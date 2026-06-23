@@ -9,6 +9,7 @@ export interface OriginToolMenu {
 }
 
 interface ToolMeta {
+  icon?: string
   description?: string
   tags?: string[]
   aliases?: string[]

@@ -7,6 +7,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'GeoJSON工具',
         name: 'geo-json',
+        icon: 'i-lucide:map',
         description: '在线查看、编辑、导入和导出 GeoJSON 数据，支持属性表、坐标系和 Shapefile 转换，适合 GIS 数据处理。',
         tags: ['GIS', '地图', 'GeoJSON', 'Shapefile'],
         aliases: ['geojson', '矢量数据', '空间数据'],
@@ -16,6 +17,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'WKT/GeoJSON转换',
         name: 'wkt-geo-json',
+        icon: 'i-lucide:route',
         description: '在线进行 WKT 与 GeoJSON 几何数据互相转换，支持点、线、面和 GeometryCollection 等常见空间格式。',
         tags: ['GIS', 'WKT', 'GeoJSON', '格式转换'],
         aliases: ['wkt转geojson', 'geojson转wkt'],
@@ -24,6 +26,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'GeoJSON/TopoJSON转换',
         name: 'topo-json',
+        icon: 'i-lucide:git-merge',
         description: '在线进行 GeoJSON 与 TopoJSON 数据互相转换，支持压缩拓扑结构和还原为标准 GeoJSON。',
         tags: ['GIS', 'GeoJSON', 'TopoJSON', '格式转换'],
         aliases: ['topojson', '拓扑数据'],
@@ -32,6 +35,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'BBox计算器',
         name: 'bbox-calculator',
+        icon: 'i-lucide:scan',
         description: '在线根据 GeoJSON、WKT、TopoJSON 或 GeoJSONL 计算边界范围，输出 bbox、中心点、宽高和范围面。',
         tags: ['GIS', 'BBox', 'GeoJSON', 'WKT'],
         aliases: ['边界范围', '包围盒', 'extent'],
@@ -40,6 +44,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '坐标转换',
         name: 'coordinate-transform',
+        icon: 'i-lucide:move-3d',
         description: '在线在 GCJ-02、BD-09、EPSG 坐标系以及自定义 proj4/WKT 坐标系之间转换坐标，支持多行批量处理。',
         tags: ['GIS', '坐标', 'EPSG', '投影'],
         aliases: ['经纬度转换', '坐标系转换', '火星坐标', '百度坐标'],
@@ -48,6 +53,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '经纬度查询',
         name: 'lat-lng',
+        icon: 'i-lucide:map-pin',
         description: '在线查询地点经纬度、拾取地图坐标并进行地址解析，适合地图定位、坐标复制和地理信息核对。',
         tags: ['GIS', '地图', '经纬度', '地址'],
         aliases: ['坐标拾取', '经纬度拾取', '地址解析'],
@@ -57,6 +63,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'GeoHash编解码',
         name: 'geohash',
+        icon: 'i-lucide:binary',
         description: '在线进行经纬度与 GeoHash 编码互转，查看地理位置编码结果，适合地图开发、位置索引和空间数据调试。',
         tags: ['GIS', 'GeoHash', '经纬度'],
         aliases: ['geohash编码', 'geohash解码', '位置编码'],
@@ -65,6 +72,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '切片方案计算',
         name: 'lod-calculator',
+        icon: 'i-lucide:layers',
         description: '在线计算地图切片方案、比例尺、分辨率和层级参数，适合 WebGIS、瓦片服务和地图发布配置。',
         tags: ['GIS', '切片', '比例尺', '瓦片'],
         aliases: ['LOD计算', '地图切片', '瓦片层级'],
@@ -73,6 +81,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '行政区数据',
         name: 'https://datav.aliyun.com/tools/atlas/index.html',
+        icon: 'i-lucide:map-pinned',
         tags: ['GIS', '行政区', '地图'],
         aliases: ['行政区划', '边界数据', '区域数据'],
         keywords: ['datav', 'aliyun', 'china map'],
@@ -86,6 +95,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'AI 对话',
         name: 'ai-chat',
+        icon: 'i-lucide:bot',
         description: '在线配置 AI 模型并进行多轮对话，支持会话管理和模型切换，适合日常提问、文本处理和开发辅助。',
         tags: ['AI', '对话', '模型'],
         aliases: ['chatgpt', '聊天', '大模型'],
@@ -96,6 +106,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'RunJS',
         name: 'runjs',
+        icon: 'i-lucide:square-terminal',
         description: '在线编写、运行和调试 JavaScript 代码片段，支持控制台输出与 ESM 依赖配置，适合快速验证逻辑。',
         tags: ['JavaScript', '代码运行', '调试'],
         aliases: ['JS运行', '在线运行JS', '代码片段'],
@@ -104,6 +115,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'TinyEditor',
         name: 'tiny-editor',
+        icon: 'i-lucide:file-pen-line',
         description: '在线使用富文本编辑器编写和预览内容，适合快速测试排版、编辑 HTML 内容和整理文本片段。',
         tags: ['编辑器', '富文本', 'HTML'],
         aliases: ['富文本编辑器', 'HTML编辑器'],
@@ -112,6 +124,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'JSON编辑器',
         name: 'json-editor',
+        icon: 'i-lucide:braces',
         description: '在线查看、格式化、编辑和校验 JSON 数据，支持文档管理和结构化预览，适合接口调试与数据整理。',
         tags: ['JSON', '编辑器', '格式化'],
         aliases: ['json editor', 'JSON格式化', 'JSON校验'],
@@ -120,6 +133,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '文本差异对比',
         name: 'text-diff',
+        icon: 'i-lucide:git-compare-arrows',
         description: '在线对比两段文本或本地文本文件差异，支持忽略空白、忽略大小写、行级和词级高亮，适合代码片段和文档比对。',
         tags: ['文本', 'Diff', '对比'],
         aliases: ['文本对比', 'diff', '差异比较'],
@@ -128,6 +142,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'Mock工具',
         name: 'mock',
+        icon: 'i-lucide:server-cog',
         description: '在线创建和管理接口 Mock 项目，配置模拟接口路径与响应数据，适合前后端联调和测试场景构造。',
         tags: ['Mock', '接口', '联调'],
         aliases: ['接口Mock', '模拟接口', '假数据'],
@@ -138,6 +153,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '正则大全',
         name: 'any-rule',
+        icon: 'i-lucide:regex',
         description: '在线查询常用正则表达式并输入内容测试匹配结果，覆盖手机号、邮箱、身份证、URL 等常见校验规则。',
         tags: ['正则', '校验', '表达式'],
         aliases: ['正则表达式', '正则测试', 'any-rule'],
@@ -146,6 +162,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'Cron解析',
         name: 'cron-parser',
+        icon: 'i-lucide:calendar-clock',
         description: '在线解析 Cron 表达式，查看自然语言说明、字段含义和下一次执行时间，适合定时任务配置检查。',
         tags: ['Cron', '定时任务', '解析'],
         aliases: ['cron表达式', '定时表达式'],
@@ -154,6 +171,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '前端CDN搜索',
         name: 'cdn-query',
+        icon: 'i-lucide:package-search',
         description: '在线搜索前端 npm 包并查看 CDN 引用信息，支持包名与作者过滤，便于快速找到浏览器可用资源地址。',
         tags: ['CDN', 'npm', '前端'],
         aliases: ['npm搜索', 'CDN查询', '包搜索'],
@@ -163,6 +181,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '颜色转换器',
         name: 'color-transform',
+        icon: 'i-lucide:palette',
         description: '在线转换 HEX、RGB、HSL 等颜色格式，快速查看颜色值和互转结果，适合前端开发与设计调色。',
         tags: ['颜色', '前端', '格式转换'],
         aliases: ['颜色转换', 'HEX转换', 'RGB转换'],
@@ -171,6 +190,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '渐变色生成器',
         name: 'gradient-color',
+        icon: 'i-lucide:paintbrush',
         description: '在线生成和预览 CSS 渐变色，调整颜色与方向并复制样式代码，适合网页背景和界面配色。',
         tags: ['颜色', 'CSS', '渐变'],
         aliases: ['渐变生成', 'CSS渐变', 'linear-gradient'],
@@ -179,6 +199,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '中国色',
         name: 'chinese-color',
+        icon: 'i-lucide:swatch-book',
         description: '在线浏览中国传统颜色，查看颜色名称、拼音、HEX、RGB 和 CMYK 数值，适合设计配色与文化色彩参考。',
         tags: ['颜色', '中国色', '设计'],
         aliases: ['传统色', '国风配色', '颜色表'],
@@ -187,6 +208,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'CSS格式化',
         name: 'css-formatter',
+        icon: 'i-simple-icons:css3',
         description: '在线格式化、压缩和整理 CSS 代码，让样式表更易阅读、调试和发布，适合前端开发日常处理。',
         tags: ['CSS', '格式化', '压缩'],
         aliases: ['CSS美化', 'CSS压缩'],
@@ -195,6 +217,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'HTML格式化',
         name: 'html-formatter',
+        icon: 'i-simple-icons:html5',
         description: '在线格式化和整理 HTML 代码，帮助查看标签层级、调整缩进并快速处理页面片段。',
         tags: ['HTML', '格式化', '前端'],
         aliases: ['HTML美化', 'HTML整理'],
@@ -203,6 +226,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'JS格式化',
         name: 'js-formatter',
+        icon: 'i-simple-icons:javascript',
         description: '在线格式化和整理 JavaScript 代码，调整缩进与代码结构，适合脚本片段阅读和调试。',
         tags: ['JavaScript', '格式化', '前端'],
         aliases: ['JS格式化', 'JS美化', 'JavaScript美化'],
@@ -211,6 +235,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'XML格式化',
         name: 'xml-formatter',
+        icon: 'i-lucide:code-xml',
         description: '在线格式化、压缩和整理 XML 内容，帮助查看层级结构、排查格式问题并处理接口返回数据。',
         tags: ['XML', '格式化', '压缩'],
         aliases: ['XML美化', 'XML压缩'],
@@ -219,6 +244,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'YAML格式化',
         name: 'yaml-formatter',
+        icon: 'i-lucide:file-code-2',
         description: '在线格式化、校验和整理 YAML 内容，适合配置文件、接口示例和结构化数据的快速查看与排错。',
         tags: ['YAML', '格式化', '配置'],
         aliases: ['YAML美化', 'YAML校验', 'yml'],
@@ -227,6 +253,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'JSON/YAML转换',
         name: 'json-yaml',
+        icon: 'i-lucide:replace-all',
         description: '在线进行 JSON 与 YAML 双向转换，支持缩进设置、示例填充和结果复制，适合配置文件与接口数据转换。',
         tags: ['JSON', 'YAML', '格式转换'],
         aliases: ['json转yaml', 'yaml转json', 'yml转换'],
@@ -235,6 +262,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'TOML格式化',
         name: 'toml-formatter',
+        icon: 'i-lucide:file-cog',
         description: '在线格式化、校验和整理 TOML 内容，适合配置文件、项目元数据和结构化数据的快速查看与排错。',
         tags: ['TOML', '格式化', '配置'],
         aliases: ['TOML美化', 'TOML校验'],
@@ -243,6 +271,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '查看网页源码',
         name: 'view-source-code',
+        icon: 'i-lucide:file-search',
         description: '在线输入网址查看网页 HTML 源码内容，适合检查页面结构、调试采集规则和分析网页返回结果。',
         tags: ['HTML', '网页', '源码'],
         aliases: ['查看源码', '网页源码', 'source'],
@@ -252,6 +281,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'glTF模型浏览',
         name: '3d-view',
+        icon: 'i-lucide:box',
         description: '在线预览 glTF/GLB 三维模型，支持文件夹资源加载、轨道控制、动画播放、线框模式和模型统计信息查看。',
         tags: ['3D', '模型', 'glTF', 'Three.js'],
         aliases: ['GLB预览', '3D模型查看', '模型浏览器'],
@@ -260,6 +290,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '在线流程图',
         name: 'https://app.diagrams.net/',
+        icon: 'i-lucide:workflow',
         tags: ['流程图', '绘图', '外链'],
         aliases: ['draw.io', 'diagrams', '画流程图'],
         keywords: ['diagram', 'flowchart', 'drawio'],
@@ -268,6 +299,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '资源包',
         name: 'https://lib.demos.pub',
+        icon: 'i-lucide:archive',
         tags: ['资源', '外链', '下载'],
         aliases: ['资源库', '素材包'],
         keywords: ['library', 'assets'],
@@ -282,6 +314,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'Base64编解码',
         name: 'base64',
+        icon: 'i-lucide:square-code',
         description: '在线进行 Base64 文本编码和解码，支持 URL-safe Base64，适合接口调试、参数处理和文本转换。',
         tags: ['Base64', '编码', '解码'],
         aliases: ['base64编码', 'base64解码'],
@@ -290,6 +323,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'Base64转文件',
         name: 'base64-file',
+        icon: 'i-lucide:file-digit',
         description: '在线将文件编码为 Base64 字符串，也可把 Base64 内容还原为文件，适合接口传输和文件内容调试。',
         tags: ['Base64', '文件', '编码'],
         aliases: ['文件转base64', 'base64还原文件'],
@@ -298,6 +332,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'Base64图片编码',
         name: 'image-base64',
+        icon: 'i-lucide:image',
         description: '在线将图片转换为 Base64 或 Data URL，也可从 Base64 预览和还原图片，适合前端内联资源处理。',
         tags: ['Base64', '图片', 'Data URL'],
         aliases: ['图片转base64', 'base64转图片'],
@@ -306,6 +341,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'URL编解码',
         name: 'url-encode',
+        icon: 'i-lucide:link',
         description: '在线进行 URL 编码和解码，支持 encodeURIComponent 与 encodeURI，适合参数处理、链接调试和表单兼容转换。',
         tags: ['URL', '编码', '解码'],
         aliases: ['URL编码', 'URL解码', '网址编码'],
@@ -314,6 +350,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '二维码编解码',
         name: 'qrcode',
+        icon: 'i-lucide:qr-code',
         description: '在线生成二维码并识别二维码图片或摄像头画面，支持纠错等级、尺寸和边距设置，适合链接与文本分享。',
         tags: ['二维码', 'QR', '编码', '识别'],
         aliases: ['QR码', '二维码生成', '二维码识别'],
@@ -322,6 +359,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '在线JWT解密',
         name: 'jwt',
+        icon: 'i-lucide:key-round',
         description: '在线解析 JWT Token 的 Header、Payload 和签名结构，便于查看声明内容、排查认证问题和调试接口。',
         tags: ['JWT', 'Token', '认证'],
         aliases: ['JWT解析', 'JWT解码', 'token解析'],
@@ -330,6 +368,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'UUID生成器',
         name: 'uuid',
+        icon: 'i-lucide:fingerprint-pattern',
         description: '在线批量生成 UUID，支持 v1、v4、v7 和 NIL 格式，可选择是否保留连字符，适合开发测试和唯一标识生成。',
         tags: ['UUID', '生成器', 'ID'],
         aliases: ['UUID生成', '唯一ID', '随机ID'],
@@ -338,6 +377,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '文本HASH',
         name: 'hash-text',
+        icon: 'i-lucide:text-cursor-input',
         description: '在线计算文本内容的哈希摘要，支持常见 Hash 算法，适合校验字符串、签名调试和数据比对。',
         tags: ['Hash', '摘要', '文本'],
         aliases: ['文本哈希', '字符串哈希', 'MD5'],
@@ -346,6 +386,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '文件HASH',
         name: 'hash-file',
+        icon: 'i-lucide:file-check-2',
         description: '在线计算文件的哈希校验值，支持常见摘要算法，适合文件完整性检查、下载校验和版本比对。',
         tags: ['Hash', '摘要', '文件'],
         aliases: ['文件哈希', '文件校验', 'MD5校验'],
@@ -354,6 +395,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '哔哩哔哩AV、BV号转换',
         name: 'bilibili-bv2av',
+        icon: 'i-simple-icons:bilibili',
         description: '在线进行哔哩哔哩 AV 号和 BV 号互相转换，并生成对应视频链接，适合 B 站视频编号查询与整理。',
         tags: ['B站', '哔哩哔哩', '编码转换'],
         aliases: ['BV转AV', 'AV转BV', 'B站编号'],
@@ -362,6 +404,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '数字中文转换',
         name: 'nzh',
+        icon: 'i-lucide:banknote',
         description: '在线进行阿拉伯数字、中文数字和金额大写转换，适合票据、金额展示和文本格式处理。',
         tags: ['数字', '中文', '金额'],
         aliases: ['数字转中文', '金额大写', '中文数字'],
@@ -370,6 +413,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '在线ASCII码对照表',
         name: 'ascii',
+        icon: 'i-lucide:table-2',
         description: '在线查询 ASCII 字符的十进制、十六进制、八进制、二进制和 HTML Code，支持关键词和字符分组筛选。',
         tags: ['ASCII', '字符', '编码'],
         aliases: ['ASCII表', '字符编码', '码表'],
@@ -383,6 +427,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'PDF合并',
         name: 'pdf-merge',
+        icon: 'i-lucide:copy-plus',
         description: '在线合并多个 PDF 文件，按上传顺序快速生成一个完整文档，适合资料整理、合同归档和报告汇总。',
         tags: ['PDF', '文件', '合并'],
         aliases: ['合并PDF', 'PDF拼接'],
@@ -391,6 +436,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'PDF拆分',
         name: 'pdf-split',
+        icon: 'i-lucide:scissors',
         description: '在线按页码范围拆分 PDF 文件，从原始文档中提取指定页面，适合分发章节、附件和单独页面。',
         tags: ['PDF', '文件', '拆分'],
         aliases: ['拆分PDF', '提取PDF页面'],
@@ -399,6 +445,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'PDF转JPG',
         name: 'pdf-to-jpg',
+        icon: 'i-lucide:file-image',
         description: '在线将 PDF 页面转换为 JPG 图片，支持多页文档批量导出，便于预览、分享和插入其他内容。',
         tags: ['PDF', '图片', '格式转换'],
         aliases: ['PDF转图片', 'PDF转JPEG'],
@@ -407,6 +454,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'JPG转PDF',
         name: 'jpg-to-pdf',
+        icon: 'i-lucide:file-plus-2',
         description: '在线把 JPG 图片按顺序合成为 PDF 文档，适合扫描件整理、图片归档和多图打包分享。',
         tags: ['PDF', '图片', '格式转换'],
         aliases: ['图片转PDF', 'JPEG转PDF'],
@@ -415,6 +463,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'Markdown编辑器',
         name: 'markdown-editor',
+        icon: 'i-simple-icons:markdown',
         description: '在线编辑 Markdown 文档，支持源码、双栏和富文本编辑模式，适合快速编写、预览和整理文本内容。',
         tags: ['Markdown', '编辑器', '文档'],
         aliases: ['MD编辑器', 'Markdown预览', '富文本Markdown'],
@@ -428,6 +477,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '极简图床',
         name: 'img-hosting',
+        icon: 'i-lucide:image-up',
         description: '在线上传和管理图片资源，支持配置图床服务、查看图片列表和复制访问地址，适合轻量图片托管。',
         tags: ['图床', '图片', '上传'],
         aliases: ['图片上传', '对象存储', 'S3图床'],
@@ -437,6 +487,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '图片加水印',
         name: 'watermark',
+        icon: 'i-lucide:stamp',
         description: '在线为图片添加文字水印，可调整字号、颜色、透明度、角度和间距，适合图片版权标记与批前预览。',
         tags: ['图片', '水印', '版权'],
         aliases: ['加水印', '图片水印'],
@@ -445,6 +496,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '屏幕录制',
         name: 'screen-record',
+        icon: 'i-lucide:screen-share',
         description: '在线录制屏幕、窗口或浏览器标签页，可配置音频、帧率、分辨率和光标显示，适合演示与问题复现。',
         tags: ['录屏', '视频', '浏览器'],
         aliases: ['屏幕录像', '录制窗口', '录制标签页'],
@@ -453,6 +505,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '这是什么动漫',
         name: 'what-anime-is-this',
+        icon: 'i-lucide:scan-search',
         description: '在线上传动漫截图并识别可能来源，返回作品名称、集数、时间位置和预览片段，适合查找截图出处。',
         tags: ['动漫', '识图', '图片'],
         aliases: ['动漫识别', '截图出处', 'trace.moe'],
@@ -467,6 +520,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'CIDR计算器',
         name: 'cidr-calculator',
+        icon: 'i-lucide:network',
         description: '在线解析 IPv4/IPv6 CIDR 网段，计算网络地址、地址范围、掩码和地址数量等信息。',
         tags: ['CIDR', 'IP', '网络'],
         aliases: ['子网计算', 'IP网段', '掩码计算'],
@@ -475,6 +529,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'WHOIS查询',
         name: 'whois',
+        icon: 'i-lucide:globe',
         description: '在线查询域名 WHOIS 注册信息，查看注册商、注册时间、到期时间和域名状态，适合域名排查与备案前检查。',
         tags: ['WHOIS', '域名', '网络'],
         aliases: ['域名查询', 'whois查询'],
@@ -484,6 +539,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'UserAgent解析',
         name: 'user-agent',
+        icon: 'i-lucide:monitor-smartphone',
         description: '在线解析 User-Agent 字符串，识别浏览器、渲染引擎、操作系统、CPU 架构和设备类型等信息。',
         tags: ['User-Agent', '浏览器', '解析'],
         aliases: ['UA解析', '用户代理', '浏览器识别'],
@@ -492,6 +548,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '短链接',
         name: 'urls',
+        icon: 'i-lucide:link-2',
         description: '在线创建和管理短链接，将长网址转换为便于分享的短地址，适合链接分发、记录和跳转管理。',
         tags: ['短链接', 'URL', '网络'],
         aliases: ['短链', '短网址', '网址缩短'],
@@ -502,6 +559,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'Linux命令查询',
         name: 'linux-command',
+        icon: 'i-simple-icons:linux',
         description: '在线查询 Linux 命令说明、参数和使用示例，适合运维排查、脚本编写和命令行学习参考。',
         tags: ['Linux', '命令', '运维'],
         aliases: ['Linux命令', '命令查询', 'man手册'],
@@ -516,6 +574,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '时间计算',
         name: 'time-compute',
+        icon: 'i-lucide:clock-3',
         description: '在线进行时间戳与日期时间互转，计算几天后的日期和两个日期之间的天数差，适合开发调试和日常换算。',
         tags: ['时间', '时间戳', '日期'],
         aliases: ['时间戳转换', '日期计算', '时间换算'],
@@ -524,6 +583,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '随机数生成',
         name: 'random',
+        icon: 'i-lucide:dices',
         description: '在线批量生成指定范围内的随机数，可设置数量、小数位和输出格式，适合抽样、测试数据和临时编号。',
         tags: ['随机数', '生成器'],
         aliases: ['随机生成', '抽样'],
@@ -532,6 +592,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '身份证解析',
         name: 'id-chinese',
+        icon: 'i-lucide:id-card',
         description: '在线解析中国居民身份证号码中的地区、出生日期、性别和校验信息，适合格式检查与基础信息识别。',
         tags: ['身份证', '校验', '解析'],
         aliases: ['身份证校验', '身份证信息', '证件号解析'],
@@ -540,6 +601,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '亲戚关系计算器',
         name: 'relationship',
+        icon: 'i-lucide:users-round',
         description: '在线根据亲属关系链计算称呼，也可反向查询关系，适合家庭关系、称谓表达和中文亲属称呼参考。',
         tags: ['亲戚关系', '称呼', '计算器'],
         aliases: ['亲属关系', '称谓计算', '关系计算'],
@@ -548,6 +610,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '房贷计算器',
         name: 'mtq-loans',
+        icon: 'i-lucide:house',
         description: '在线计算商业贷款、公积金贷款和组合贷款的还款计划，支持等额本息、等额本金和利息明细估算。',
         tags: ['房贷', '贷款', '计算器'],
         aliases: ['贷款计算', '等额本息', '等额本金'],
@@ -561,6 +624,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '塞尔达荒野之息地图',
         name: 'zelda-botw-map',
+        icon: 'i-lucide:map-plus',
         description: '在线查看塞尔达传说荒野之息地图资源，支持地图浏览和标记参考，适合游戏探索路线规划。',
         tags: ['游戏', '地图', '塞尔达'],
         aliases: ['旷野之息地图', 'BOTW地图', '塞尔达地图'],
@@ -570,6 +634,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '2048',
         name: '2048',
+        icon: 'i-lucide:grid-3x3',
         description: '在线游玩 2048 数字合成小游戏，通过方向操作合并相同数字并挑战更高分数，适合休闲练习和打发时间。',
         tags: ['游戏', '2048', '数字'],
         aliases: ['2048游戏', '数字合成'],
@@ -578,6 +643,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '俄罗斯方块',
         name: 'tetris',
+        icon: 'i-lucide:blocks',
         description: '在线游玩经典俄罗斯方块小游戏，支持键盘和触控操作，自动保存最高分并挑战更高等级。',
         tags: ['游戏', '俄罗斯方块', 'Tetris'],
         aliases: ['方块游戏', 'tetris'],
@@ -586,6 +652,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '贪吃蛇',
         name: 'snake',
+        icon: 'i-lucide:gamepad-2',
         description: '在线游玩经典贪吃蛇小游戏，控制蛇身吃掉食物并避免撞墙或撞到自己，自动保存最高分。',
         tags: ['游戏', '贪吃蛇', 'Snake'],
         aliases: ['snake', '贪吃蛇游戏'],
@@ -594,6 +661,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: '奥利奥生成器',
         name: 'oreooo',
+        icon: 'i-lucide:sandwich',
         description: '在线生成自定义奥利奥堆叠图片，通过“奥”“利”“与”组合出趣味文字效果，适合表情图和娱乐分享。',
         tags: ['娱乐', '图片生成', '表情'],
         aliases: ['奥利奥', '表情生成', '梗图'],
@@ -602,6 +670,7 @@ export const tools: OriginToolMenu[] = [
       {
         label: 'PalWorld服务器设置',
         name: 'pal-server-settings',
+        icon: 'i-lucide:gamepad-2',
         description: '在线解析、编辑和生成 PalWorldSettings.ini 服务器配置，支持难度、倍率、掉落、联机和 RCON 等参数调整。',
         tags: ['游戏', 'PalWorld', '服务器', '配置'],
         aliases: ['幻兽帕鲁服务器', '帕鲁配置', 'PalWorldSettings'],

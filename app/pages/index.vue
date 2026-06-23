@@ -233,31 +233,45 @@ onMounted(() => {
           <div class="col-span-full text-muted">
             {{ item.label }}
           </div>
-          <UPageCard
+          <UTooltip
             v-for="(tool) in item.children"
             :key="tool.name"
-            class="group relative bg-elevated border border-inverted hover:border-primary text-base"
-            :to="tool.name"
-            :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
+            :text="tool.description"
+            :delay-duration="500"
           >
-            <template #title>
-              <span class="block pr-8">
-                {{ tool.label }}
-              </span>
-            </template>
-            <UTooltip v-if="mounted" :text="isFav(tool.label) ? '取消收藏' : '收藏'">
-              <UButton
-                :aria-label="isFav(tool.label) ? '取消收藏' : '收藏'"
-                :color="isFav(tool.label) ? 'warning' : 'neutral'"
-                :variant="isFav(tool.label) ? 'soft' : 'ghost'"
-                :icon="isFav(tool.label) ? 'i-icon-park-solid:star' : 'i-icon-park-outline:star'"
-                size="xs"
-                square
-                class="absolute right-2 top-2 z-10 cursor-pointer opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
-                @click.stop.prevent="toggleFav(tool)"
-              />
-            </UTooltip>
-          </UPageCard>
+            <UPageCard
+              class="group relative bg-elevated border border-inverted hover:border-primary text-base"
+              :to="tool.name"
+              :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
+              :description="tool.description"
+              :ui="{
+                description: 'mt-4 h-14 overflow-hidden line-clamp-2 leading-7',
+              }"
+            >
+              <template #title>
+                <span class="flex items-center gap-3" :title="tool.label">
+                  <span class="flex size-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                    <UIcon :name="tool.icon" class="size-5" />
+                  </span>
+                  <span class="block min-w-0 truncate leading-6">
+                    {{ tool.label }}
+                  </span>
+                </span>
+              </template>
+              <UTooltip v-if="mounted" :text="isFav(tool.label) ? '取消收藏' : '收藏'">
+                <UButton
+                  :aria-label="isFav(tool.label) ? '取消收藏' : '收藏'"
+                  :color="isFav(tool.label) ? 'warning' : 'neutral'"
+                  :variant="isFav(tool.label) ? 'soft' : 'ghost'"
+                  :icon="isFav(tool.label) ? 'i-icon-park-solid:star' : 'i-icon-park-outline:star'"
+                  size="xs"
+                  square
+                  class="absolute right-2 top-2 z-10 cursor-pointer opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+                  @click.stop.prevent="toggleFav(tool)"
+                />
+              </UTooltip>
+            </UPageCard>
+          </UTooltip>
         </div>
       </TransitionGroup>
     </div>
