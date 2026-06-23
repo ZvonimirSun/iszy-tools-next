@@ -78,6 +78,6 @@ if (image) {
         <NuxtPage />
       </NuxtLayout>
     </UMain>
-    <AppFooter />
+    <AppFooter v-if="!tool" />
   </UApp>
 </template>
