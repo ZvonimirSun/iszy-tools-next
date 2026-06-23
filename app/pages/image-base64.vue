@@ -1,8 +1,6 @@
 <script setup lang="ts">
 type Mode = 'encode' | 'decode'
 
-definePageMeta({ layout: 'bounded' })
-
 const BASE64_DATA_URL_REGEX = /^data:image\/[\w.+-]+;base64,/i
 const BASE64_LOOSE_REGEX = /^[A-Z0-9+/\s=]+$/i
 const BASE64_WHITESPACE_REGEX = /\s+/g

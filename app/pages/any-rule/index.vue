@@ -2,8 +2,6 @@
 import type { AnyRuleExample, AnyRuleItem } from './children/anyRule.data'
 import { anyRuleItems } from './children/anyRule.data'
 
-definePageMeta({ layout: 'bounded' })
-
 const SOURCE_URL = 'https://any86.github.io/any-rule/'
 const FEEDBACK_URL_PREFIX = 'https://github.com/any86/any-rule/issues/new?title='
 

@@ -6,8 +6,6 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACO_EXTENSION_NAME, findRootFile, getRelativePath, gltfJsonUsesExtension, KTX2_EXTENSION_NAME, normalizePath, readGltfJson } from './children/gltfUtils'
 import { useGltfLoaders } from './children/useGltfLoaders'
 
-definePageMeta({ layout: 'bounded' })
-
 const MAP_NAMES = [
   'map',
   'aoMap',

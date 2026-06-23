@@ -4,10 +4,6 @@ import MockDetail from './children/mockDetail.vue'
 import MockList from './children/mockList.vue'
 import { init, selectProject } from './children/mockProject.service'
 
-definePageMeta({
-  layout: 'bounded-wide',
-})
-
 const params = useUrlSearchParams<{ prjId?: string }>('hash-params')
 
 onMounted(() => {

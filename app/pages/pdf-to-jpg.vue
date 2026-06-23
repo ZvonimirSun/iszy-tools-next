@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import draggable from 'vuedraggable'
 
-definePageMeta({ layout: 'bounded' })
-
 const PDF_REGEX = /\.pdf$/i
 
 interface FileItem {

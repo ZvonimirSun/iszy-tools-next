@@ -9,8 +9,6 @@ import {
   isSex,
 } from './children/relationship.service'
 
-definePageMeta({ layout: 'bounded' })
-
 const { copy } = useCopy()
 
 const activeTab = ref<ActiveTab>('call')

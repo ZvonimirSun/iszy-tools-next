@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import 'leaflet/dist/leaflet.css'
 
-definePageMeta({ layout: 'bounded' })
-
 const keyword = ref('')
 const epsgCode = ref('4326')
 const epsgCodeInput = ref('4326')

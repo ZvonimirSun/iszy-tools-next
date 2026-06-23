@@ -10,8 +10,6 @@ import {
   runjsDepsSignature,
 } from './children/runjs.service'
 
-definePageMeta({ layout: 'bounded' })
-
 type LogType = 'log' | 'result' | 'error' | 'runtime-error' | 'unhandledrejection' | 'system'
 
 interface RunjsLog {

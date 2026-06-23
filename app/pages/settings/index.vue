@@ -9,6 +9,10 @@ const { title, adminOrigin, features: { publicRegister } } = usePublicConfig()
 const seoTitle = computed(() => `个人设置 - ${title}`)
 const seoDescription = '管理个人偏好、首页展示、第三方登录绑定、应用配置和登录设备。'
 
+definePageMeta({
+  layout: 'full',
+})
+
 useSeoMeta({
   title: () => seoTitle.value,
   ogTitle: () => seoTitle.value,

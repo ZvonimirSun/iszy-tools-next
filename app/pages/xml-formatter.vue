@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import xml from '~/components/editor/lang-xml'
 
-definePageMeta({ layout: 'bounded' })
-
 const value = ref('<hello><world>foo</world><world>bar</world></hello>')
 
 const options = reactive({

@@ -11,6 +11,10 @@ const userStore = useUserStore()
 const seoTitle = computed(() => `用户登录 - ${title}`)
 const seoDescription = '登录账号后可使用需要权限的在线工具，管理个人设置、第三方账号绑定和设备会话。'
 
+definePageMeta({
+  layout: 'full',
+})
+
 useSeoMeta({
   title: () => seoTitle.value,
   ogTitle: () => seoTitle.value,

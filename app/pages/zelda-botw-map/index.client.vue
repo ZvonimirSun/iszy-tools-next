@@ -1,6 +1,4 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'bounded' })
-
 const mapContainer = useTemplateRef('mapContainer')
 
 onMounted(async () => {

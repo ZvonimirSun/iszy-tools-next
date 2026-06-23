@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { decodeGeoHash, encodeGeoHash } from './children/geohash'
 
-definePageMeta({ layout: 'bounded' })
-
 const inputText = ref('')
 const outputText = ref('')
 const errorMessage = ref('')

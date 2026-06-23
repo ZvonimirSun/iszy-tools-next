@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { parseChineseIdCard } from './children/idChinese.service'
 
-definePageMeta({ layout: 'bounded' })
-
 const idInput = ref('')
 const { copy } = useCopy()
 

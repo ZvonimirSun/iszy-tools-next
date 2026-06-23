@@ -1,6 +1,4 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'bounded' })
-
 const loading = ref(false)
 const domains = ref('')
 const result = ref<string>()

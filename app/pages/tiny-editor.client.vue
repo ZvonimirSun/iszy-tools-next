@@ -3,8 +3,6 @@ import css from '~/components/editor/lang-css'
 import html from '~/components/editor/lang-html'
 import js from '~/components/editor/lang-js'
 
-definePageMeta({ layout: 'bounded' })
-
 const store = useTinyEditorStore()
 
 const doc = computed(() => {

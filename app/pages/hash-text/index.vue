@@ -2,8 +2,6 @@
 import type { AlgoNames, Encoding } from './children/hashText.service'
 import { useHashText } from './children/useHashText'
 
-definePageMeta({ layout: 'bounded' })
-
 const { copy, copied } = useClipboard()
 const { post, terminate, data } = useHashText()
 

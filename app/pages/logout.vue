@@ -7,6 +7,10 @@ const { title } = usePublicConfig()
 const seoTitle = computed(() => `退出登录 - ${title}`)
 const seoDescription = '正在退出账号并清理当前登录会话。'
 
+definePageMeta({
+  layout: 'full',
+})
+
 useSeoMeta({
   title: () => seoTitle.value,
   ogTitle: () => seoTitle.value,

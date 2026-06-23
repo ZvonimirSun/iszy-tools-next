@@ -2,8 +2,6 @@
 type Mode = 'encode' | 'decode'
 type Strategy = 'component' | 'uri'
 
-definePageMeta({ layout: 'bounded' })
-
 const SPACE_REGEX = /%20/g
 const PLUS_REGEX = /\+/g
 

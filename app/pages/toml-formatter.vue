@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import toml from '~/components/editor/lang-toml'
 
-definePageMeta({ layout: 'bounded' })
-
 const value = ref('a={b=1,c=true}\n[[d]]\nb=2\nc=false\n')
 </script>
 

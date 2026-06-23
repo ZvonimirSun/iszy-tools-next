@@ -6,6 +6,10 @@ interface UserToolMenu extends OriginToolMenu {
   kind: 'favorite' | 'most' | 'recent'
 }
 
+definePageMeta({
+  layout: 'full',
+})
+
 const input = useTemplateRef('input')
 
 const searchStr = ref('')
