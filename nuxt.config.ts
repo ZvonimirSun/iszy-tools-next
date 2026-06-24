@@ -126,7 +126,7 @@ export default defineNuxtConfig({
     manifest: false,
     workbox: {
       maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
-      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      globPatterns: [],
       navigateFallback: null,
       runtimeCaching: [
         {
@@ -139,8 +139,37 @@ export default defineNuxtConfig({
               statuses: [200],
             },
             expiration: {
-              maxEntries: 20,
+              maxEntries: 50,
+              maxAgeSeconds: 60 * 60 * 24 * 7,
+            },
+          },
+        },
+        {
+          urlPattern: ({ sameOrigin, url }) => sameOrigin && url.pathname.startsWith('/api/'),
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'iszy-tools-next-api',
+            networkTimeoutSeconds: 3,
+            cacheableResponse: {
+              statuses: [200],
+            },
+            expiration: {
+              maxEntries: 200,
               maxAgeSeconds: 60 * 60 * 24,
+            },
+          },
+        },
+        {
+          urlPattern: ({ request }) => ['script', 'style', 'image'].includes(request.destination),
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'iszy-tools-next-assets',
+            cacheableResponse: {
+              statuses: [200],
+            },
+            expiration: {
+              maxEntries: 1000,
+              maxAgeSeconds: 60 * 60 * 24 * 30,
             },
           },
         },
