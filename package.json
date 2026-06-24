@@ -7,7 +7,7 @@
   "author": "ZvonimirSun",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "cross-env NODE_OPTIONS=--max-old-space-size=12288 nuxt build",
+    "build": "cross-env NODE_OPTIONS=\"--max-old-space-size=12288 --disable-warning=DEP0155\" nuxt build",
     "dev": "nuxt dev",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -47,7 +47,6 @@
     "@mapbox/shp-write": "^0.4.3",
     "@nuxt/scripts": "^1.2.0",
     "@nuxt/ui": "^4.8.1",
-    "@nuxtjs/partytown": "^2.0.0",
     "@nuxtjs/sitemap": "^8.0.15",
     "@pinia/nuxt": "0.11.3",
     "@tldraw/assets": "3.15.5",
