@@ -15,6 +15,7 @@ const pagePattern = [
   '!**/_*/**',
   '!**/_*',
 ]
+
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
@@ -91,6 +92,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@vueuse/nuxt',
     '@nuxt/scripts',
+    '@vite-pwa/nuxt',
     '@nuxtjs/sitemap',
     '@zvonimirsun/pinia-plugin-persistedstate/nuxt',
     'json-editor-vue/nuxt',
@@ -116,6 +118,33 @@ export default defineNuxtConfig({
   scripts: {
     registry: {
       cloudflareWebAnalytics: { trigger: 'onNuxtReady' },
+    },
+  },
+  pwa: {
+    strategies: 'generateSW',
+    registerType: 'autoUpdate',
+    manifest: false,
+    workbox: {
+      maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      navigateFallback: null,
+      runtimeCaching: [
+        {
+          urlPattern: ({ request }) => request.mode === 'navigate',
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'iszy-tools-next-pages',
+            networkTimeoutSeconds: 3,
+            cacheableResponse: {
+              statuses: [200],
+            },
+            expiration: {
+              maxEntries: 20,
+              maxAgeSeconds: 60 * 60 * 24,
+            },
+          },
+        },
+      ],
     },
   },
   pages: {
