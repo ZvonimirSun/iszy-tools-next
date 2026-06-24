@@ -12,7 +12,7 @@ export function mountTlDraw(container: HTMLElement) {
   let syncColorScheme = () => {}
 
   root.render(createElement(Tldraw, {
-    assetUrls: getAssetUrls({ baseUrl: `${cdnOrigin}/jsd/npm/@tldraw/assets@3/` }),
+    assetUrls: getAssetUrls({ baseUrl: `${cdnOrigin}/jsd/npm/@tldraw/assets@3.15.5/` }),
     onMount: (editor) => {
       syncColorScheme = () => {
         editor.user.updateUserPreferences({
