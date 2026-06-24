@@ -123,6 +123,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['tiny editor', 'wysiwyg', 'rich text'],
       },
       {
+        label: '简易白板',
+        name: 'tl-draw',
+        icon: 'i-lucide:pencil-ruler',
+        description: '在线使用 tldraw 简易白板绘制草图、流程和临时说明，支持本地保存画布内容，适合快速记录和讨论。',
+        tags: ['白板', '绘图', '草图'],
+        aliases: ['tlDraw', 'tldraw', '画板'],
+        keywords: ['whiteboard', 'draw', 'canvas'],
+      },
+      {
         label: 'JSON编辑器',
         name: 'json-editor',
         icon: 'i-lucide:braces',

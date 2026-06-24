@@ -37,6 +37,9 @@ export default defineNuxtConfig({
       },
       features: {
         publicRegister: false,
+        tlDraw: {
+          persistenceKey: '',
+        },
         map: {
           tdtToken: '',
           gaodeToken: '',
