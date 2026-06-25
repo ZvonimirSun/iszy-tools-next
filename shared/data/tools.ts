@@ -378,6 +378,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['encodeURIComponent', 'decodeURIComponent', 'percent encoding'],
       },
       {
+        label: 'URL解析',
+        name: 'url-parser',
+        icon: 'i-lucide:link-2',
+        description: '在线解析 URL 的协议、用户名、密码、主机、端口、路径、参数和 Hash，并拆分 Query 参数键值。',
+        tags: ['URL', '解析', '参数'],
+        aliases: ['网址解析', 'URL参数解析', 'query解析'],
+        keywords: ['url parser', 'query', 'search params', 'protocol', 'hostname'],
+      },
+      {
         label: '二维码编解码',
         name: 'qrcode',
         icon: 'i-lucide:qr-code',
