@@ -405,6 +405,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['sha', 'md5', 'digest'],
       },
       {
+        label: 'HMAC生成器',
+        name: 'hmac-generator',
+        icon: 'i-lucide:key-square',
+        description: '在线使用密钥生成 HMAC 摘要，支持 MD5、RIPEMD160、SHA 系列算法以及 Binary、Hex、Base64、Base64URL 输出。',
+        tags: ['HMAC', '签名', '摘要'],
+        aliases: ['HMAC签名', '接口签名', '消息认证码'],
+        keywords: ['hmac', 'sha256', 'sha512', 'ripemd160', 'signature', 'base64url'],
+      },
+      {
         label: '文件HASH',
         name: 'hash-file',
         icon: 'i-lucide:file-check-2',
