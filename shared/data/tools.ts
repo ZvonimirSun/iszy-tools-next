@@ -150,6 +150,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['text diff', 'compare', 'difference'],
       },
       {
+        label: '命名格式转换',
+        name: 'case-converter',
+        icon: 'i-lucide:case-sensitive',
+        description: '在线将文本转换为 lowercase、uppercase、camelcase、constantcase、dotcase、headercase、snakecase 等常见大小写格式。',
+        tags: ['文本', '命名', '转换'],
+        aliases: ['大小写转换', 'case converter', '变量名转换'],
+        keywords: ['lowercase', 'uppercase', 'camelcase', 'snakecase', 'constantcase', 'paramcase'],
+      },
+      {
         label: 'Mock工具',
         name: 'mock',
         icon: 'i-lucide:server-cog',
