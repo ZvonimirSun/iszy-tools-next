@@ -261,6 +261,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['formatter', 'config', 'yaml'],
       },
       {
+        label: 'Docker Run转Compose',
+        name: 'docker-run-compose',
+        icon: 'i-simple-icons:docker',
+        description: '在线将 docker run 命令转换为 Docker Compose YAML，支持端口、环境变量、卷、重启策略和常见运行参数。',
+        tags: ['Docker', 'Compose', '配置转换'],
+        aliases: ['docker compose', 'docker run转换', '容器配置'],
+        keywords: ['docker', 'compose', 'container', 'yaml'],
+      },
+      {
         label: 'JSON/YAML转换',
         name: 'json-yaml',
         icon: 'i-lucide:replace-all',
