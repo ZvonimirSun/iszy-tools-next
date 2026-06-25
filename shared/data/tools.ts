@@ -159,6 +159,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['lowercase', 'uppercase', 'camelcase', 'snakecase', 'constantcase', 'paramcase'],
       },
       {
+        label: '列表处理',
+        name: 'list-converter',
+        icon: 'i-lucide:list-filter',
+        description: '在线按行转换列表数据，支持去空白、去重、小写、排序、分隔符以及项/列表前后缀配置。',
+        tags: ['文本', '列表', '批处理'],
+        aliases: ['列表转换', '行处理', '去重排序'],
+        keywords: ['list', 'dedupe', 'sort', 'separator', 'prefix', 'suffix'],
+      },
+      {
         label: 'Mock工具',
         name: 'mock',
         icon: 'i-lucide:server-cog',
