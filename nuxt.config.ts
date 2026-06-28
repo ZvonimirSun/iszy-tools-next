@@ -17,6 +17,7 @@ const pagePattern = [
 ]
 
 export default defineNuxtConfig({
+  extends: ['@zvonimirsun/iszy-nuxt-auth-layer'],
   runtimeConfig: {
     public: {
       url: 'http://localhost:3000',
