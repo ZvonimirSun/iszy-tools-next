@@ -75,8 +75,8 @@ export const useSettingsStore = defineStore('settings', () => {
     })
   }
 
-  async function getSyncData() {
-    if (!useUserStore().logged) {
+  async function getSyncData(userStore = useUserStore()) {
+    if (!userStore.logged) {
       return
     }
     try {

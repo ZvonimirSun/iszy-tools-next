@@ -6,7 +6,7 @@ export default defineEventHandler(async (event): Promise<ResultDto<OriginToolMen
 
   let user: PublicUser | null = null
   try {
-    const res = await authFetch<ResultDto<PublicUser>>(event, '/user/me')
+    const res = await authFetch(event)<ResultDto<PublicUser>>('/user/me')
     user = res.data!
   }
   catch (e) {}

@@ -1,5 +1,5 @@
 minimumReleaseAgeExclude:
-  - '@zvonimirsun/iszy-nuxt-auth-layer@0.1.4'
+  - '@zvonimirsun/iszy-nuxt-auth-layer@0.1.5'
 
 shellEmulator: true
 blockExoticSubdeps: false
@@ -25,6 +25,7 @@ onlyBuiltDependencies:
 
 allowBuilds:
   '@parcel/watcher': false
+  '@zvonimirsun/iszy-nuxt-auth-layer': false
   '@zvonimirsun/map-sdk': false
   core-js: false
   esbuild: false

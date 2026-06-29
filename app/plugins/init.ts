@@ -1,6 +1,6 @@
 export default defineNuxtPlugin({
   async setup() {
-    const fetcher = useRequestFetch()
+    const fetcher = useRequestFetch() as Fetcher
 
     const userStore = useUserStore()
     const originToolsStore = useOriginToolsStore()
@@ -11,14 +11,14 @@ export default defineNuxtPlugin({
     })
 
     authEvents.on('loginSuccess', () => {
-      return settingsStore.getSyncData()
+      return settingsStore.getSyncData(userStore)
     })
 
-    await userStore.pullProfile(false, fetcher as typeof $fetch)
+    await userStore.pullProfile(false, fetcher)
     await originToolsStore.init(fetcher)
 
     onNuxtReady(() => {
-      settingsStore.getSyncData()
+      settingsStore.getSyncData(userStore)
     })
   },
 })
