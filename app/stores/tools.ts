@@ -2,21 +2,23 @@ import type { OptionalExcept } from '@zvonimirsun/iszy-common'
 import type { Favorite, Statistic, ToolMenu, ToolRecord } from '#shared/types/tool'
 
 export const useToolsStore = defineStore('tools', () => {
+  const originToolsStore = useOriginToolsStore()
+  const settingsStore = useSettingsStore()
   const favorite = ref<Favorite[]>([])
   const statistics = ref<Statistic[]>([])
 
   const toolItemsMap = computed<Record<string, ToolItem>>(() => {
     const map: Record<string, ToolItem> = {}
-    useOriginToolsStore().toolItems.forEach((item: ToolItem) => {
+    originToolsStore.toolItems.forEach((item: ToolItem) => {
       map[item.name] = item
     })
     return map
   })
 
   const toolMenus = computed<ToolMenu[]>(() => {
-    const settings = useSettingsStore().general
-    const oriToolMenus = useOriginToolsStore().toolMenus
-    const oriToolItems = useOriginToolsStore().toolItems
+    const settings = settingsStore.general
+    const oriToolMenus = originToolsStore.toolMenus
+    const oriToolItems = originToolsStore.toolItems
 
     let tmp: ToolMenu[] = []
     if (settings.showType) {
@@ -127,7 +129,7 @@ export const useToolsStore = defineStore('tools', () => {
   }
 
   function fixFavorite() {
-    const allTools = useOriginToolsStore().toolItems
+    const allTools = originToolsStore.toolItems
     for (const tool of favorite.value) {
       const tmp = allTools.find(item => (item.label === tool.label))
       if (!tmp) {
