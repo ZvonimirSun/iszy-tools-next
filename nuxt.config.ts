@@ -38,7 +38,6 @@ export default defineNuxtConfig({
         androidManifest: '',
       },
       features: {
-        publicRegister: false,
         tlDraw: {
           persistenceKey: '',
         },
@@ -73,16 +72,6 @@ export default defineNuxtConfig({
     },
     features: {
       showAllTools: false,
-    },
-    redis: {
-      host: '',
-      port: 6379,
-      password: undefined,
-    },
-    session: {
-      cookieName: 'NUXT_SESSION_ID',
-      maxAge: '7d',
-      domain: '',
     },
   },
   compatibilityDate: '2026-03-01',

@@ -125,8 +125,8 @@ importers:
         specifier: ^1.1.5
         version: 1.1.5
       '@zvonimirsun/iszy-nuxt-auth-layer':
-        specifier: ^0.1.5
-        version: 0.1.5(@pinia/nuxt@0.11.3(magicast@0.5.3)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3))))(nuxt@4.4.8(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@parcel/watcher@2.5.6)(@rollup/plugin-babel@6.1.0(@babel/core@7.29.7)(rollup@4.61.0))(@types/node@25.9.1)(@vue/compiler-sfc@3.5.35)(cac@6.7.14)(db0@0.3.4)(eslint@10.4.1(jiti@2.7.0))(idb-keyval@6.2.5)(ioredis@5.11.0)(lightningcss@1.32.0)(magicast@0.5.3)(optionator@0.9.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))(rollup-plugin-visualizer@7.0.1(rollup@4.61.0))(rollup@4.61.0)(sass@1.100.0)(srvx@0.11.16)(terser@5.48.0)(typescript@6.0.3)(vite@7.3.5(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.100.0)(terser@5.48.0)(yaml@2.9.0))(vue-tsc@3.3.3(typescript@6.0.3))(yaml@2.9.0))(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))
+        specifier: ^0.1.6
+        version: 0.1.6(@nuxt/ui@4.9.0(0a5fb70a9a631a9293feef608c877ef6))(@pinia/nuxt@0.11.3(magicast@0.5.3)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3))))(nuxt@4.4.8(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@parcel/watcher@2.5.6)(@rollup/plugin-babel@6.1.0(@babel/core@7.29.7)(rollup@4.61.0))(@types/node@25.9.1)(@vue/compiler-sfc@3.5.35)(cac@6.7.14)(db0@0.3.4)(eslint@10.4.1(jiti@2.7.0))(idb-keyval@6.2.5)(ioredis@5.11.0)(lightningcss@1.32.0)(magicast@0.5.3)(optionator@0.9.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))(rollup-plugin-visualizer@7.0.1(rollup@4.61.0))(rollup@4.61.0)(sass@1.100.0)(srvx@0.11.16)(terser@5.48.0)(typescript@6.0.3)(vite@7.3.5(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.100.0)(terser@5.48.0)(yaml@2.9.0))(vue-tsc@3.3.3(typescript@6.0.3))(yaml@2.9.0))(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))
       '@zvonimirsun/leaflet-geoman':
         specifier: ^1.2.0
         version: 1.2.0(leaflet@1.9.4)
@@ -5956,9 +5956,10 @@ packages:
   '@zvonimirsun/iszy-common@1.2.0':
     resolution: {integrity: sha512-Vr/oelHaLDA+iXaxP+pAFH7CZWlvYLuU0zgHcEiA5+6c7wf7eVvKC+rchPo8crUvbIKzQZnR1zx1Au2BWXtmxQ==}
 
-  '@zvonimirsun/iszy-nuxt-auth-layer@0.1.5':
-    resolution: {integrity: sha512-vBnJ06OMWZbElNrEpyxh6YBZ+eVXl+4hi199xpoQypZ5S3lTBMJAgND+FHxswjIkIIn0bXcgyqph9UzLrThXFg==}
+  '@zvonimirsun/iszy-nuxt-auth-layer@0.1.6':
+    resolution: {integrity: sha512-95PFA2UDkPHKvlVEkuDePH3ntoEcf926oGpNBqACYlxWEJf069+xsRgTGcoMTCZiyGbPNgz+J8dYKOyZll7fuw==}
     peerDependencies:
+      '@nuxt/ui': '>=4.0.0'
       '@pinia/nuxt': '>=0.11.0'
       nuxt: '>=4.0.0'
       pinia: '>=3.0.0'
@@ -19167,16 +19168,17 @@ snapshots:
     dependencies:
       uuid: 14.0.0
 
-  '@zvonimirsun/iszy-nuxt-auth-layer@0.1.5(@pinia/nuxt@0.11.3(magicast@0.5.3)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3))))(nuxt@4.4.8(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@parcel/watcher@2.5.6)(@rollup/plugin-babel@6.1.0(@babel/core@7.29.7)(rollup@4.61.0))(@types/node@25.9.1)(@vue/compiler-sfc@3.5.35)(cac@6.7.14)(db0@0.3.4)(eslint@10.4.1(jiti@2.7.0))(idb-keyval@6.2.5)(ioredis@5.11.0)(lightningcss@1.32.0)(magicast@0.5.3)(optionator@0.9.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))(rollup-plugin-visualizer@7.0.1(rollup@4.61.0))(rollup@4.61.0)(sass@1.100.0)(srvx@0.11.16)(terser@5.48.0)(typescript@6.0.3)(vite@7.3.5(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.100.0)(terser@5.48.0)(yaml@2.9.0))(vue-tsc@3.3.3(typescript@6.0.3))(yaml@2.9.0))(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))':
+  '@zvonimirsun/iszy-nuxt-auth-layer@0.1.6(@nuxt/ui@4.9.0(0a5fb70a9a631a9293feef608c877ef6))(@pinia/nuxt@0.11.3(magicast@0.5.3)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3))))(nuxt@4.4.8(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@parcel/watcher@2.5.6)(@rollup/plugin-babel@6.1.0(@babel/core@7.29.7)(rollup@4.61.0))(@types/node@25.9.1)(@vue/compiler-sfc@3.5.35)(cac@6.7.14)(db0@0.3.4)(eslint@10.4.1(jiti@2.7.0))(idb-keyval@6.2.5)(ioredis@5.11.0)(lightningcss@1.32.0)(magicast@0.5.3)(optionator@0.9.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))(rollup-plugin-visualizer@7.0.1(rollup@4.61.0))(rollup@4.61.0)(sass@1.100.0)(srvx@0.11.16)(terser@5.48.0)(typescript@6.0.3)(vite@7.3.5(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.100.0)(terser@5.48.0)(yaml@2.9.0))(vue-tsc@3.3.3(typescript@6.0.3))(yaml@2.9.0))(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))':
     dependencies:
+      '@nuxt/ui': 4.9.0(0a5fb70a9a631a9293feef608c877ef6)
       '@pinia/nuxt': 0.11.3(magicast@0.5.3)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))
       '@zvonimirsun/iszy-common': 1.2.0
-      dayjs: 1.11.21
       mitt: 3.0.1
       ms: 2.1.3
       nuxt: 4.4.8(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@parcel/watcher@2.5.6)(@rollup/plugin-babel@6.1.0(@babel/core@7.29.7)(rollup@4.61.0))(@types/node@25.9.1)(@vue/compiler-sfc@3.5.35)(cac@6.7.14)(db0@0.3.4)(eslint@10.4.1(jiti@2.7.0))(idb-keyval@6.2.5)(ioredis@5.11.0)(lightningcss@1.32.0)(magicast@0.5.3)(optionator@0.9.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))(rollup-plugin-visualizer@7.0.1(rollup@4.61.0))(rollup@4.61.0)(sass@1.100.0)(srvx@0.11.16)(terser@5.48.0)(typescript@6.0.3)(vite@7.3.5(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.100.0)(terser@5.48.0)(yaml@2.9.0))(vue-tsc@3.3.3(typescript@6.0.3))(yaml@2.9.0)
       ofetch: 1.5.1
       pinia: 3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3))
+      zod: 4.4.3
 
   '@zvonimirsun/leaflet-geoman@1.2.0(leaflet@1.9.4)':
     dependencies:
