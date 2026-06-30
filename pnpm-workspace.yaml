@@ -1,5 +1,5 @@
 minimumReleaseAgeExclude:
-  - '@zvonimirsun/iszy-nuxt-auth-layer@0.1.6'
+  - '@zvonimirsun/iszy-nuxt-auth-layer@0.1.7'
 
 shellEmulator: true
 blockExoticSubdeps: false
