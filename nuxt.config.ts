@@ -82,7 +82,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@vueuse/nuxt',
     '@nuxt/scripts',
-    '@vite-pwa/nuxt',
     '@nuxtjs/sitemap',
     '@zvonimirsun/pinia-plugin-persistedstate/nuxt',
     'json-editor-vue/nuxt',
@@ -108,62 +107,6 @@ export default defineNuxtConfig({
   scripts: {
     registry: {
       cloudflareWebAnalytics: { trigger: 'onNuxtReady' },
-    },
-  },
-  pwa: {
-    strategies: 'generateSW',
-    registerType: 'autoUpdate',
-    manifest: false,
-    workbox: {
-      maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
-      globPatterns: [],
-      navigateFallback: null,
-      runtimeCaching: [
-        {
-          urlPattern: ({ request }) => request.mode === 'navigate',
-          handler: 'NetworkFirst',
-          options: {
-            cacheName: 'iszy-tools-next-pages',
-            networkTimeoutSeconds: 3,
-            cacheableResponse: {
-              statuses: [200],
-            },
-            expiration: {
-              maxEntries: 50,
-              maxAgeSeconds: 60 * 60 * 24 * 7,
-            },
-          },
-        },
-        {
-          urlPattern: ({ sameOrigin, url }) => sameOrigin && url.pathname.startsWith('/api/'),
-          handler: 'NetworkFirst',
-          options: {
-            cacheName: 'iszy-tools-next-api',
-            networkTimeoutSeconds: 3,
-            cacheableResponse: {
-              statuses: [200],
-            },
-            expiration: {
-              maxEntries: 200,
-              maxAgeSeconds: 60 * 60 * 24,
-            },
-          },
-        },
-        {
-          urlPattern: ({ request }) => ['script', 'style', 'image'].includes(request.destination),
-          handler: 'StaleWhileRevalidate',
-          options: {
-            cacheName: 'iszy-tools-next-assets',
-            cacheableResponse: {
-              statuses: [200],
-            },
-            expiration: {
-              maxEntries: 1000,
-              maxAgeSeconds: 60 * 60 * 24 * 30,
-            },
-          },
-        },
-      ],
     },
   },
   pages: {
