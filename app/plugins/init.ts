@@ -6,16 +6,26 @@ export default defineNuxtPlugin({
     const originToolsStore = useOriginToolsStore()
     const settingsStore = useSettingsStore()
 
-    authEvents.on('profileUpdated', ({ fetcher }) => {
+    const profileUpdatedHandler = ({ fetcher }: { fetcher?: Fetcher }) => {
       return originToolsStore.fetchTools(fetcher)
-    })
-
-    authEvents.on('loginSuccess', () => {
+    }
+    const loginSuccessHandler = () => {
       return settingsStore.getSyncData(userStore)
-    })
+    }
 
-    await userStore.pullProfile(false, fetcher)
-    await originToolsStore.init(fetcher)
+    authEvents.on('profileUpdated', profileUpdatedHandler)
+    authEvents.on('loginSuccess', loginSuccessHandler)
+
+    try {
+      await userStore.pullProfile(false, fetcher)
+      await originToolsStore.init(fetcher)
+    }
+    finally {
+      if (import.meta.server) {
+        authEvents.off('profileUpdated', profileUpdatedHandler)
+        authEvents.off('loginSuccess', loginSuccessHandler)
+      }
+    }
 
     onNuxtReady(() => {
       settingsStore.getSyncData(userStore)

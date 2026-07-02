@@ -44,6 +44,7 @@ export const useSettingsStore = defineStore('settings', () => {
     } satisfies AiChatSettings,
   })
   const finishSync = ref(false)
+  let stopModulesSyncWatch: (() => void) | null = null
 
   const syncData = debounce(() => {
     if (!useUserStore().logged) {
@@ -89,7 +90,8 @@ export const useSettingsStore = defineStore('settings', () => {
         else {
           syncData()
         }
-        watch(modules, syncData, {
+        stopModulesSyncWatch?.()
+        stopModulesSyncWatch = watch(modules, syncData, {
           deep: true,
         })
       }
