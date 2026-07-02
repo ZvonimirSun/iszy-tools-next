@@ -29,4 +29,7 @@ export default defineAppConfig({
       },
     },
   },
+  icon: {
+    iconifyApiEndpoint: 'https://cdn.ovooo.cc/iconify',
+  },
 })

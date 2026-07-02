@@ -74,7 +74,7 @@ export default defineNuxtConfig({
       showAllTools: false,
     },
   },
-  compatibilityDate: '2026-03-01',
+  compatibilityDate: '2026-07-02',
   devtools: { enabled: true },
   modules: [
     '@nuxt/ui',
