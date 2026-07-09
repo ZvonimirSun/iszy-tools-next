@@ -345,6 +345,7 @@ onUnmounted(() => {
           class="hidden"
           title="RunJS Sandbox"
           sandbox="allow-scripts"
+          referrerpolicy="no-referrer"
         />
         <div v-if="logs.length" class="flex flex-col gap-2">
           <div

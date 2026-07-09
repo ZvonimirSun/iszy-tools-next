@@ -97,6 +97,8 @@ function openNew() {
         class="h-full w-full"
         title="展示面板"
         allowTransparency="true"
+        sandbox="allow-scripts"
+        referrerpolicy="no-referrer"
       />
     </div>
   </div>
