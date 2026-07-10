@@ -119,11 +119,11 @@ importers:
         specifier: ^14.3.0
         version: 14.3.0(vue-router@5.1.0(@vue/compiler-sfc@3.5.35)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))(vite@7.3.5(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.100.0)(terser@5.48.0)(yaml@2.9.0))(vue@3.5.35(typescript@6.0.3)))(vue@3.5.35(typescript@6.0.3))
       '@zvonimirsun/iszy-common':
-        specifier: ^1.1.5
-        version: 1.1.5
+        specifier: ^1.2.2
+        version: 1.2.2
       '@zvonimirsun/iszy-nuxt-auth-layer':
-        specifier: ^0.1.7
-        version: 0.1.7(@nuxt/ui@4.9.0(0a5fb70a9a631a9293feef608c877ef6))(@pinia/nuxt@0.11.3(magicast@0.5.3)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3))))(nuxt@4.4.8(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@parcel/watcher@2.5.6)(@rollup/plugin-babel@6.1.0(@babel/core@7.29.7)(rollup@4.61.0))(@types/node@25.9.1)(@vue/compiler-sfc@3.5.35)(cac@6.7.14)(db0@0.3.4)(eslint@10.4.1(jiti@2.7.0))(idb-keyval@6.2.5)(ioredis@5.11.0)(lightningcss@1.32.0)(magicast@0.5.3)(optionator@0.9.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))(rollup-plugin-visualizer@7.0.1(rollup@4.61.0))(rollup@4.61.0)(sass@1.100.0)(srvx@0.11.16)(terser@5.48.0)(typescript@6.0.3)(vite@7.3.5(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.100.0)(terser@5.48.0)(yaml@2.9.0))(vue-tsc@3.3.3(typescript@6.0.3))(yaml@2.9.0))(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))
+        specifier: ^0.1.8
+        version: 0.1.8(@nuxt/ui@4.9.0(0a5fb70a9a631a9293feef608c877ef6))(@pinia/nuxt@0.11.3(magicast@0.5.3)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3))))(nuxt@4.4.8(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@parcel/watcher@2.5.6)(@rollup/plugin-babel@6.1.0(@babel/core@7.29.7)(rollup@4.61.0))(@types/node@25.9.1)(@vue/compiler-sfc@3.5.35)(cac@6.7.14)(db0@0.3.4)(eslint@10.4.1(jiti@2.7.0))(idb-keyval@6.2.5)(ioredis@5.11.0)(lightningcss@1.32.0)(magicast@0.5.3)(optionator@0.9.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))(rollup-plugin-visualizer@7.0.1(rollup@4.61.0))(rollup@4.61.0)(sass@1.100.0)(srvx@0.11.16)(terser@5.48.0)(typescript@6.0.3)(vite@7.3.5(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.100.0)(terser@5.48.0)(yaml@2.9.0))(vue-tsc@3.3.3(typescript@6.0.3))(yaml@2.9.0))(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))
       '@zvonimirsun/leaflet-geoman':
         specifier: ^1.2.0
         version: 1.2.0(leaflet@1.9.4)
@@ -5525,14 +5525,14 @@ packages:
   '@zarrita/storage@0.2.0':
     resolution: {integrity: sha512-855ZXqtnds7spnT8vNvD+MXa3QExP1m2GqShe8yt7uZXHnQLgJHgkpVwFjE1B0KDDRO0ki09hmk6OboTaIfPsQ==}
 
-  '@zvonimirsun/iszy-common@1.1.5':
-    resolution: {integrity: sha512-2fGkoxKgUPvkfhloUVAOpaXBiUrNg8uwqry9dYw7NmkLGSzMkoYJ6B126rM2zo0M9tuEjtSQwIEZsgAvrE53vA==}
-
   '@zvonimirsun/iszy-common@1.2.0':
     resolution: {integrity: sha512-Vr/oelHaLDA+iXaxP+pAFH7CZWlvYLuU0zgHcEiA5+6c7wf7eVvKC+rchPo8crUvbIKzQZnR1zx1Au2BWXtmxQ==}
 
-  '@zvonimirsun/iszy-nuxt-auth-layer@0.1.7':
-    resolution: {integrity: sha512-wB3gKHS7kF9HaV/yYjZYSd8ickjgMtnIrb2t/SG7ykBUy+NZBLimOYPrDjz2YmCtA6I0Z9Jp6NMf6lc16pFB6w==}
+  '@zvonimirsun/iszy-common@1.2.2':
+    resolution: {integrity: sha512-YL+IljwrgUCpZlSZj8vFd/wZOfZSbQGsrXdsD+NKp3WGIjVCUdpVxjfgm3mCtul2Cu7bHxYBUpw0l6g5myWEiA==}
+
+  '@zvonimirsun/iszy-nuxt-auth-layer@0.1.8':
+    resolution: {integrity: sha512-dL1Ibh2uiXYxyXRhNYxq1Mqsd1c1sRxqRnXjqqDhFiQMLZ0X0ZjF5VimC/Vr5FA0Ah1IqqSUBNvpe7QfRvKWlQ==}
     peerDependencies:
       '@nuxt/ui': '>=4.0.0'
       '@pinia/nuxt': '>=0.11.0'
@@ -17741,15 +17741,15 @@ snapshots:
       reference-spec-reader: 0.2.0
       unzipit: 2.0.0
 
-  '@zvonimirsun/iszy-common@1.1.5':
-    dependencies:
-      uuid: 14.0.0
-
   '@zvonimirsun/iszy-common@1.2.0':
     dependencies:
       uuid: 14.0.0
 
-  '@zvonimirsun/iszy-nuxt-auth-layer@0.1.7(@nuxt/ui@4.9.0(0a5fb70a9a631a9293feef608c877ef6))(@pinia/nuxt@0.11.3(magicast@0.5.3)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3))))(nuxt@4.4.8(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@parcel/watcher@2.5.6)(@rollup/plugin-babel@6.1.0(@babel/core@7.29.7)(rollup@4.61.0))(@types/node@25.9.1)(@vue/compiler-sfc@3.5.35)(cac@6.7.14)(db0@0.3.4)(eslint@10.4.1(jiti@2.7.0))(idb-keyval@6.2.5)(ioredis@5.11.0)(lightningcss@1.32.0)(magicast@0.5.3)(optionator@0.9.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))(rollup-plugin-visualizer@7.0.1(rollup@4.61.0))(rollup@4.61.0)(sass@1.100.0)(srvx@0.11.16)(terser@5.48.0)(typescript@6.0.3)(vite@7.3.5(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.100.0)(terser@5.48.0)(yaml@2.9.0))(vue-tsc@3.3.3(typescript@6.0.3))(yaml@2.9.0))(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))':
+  '@zvonimirsun/iszy-common@1.2.2':
+    dependencies:
+      uuid: 14.0.0
+
+  '@zvonimirsun/iszy-nuxt-auth-layer@0.1.8(@nuxt/ui@4.9.0(0a5fb70a9a631a9293feef608c877ef6))(@pinia/nuxt@0.11.3(magicast@0.5.3)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3))))(nuxt@4.4.8(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@parcel/watcher@2.5.6)(@rollup/plugin-babel@6.1.0(@babel/core@7.29.7)(rollup@4.61.0))(@types/node@25.9.1)(@vue/compiler-sfc@3.5.35)(cac@6.7.14)(db0@0.3.4)(eslint@10.4.1(jiti@2.7.0))(idb-keyval@6.2.5)(ioredis@5.11.0)(lightningcss@1.32.0)(magicast@0.5.3)(optionator@0.9.4)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))(rollup-plugin-visualizer@7.0.1(rollup@4.61.0))(rollup@4.61.0)(sass@1.100.0)(srvx@0.11.16)(terser@5.48.0)(typescript@6.0.3)(vite@7.3.5(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.100.0)(terser@5.48.0)(yaml@2.9.0))(vue-tsc@3.3.3(typescript@6.0.3))(yaml@2.9.0))(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))':
     dependencies:
       '@nuxt/ui': 4.9.0(0a5fb70a9a631a9293feef608c877ef6)
       '@pinia/nuxt': 0.11.3(magicast@0.5.3)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))
