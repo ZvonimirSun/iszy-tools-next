@@ -862,6 +862,15 @@ export const tools: OriginToolMenu[] = [
         aliases: ['百分比计算', '占比计算', '增长率'],
         keywords: ['percentage', 'percent', 'ratio', 'change'],
       },
+      {
+        label: '温度转换',
+        name: 'temperature-converter',
+        icon: 'i-lucide:thermometer',
+        description: '在线进行摄氏度、华氏度、开尔文、兰氏度、德利尔、牛顿、列氏和罗默温标互相转换。',
+        tags: ['温度', '单位转换', '生活'],
+        aliases: ['温标转换', '摄氏华氏转换', 'temperature'],
+        keywords: ['temperature', 'celsius', 'fahrenheit', 'kelvin'],
+      },
     ],
   },
   {
