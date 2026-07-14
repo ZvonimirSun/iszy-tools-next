@@ -13,8 +13,12 @@ describe('passwordStrength.service', () => {
   it('根据字符集估算池大小和熵', () => {
     const result = analyzePassword('Aa1!')
 
-    expect(result.poolSize).toBe(95)
+    expect(result.poolSize).toBe(94)
     expect(Math.round(result.entropyBits)).toBe(26)
+  })
+
+  it('特殊字符池大小与常见估算模型一致', () => {
+    expect(analyzePassword('-_(').poolSize).toBe(32)
   })
 
   it('长随机密码得分更高', () => {

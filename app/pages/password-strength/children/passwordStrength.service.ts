@@ -12,6 +12,7 @@ const LOWERCASE_REGEX = /[a-z]/
 const UPPERCASE_REGEX = /[A-Z]/
 const NUMBER_REGEX = /\d/
 const SYMBOL_REGEX = /[^A-Z0-9]/i
+const SYMBOL_POOL_SIZE = 32
 const COMMON_PATTERNS = [
   /password/i,
   /qwerty/i,
@@ -54,7 +55,7 @@ function estimatePoolSize(password: string) {
     pool += 10
   }
   if (SYMBOL_REGEX.test(password)) {
-    pool += 33
+    pool += SYMBOL_POOL_SIZE
   }
   return pool
 }
