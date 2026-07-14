@@ -177,6 +177,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['text statistics', 'word count', 'characters', 'bytes'],
       },
       {
+        label: 'Lorem Ipsum生成',
+        name: 'lorem-ipsum',
+        icon: 'i-lucide:text',
+        description: '在线生成 Lorem Ipsum 占位文本，可配置段落数、每段句子数和每句单词数，适合排版和原型填充。',
+        tags: ['文本', '占位', '生成器'],
+        aliases: ['占位文本', '假文生成', 'Lorem'],
+        keywords: ['lorem ipsum', 'placeholder', 'text generator'],
+      },
+      {
         label: 'Slugify字符串',
         name: 'slugify',
         icon: 'i-lucide:link',
