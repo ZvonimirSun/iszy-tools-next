@@ -342,6 +342,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['json csv', 'export', 'spreadsheet', 'table'],
       },
       {
+        label: 'JSON差异对比',
+        name: 'json-diff',
+        icon: 'i-lucide:git-compare',
+        description: '在线结构化对比两个 JSON，按路径展示新增、删除、修改和相同项，适合接口返回和配置文件差异排查。',
+        tags: ['JSON', 'Diff', '对比'],
+        aliases: ['JSON对比', 'json diff', '结构化差异'],
+        keywords: ['json diff', 'compare', 'difference', 'object'],
+      },
+      {
         label: 'TOML格式化',
         name: 'toml-formatter',
         icon: 'i-lucide:file-cog',
