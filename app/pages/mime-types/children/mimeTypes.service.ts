@@ -1,4 +1,4 @@
-import { extensions as mimeToExtensions, types as extensionToMime } from 'mime-types'
+import { types as extensionToMime, extensions as mimeToExtensions } from 'mime-types'
 
 export interface MimeInfo {
   mime: string
