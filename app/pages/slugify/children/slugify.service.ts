@@ -1,32 +1,43 @@
+import slugify from '@sindresorhus/slugify'
+
 export interface SlugifyOptions {
   separator?: string
   lowercase?: boolean
   keepCjk?: boolean
 }
 
-const DIACRITIC_REGEX = /[\u0300-\u036F]/g
 const DEFAULT_SEPARATOR = '-'
 
 export function slugifyText(value: string, options: SlugifyOptions = {}) {
   const separator = sanitizeSeparator(options.separator ?? DEFAULT_SEPARATOR)
-  const keepCjk = options.keepCjk ?? true
   const lowercase = options.lowercase ?? true
-  const allowedPattern = keepCjk ? /[^\p{Letter}\p{Number}]+/gu : /[^A-Z0-9]+/gi
-  const edgeSeparatorPattern = new RegExp(`^${escapeRegExp(separator)}+|${escapeRegExp(separator)}+$`, 'g')
-  const repeatedSeparatorPattern = new RegExp(`${escapeRegExp(separator)}+`, 'g')
 
-  let result = value
-    .normalize('NFKD')
-    .replace(DIACRITIC_REGEX, '')
-    .replace(allowedPattern, separator)
-    .replace(repeatedSeparatorPattern, separator)
-    .replace(edgeSeparatorPattern, '')
-
-  if (lowercase) {
-    result = result.toLowerCase()
+  if (!(options.keepCjk ?? true)) {
+    return slugify(value, { lowercase, separator })
   }
 
-  return result
+  return slugifyKeepCjk(value, { lowercase, separator })
+}
+
+function slugifyKeepCjk(value: string, options: { separator: string, lowercase: boolean }) {
+  const segments = value.match(/[\u4E00-\u9FFF]+|[^\u4E00-\u9FFF]+/gu) ?? []
+  const separatorPattern = escapeRegExp(options.separator)
+
+  return segments
+    .map((segment) => {
+      if (/^[\u4E00-\u9FFF]+$/u.test(segment)) {
+        return segment
+      }
+
+      return slugify(segment, {
+        lowercase: options.lowercase,
+        separator: options.separator,
+      })
+    })
+    .filter(Boolean)
+    .join(options.separator)
+    .replace(new RegExp(`${separatorPattern}+`, 'g'), options.separator)
+    .replace(new RegExp(`^${separatorPattern}|${separatorPattern}$`, 'g'), '')
 }
 
 function sanitizeSeparator(separator: string) {
