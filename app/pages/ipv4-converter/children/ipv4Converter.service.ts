@@ -4,6 +4,7 @@ export interface Ipv4ConversionResult {
   hexadecimal: string
   binary: string
   ipv6Mapped: string
+  ipv6MappedFull: string
 }
 
 export function convertIpv4(input: string): Ipv4ConversionResult {
@@ -18,6 +19,7 @@ export function convertIpv4(input: string): Ipv4ConversionResult {
     hexadecimal,
     binary,
     ipv6Mapped: `::ffff:${decimal}`,
+    ipv6MappedFull: `0000:0000:0000:0000:0000:ffff:${formatIpv6Tail(integer)}`,
   }
 }
 
@@ -90,4 +92,24 @@ function formatBinary(value: number) {
     (value >>> 8) & 0xFF,
     value & 0xFF,
   ].map(octet => octet.toString(2).padStart(8, '0')).join('.')
+}
+
+function formatIpv6Tail(value: number) {
+  return [
+    (value >>> 24) & 0xFF,
+    (value >>> 16) & 0xFF,
+    (value >>> 8) & 0xFF,
+    value & 0xFF,
+  ]
+    .map(octet => octet.toString(16).padStart(2, '0'))
+    .reduce<string[]>((blocks, octet, index) => {
+      if (index % 2 === 0) {
+        blocks.push(octet)
+      }
+      else {
+        blocks[blocks.length - 1] += octet
+      }
+      return blocks
+    }, [])
+    .join(':')
 }

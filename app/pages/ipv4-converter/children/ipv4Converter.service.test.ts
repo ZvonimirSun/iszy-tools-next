@@ -9,6 +9,7 @@ describe('ipv4Converter.service', () => {
       hexadecimal: '0xC0A80101',
       binary: '11000000.10101000.00000001.00000001',
       ipv6Mapped: '::ffff:192.168.1.1',
+      ipv6MappedFull: '0000:0000:0000:0000:0000:ffff:c0a8:0101',
     })
   })
 
