@@ -719,6 +719,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['ipv4 converter', 'decimal', 'hex', 'binary'],
       },
       {
+        label: 'IPv4范围展开',
+        name: 'ipv4-range',
+        icon: 'i-lucide:list-tree',
+        description: '在线根据起止 IPv4 地址计算地址数量、CIDR 覆盖并预览地址列表，适合网络规则和网段整理。',
+        tags: ['IPv4', 'CIDR', '网络'],
+        aliases: ['IP范围', 'IP段展开', 'CIDR覆盖'],
+        keywords: ['ipv4 range', 'cidr', 'ip list', 'network'],
+      },
+      {
         label: '随机端口生成',
         name: 'random-port',
         icon: 'i-lucide:server',
