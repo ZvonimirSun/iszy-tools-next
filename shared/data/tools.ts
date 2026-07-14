@@ -728,6 +728,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['ipv4 range', 'cidr', 'ip list', 'network'],
       },
       {
+        label: 'IPv6 ULA生成器',
+        name: 'ipv6-ula',
+        icon: 'i-lucide:route',
+        description: '在线按 RFC4193 生成 IPv6 Unique Local Address /48 前缀和 /64 子网示例，适合内网规划。',
+        tags: ['IPv6', 'ULA', '网络'],
+        aliases: ['IPv6本地地址', 'ULA前缀', 'RFC4193'],
+        keywords: ['ipv6 ula', 'rfc4193', 'unique local address'],
+      },
+      {
         label: '随机端口生成',
         name: 'random-port',
         icon: 'i-lucide:server',
