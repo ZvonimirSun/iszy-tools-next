@@ -1,3 +1,5 @@
+import JSON5 from 'json5'
+
 export type JsonDiffKind = 'equal' | 'change' | 'insert' | 'delete'
 
 export interface JsonDiffRow {
@@ -8,8 +10,8 @@ export interface JsonDiffRow {
 }
 
 export function diffJson(leftInput: string, rightInput: string) {
-  const left = JSON.parse(leftInput) as unknown
-  const right = JSON.parse(rightInput) as unknown
+  const left = JSON5.parse(leftInput) as unknown
+  const right = JSON5.parse(rightInput) as unknown
   return compareValues(left, right, '$')
 }
 

@@ -28,4 +28,13 @@ describe('jsonDiff.service', () => {
 
     expect(createJsonDiffSummary(rows)).toBe('~ $.age: 18 -> 19\n+ $.city: Paris')
   })
+
+  it('支持 JSON5 输入', () => {
+    const rows = diffJson(`{
+      // old value
+      age: 18,
+    }`, `{ age: 19 }`)
+
+    expect(rows).toEqual([{ path: '$.age', kind: 'change', left: 18, right: 19 }])
+  })
 })
