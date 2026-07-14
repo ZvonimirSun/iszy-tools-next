@@ -746,6 +746,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['random port', 'port generator', 'network'],
       },
       {
+        label: 'MAC地址生成',
+        name: 'mac-generator',
+        icon: 'i-lucide:ethernet-port',
+        description: '在线批量生成随机 MAC 地址，支持前缀、大小写、分隔符和本地管理地址选项。',
+        tags: ['MAC', '网络', '生成器'],
+        aliases: ['MAC生成器', '网卡地址', '物理地址'],
+        keywords: ['mac address', 'generator', 'network'],
+      },
+      {
         label: 'WHOIS查询',
         name: 'whois',
         icon: 'i-lucide:globe',
