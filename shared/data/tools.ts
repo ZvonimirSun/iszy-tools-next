@@ -719,6 +719,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['ipv4 converter', 'decimal', 'hex', 'binary'],
       },
       {
+        label: '随机端口生成',
+        name: 'random-port',
+        icon: 'i-lucide:server',
+        description: '在线生成指定范围内的随机端口号，支持唯一端口、开发端口范围和批量复制。',
+        tags: ['端口', '网络', '随机'],
+        aliases: ['端口生成器', '随机端口', '开发端口'],
+        keywords: ['random port', 'port generator', 'network'],
+      },
+      {
         label: 'WHOIS查询',
         name: 'whois',
         icon: 'i-lucide:globe',
