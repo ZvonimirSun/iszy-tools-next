@@ -8,6 +8,10 @@ const { copy } = useCopy()
 
 const lastEvent = ref<KeyboardEvent | null>(null)
 
+useEventListener(document, 'keydown', (event) => {
+  lastEvent.value = event
+})
+
 const rows = computed<KeyInfo[]>(() => {
   const event = lastEvent.value
   if (!event) {
@@ -41,7 +45,6 @@ const rows = computed<KeyInfo[]>(() => {
 const copyText = computed(() => rows.value.map(row => `${row.label}: ${row.value}`).join('\n'))
 
 function handleKeydown(event: KeyboardEvent) {
-  event.preventDefault()
   lastEvent.value = event
 }
 
@@ -71,11 +74,14 @@ function formatLocation(location: number) {
       <div class="mx-auto mb-3 flex size-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
         <UIcon name="i-lucide:keyboard" class="size-6" />
       </div>
+      <div v-if="lastEvent" class="mb-2 font-mono text-4xl font-semibold">
+        {{ lastEvent.key }}
+      </div>
       <h1 class="text-lg font-semibold">
-        点击此区域后按下任意按键
+        按下任意按键
       </h1>
       <p class="mt-1 text-sm text-muted">
-        支持组合键，按键信息仅在当前页面显示。
+        页面会监听当前标签页内的键盘事件，并展示最后一次按键。
       </p>
     </div>
 
