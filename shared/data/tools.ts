@@ -288,6 +288,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['beautify', 'formatter', 'javascript'],
       },
       {
+        label: 'SQL格式化',
+        name: 'sql-formatter',
+        icon: 'i-lucide:database',
+        description: '在线格式化 SQL 查询语句，支持 MySQL、PostgreSQL、SQLite、SQL Server、Oracle、BigQuery 等常见方言。',
+        tags: ['SQL', '格式化', '数据库'],
+        aliases: ['SQL美化', 'SQL整理', '查询格式化'],
+        keywords: ['sql formatter', 'mysql', 'postgresql', 'sqlite', 'database'],
+      },
+      {
         label: 'XML格式化',
         name: 'xml-formatter',
         icon: 'i-lucide:code-xml',
