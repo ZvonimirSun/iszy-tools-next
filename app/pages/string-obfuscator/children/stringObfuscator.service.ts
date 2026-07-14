@@ -3,6 +3,7 @@ export interface ObfuscateOptions {
   keepEnd: number
   maskChar: string
   perLine: boolean
+  keepSpaces?: boolean
 }
 
 export function obfuscateString(value: string, options: ObfuscateOptions) {
@@ -18,14 +19,18 @@ function obfuscateSingle(value: string, options: ObfuscateOptions) {
   const keepStart = Math.max(0, Math.trunc(options.keepStart))
   const keepEnd = Math.max(0, Math.trunc(options.keepEnd))
   const maskChar = options.maskChar || '*'
+  const keepSpaces = options.keepSpaces ?? true
 
   if (chars.length <= keepStart + keepEnd) {
-    return maskChar.repeat(chars.length)
+    return chars.map(char => keepSpaces && char === ' ' ? char : maskChar).join('')
   }
 
-  return [
-    chars.slice(0, keepStart).join(''),
-    maskChar.repeat(chars.length - keepStart - keepEnd),
-    keepEnd ? chars.slice(-keepEnd).join('') : '',
-  ].join('')
+  return chars
+    .map((char, index) => {
+      if (keepSpaces && char === ' ') {
+        return char
+      }
+      return index < keepStart || index >= chars.length - keepEnd ? char : maskChar
+    })
+    .join('')
 }

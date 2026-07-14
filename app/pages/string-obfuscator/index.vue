@@ -6,6 +6,7 @@ const keepStart = ref(4)
 const keepEnd = ref(4)
 const maskChar = ref('*')
 const perLine = ref(true)
+const keepSpaces = ref(true)
 const { copy } = useCopy()
 
 const outputText = computed(() => obfuscateString(inputText.value, {
@@ -13,12 +14,13 @@ const outputText = computed(() => obfuscateString(inputText.value, {
   keepEnd: keepEnd.value,
   maskChar: maskChar.value,
   perLine: perLine.value,
+  keepSpaces: keepSpaces.value,
 }))
 </script>
 
 <template>
   <div class="mx-auto flex w-full max-w-4xl flex-col gap-4">
-    <div class="grid gap-3 rounded-lg border border-muted bg-muted/30 p-4 md:grid-cols-4">
+    <div class="grid gap-3 rounded-lg border border-muted bg-muted/30 p-4 md:grid-cols-5">
       <UFormField label="保留开头">
         <UInputNumber v-model="keepStart" class="w-full" :min="0" :max="100" />
       </UFormField>
@@ -30,6 +32,9 @@ const outputText = computed(() => obfuscateString(inputText.value, {
       </UFormField>
       <UFormField label="处理方式">
         <USwitch v-model="perLine" label="逐行处理" class="pt-2" />
+      </UFormField>
+      <UFormField label="空格">
+        <USwitch v-model="keepSpaces" label="保留空格" class="pt-2" />
       </UFormField>
     </div>
 

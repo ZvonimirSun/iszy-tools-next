@@ -13,4 +13,9 @@ describe('stringObfuscator.service', () => {
   it('支持逐行处理和 Unicode 字符', () => {
     expect(obfuscateString('用户123\nsecret', { keepStart: 1, keepEnd: 1, maskChar: '•', perLine: true })).toBe('用•••3\ns••••t')
   })
+
+  it('默认保留空格，也可以关闭', () => {
+    expect(obfuscateString('12345 67890', { keepStart: 4, keepEnd: 0, maskChar: '*', perLine: false })).toBe('1234* *****')
+    expect(obfuscateString('12345 67890', { keepStart: 4, keepEnd: 0, maskChar: '*', perLine: false, keepSpaces: false })).toBe('1234*******')
+  })
 })
