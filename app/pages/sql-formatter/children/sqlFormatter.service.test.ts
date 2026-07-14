@@ -6,6 +6,7 @@ describe('sqlFormatter.service', () => {
     const result = formatSql('select * from users where id = 1', {
       language: 'postgresql',
       keywordCase: 'upper',
+      indentStyle: 'standard',
       tabWidth: 2,
       useTabs: false,
     })
@@ -19,8 +20,21 @@ describe('sqlFormatter.service', () => {
     expect(formatSql('   ', {
       language: 'sql',
       keywordCase: 'preserve',
+      indentStyle: 'standard',
       tabWidth: 2,
       useTabs: false,
     })).toBe('')
+  })
+
+  it('支持表格式缩进风格', () => {
+    const result = formatSql('select id,name from users', {
+      language: 'sql',
+      keywordCase: 'upper',
+      indentStyle: 'tabularLeft',
+      tabWidth: 2,
+      useTabs: false,
+    })
+
+    expect(result).toContain('SELECT')
   })
 })

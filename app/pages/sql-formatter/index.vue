@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SqlLanguage } from 'sql-formatter'
+import type { SqlFormatterOptions } from './children/sqlFormatter.service'
 import { formatSql } from './children/sqlFormatter.service'
 
 const sampleSql = `select u.id,u.name,count(o.id) as order_count
@@ -12,20 +13,24 @@ order by order_count desc;`
 const inputText = ref(sampleSql)
 const language = ref<SqlLanguage>('postgresql')
 const keywordCase = ref<'preserve' | 'upper' | 'lower'>('upper')
+const indentStyle = ref<SqlFormatterOptions['indentStyle']>('standard')
 const tabWidth = ref(2)
 const useTabs = ref(false)
 const { copy } = useCopy()
 
 const languageOptions = [
   { label: 'Standard SQL', value: 'sql' },
+  { label: 'GCP BigQuery', value: 'bigquery' },
+  { label: 'IBM DB2', value: 'db2' },
+  { label: 'Apache Hive', value: 'hive' },
   { label: 'MySQL', value: 'mysql' },
   { label: 'PostgreSQL', value: 'postgresql' },
   { label: 'SQLite', value: 'sqlite' },
   { label: 'MariaDB', value: 'mariadb' },
   { label: 'SQL Server', value: 'transactsql' },
   { label: 'Oracle PL/SQL', value: 'plsql' },
-  { label: 'BigQuery', value: 'bigquery' },
-  { label: 'DB2', value: 'db2' },
+  { label: 'Couchbase N1QL', value: 'n1ql' },
+  { label: 'Amazon Redshift', value: 'redshift' },
   { label: 'Snowflake', value: 'snowflake' },
   { label: 'Spark', value: 'spark' },
   { label: 'Trino', value: 'trino' },
@@ -36,6 +41,11 @@ const keywordCaseOptions = [
   { label: '大写关键字', value: 'upper' },
   { label: '小写关键字', value: 'lower' },
 ]
+const indentStyleOptions = [
+  { label: '标准缩进', value: 'standard' },
+  { label: '表格式左对齐', value: 'tabularLeft' },
+  { label: '表格式右对齐', value: 'tabularRight' },
+]
 
 const formatted = computed(() => {
   try {
@@ -44,6 +54,7 @@ const formatted = computed(() => {
       value: formatSql(inputText.value, {
         language: language.value,
         keywordCase: keywordCase.value,
+        indentStyle: indentStyle.value,
         tabWidth: tabWidth.value,
         useTabs: useTabs.value,
       }),
@@ -71,7 +82,7 @@ function fillExample() {
 
 <template>
   <div class="max-h-full flex flex-col gap-4">
-    <div class="grid gap-3 md:grid-cols-4">
+    <div class="grid gap-3 md:grid-cols-5">
       <UFormField label="SQL 方言">
         <USelect v-model="language" :items="languageOptions" class="w-full" />
       </UFormField>
@@ -80,6 +91,9 @@ function fillExample() {
       </UFormField>
       <UFormField label="缩进宽度">
         <UInputNumber v-model="tabWidth" class="w-full" :min="1" :max="8" />
+      </UFormField>
+      <UFormField label="缩进风格">
+        <USelect v-model="indentStyle" :items="indentStyleOptions" class="w-full" />
       </UFormField>
       <UFormField label="缩进方式">
         <USwitch v-model="useTabs" label="使用 Tab" class="pt-2" />
