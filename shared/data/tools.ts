@@ -414,6 +414,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['html entities', 'escape', 'unescape', 'entity'],
       },
       {
+        label: 'Basic Auth生成器',
+        name: 'basic-auth',
+        icon: 'i-lucide:key-square',
+        description: '在线根据用户名和密码生成 Basic Auth Token、Authorization Header 和 cURL 示例，适合接口调试。',
+        tags: ['HTTP', '认证', 'Base64'],
+        aliases: ['Basic认证', 'Authorization生成', 'Basic Auth'],
+        keywords: ['basic auth', 'authorization', 'header', 'base64'],
+      },
+      {
         label: '二维码编解码',
         name: 'qrcode',
         icon: 'i-lucide:qr-code',
