@@ -710,6 +710,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['subnet', 'ipv4', 'ipv6', 'network'],
       },
       {
+        label: 'IPv4地址转换',
+        name: 'ipv4-converter',
+        icon: 'i-lucide:binary',
+        description: '在线进行 IPv4 点分十进制、整数、十六进制、二进制和 IPv4-mapped IPv6 表示互相转换。',
+        tags: ['IPv4', '网络', '转换'],
+        aliases: ['IP地址转换', 'IPv4整数转换', 'IPv4十六进制'],
+        keywords: ['ipv4 converter', 'decimal', 'hex', 'binary'],
+      },
+      {
         label: 'WHOIS查询',
         name: 'whois',
         icon: 'i-lucide:globe',
