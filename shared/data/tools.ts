@@ -168,6 +168,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['list', 'dedupe', 'sort', 'separator', 'prefix', 'suffix'],
       },
       {
+        label: '文本统计',
+        name: 'text-statistics',
+        icon: 'i-lucide:sigma',
+        description: '在线统计文本字符数、Unicode 码点、词数、行数、句子数、UTF-8 字节数和估算阅读时间。',
+        tags: ['文本', '统计', '字数'],
+        aliases: ['字数统计', '字符统计', '文本分析'],
+        keywords: ['text statistics', 'word count', 'characters', 'bytes'],
+      },
+      {
         label: 'Slugify字符串',
         name: 'slugify',
         icon: 'i-lucide:link',
