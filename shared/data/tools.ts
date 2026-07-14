@@ -234,6 +234,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['http status', 'status code', 'response code', '404', '500'],
       },
       {
+        label: 'MIME类型查询',
+        name: 'mime-types',
+        icon: 'i-lucide:file-question',
+        description: '在线查询常见文件扩展名对应的 MIME Type，也可按 MIME 片段反查扩展名，适合上传、响应头和静态资源调试。',
+        tags: ['MIME', '文件', 'HTTP'],
+        aliases: ['Content-Type查询', '扩展名查询', '媒体类型'],
+        keywords: ['mime type', 'content-type', 'extension', 'file type'],
+      },
+      {
         label: '颜色转换器',
         name: 'color-transform',
         icon: 'i-lucide:palette',
