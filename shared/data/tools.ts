@@ -168,6 +168,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['list', 'dedupe', 'sort', 'separator', 'prefix', 'suffix'],
       },
       {
+        label: 'Slugify字符串',
+        name: 'slugify',
+        icon: 'i-lucide:link',
+        description: '在线将标题、文件名或任意文本转换为 URL、文件名和 ID 友好的 slug，支持自定义分隔符和中文保留。',
+        tags: ['文本', 'URL', '命名'],
+        aliases: ['Slug生成', 'URL友好字符串', '文件名安全'],
+        keywords: ['slugify', 'slug', 'filename', 'url safe'],
+      },
+      {
         label: 'Mock工具',
         name: 'mock',
         icon: 'i-lucide:server-cog',
