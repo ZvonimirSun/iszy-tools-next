@@ -177,6 +177,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['slugify', 'slug', 'filename', 'url safe'],
       },
       {
+        label: 'Keycode信息',
+        name: 'keycode',
+        icon: 'i-lucide:keyboard',
+        description: '在线查看键盘按键事件的 key、code、keyCode、which、location 和组合键状态，适合前端交互调试。',
+        tags: ['键盘', '前端', '调试'],
+        aliases: ['按键码', 'KeyboardEvent', '键盘事件'],
+        keywords: ['keycode', 'keyboard', 'event.key', 'event.code'],
+      },
+      {
         label: 'Mock工具',
         name: 'mock',
         icon: 'i-lucide:server-cog',
