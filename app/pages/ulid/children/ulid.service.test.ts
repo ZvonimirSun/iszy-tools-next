@@ -8,10 +8,10 @@ describe('ulid.service', () => {
   })
 
   it('生成 26 位 ULID', () => {
-    const ulid = createUlid(0, new Uint8Array(10))
+    const ulid = createUlid(0)
 
-    expect(ulid).toBe('00000000000000000000000000')
     expect(ulid).toHaveLength(26)
+    expect(ulid).toMatch(/^0000000000[0-9A-HJKMNP-TV-Z]{16}$/)
   })
 
   it('支持批量生成和小写输出', () => {

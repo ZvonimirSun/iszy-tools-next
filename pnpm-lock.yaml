@@ -274,6 +274,9 @@ importers:
       ua-parser-js:
         specifier: ^2.0.10
         version: 2.0.10
+      ulid:
+        specifier: ^3.0.2
+        version: 3.0.2
       unicode-emoji-json:
         specifier: ^0.9.0
         version: 0.9.0
@@ -10198,6 +10201,10 @@ packages:
 
   ufo@1.6.4:
     resolution: {integrity: sha512-JFNbkD1Svwe0KvGi8GOeLcP4kAWQ609twvCdcHxq1oSL8svv39ZuSvajcD8B+5D0eL4+s1Is2D/O6KN3qcTeRA==}
+
+  ulid@3.0.2:
+    resolution: {integrity: sha512-yu26mwteFYzBAot7KVMqFGCVpsF6g8wXfJzQUHvu1no3+rRRSFcSV2nKeYvNPLD2J4b08jYBDhHUjeH0ygIl9w==}
+    hasBin: true
 
   ultrahtml@1.6.0:
     resolution: {integrity: sha512-R9fBn90VTJrqqLDwyMph+HGne8eqY1iPfYhPzZrvKpIfwkWZbcYlfpsb8B9dTvBfpy1/hqAD7Wi8EKfP9e8zdw==}
@@ -23435,6 +23442,8 @@ snapshots:
   uc.micro@2.1.0: {}
 
   ufo@1.6.4: {}
+
+  ulid@3.0.2: {}
 
   ultrahtml@1.6.0: {}
 
