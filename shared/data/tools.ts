@@ -207,6 +207,15 @@ export const tools: OriginToolMenu[] = [
         requiresNetwork: true,
       },
       {
+        label: 'HTTP状态码',
+        name: 'http-status-codes',
+        icon: 'i-lucide:badge-info',
+        description: '在线查询 HTTP 状态码的英文短语、分类和中文说明，适合接口调试、网关排查和日志分析。',
+        tags: ['HTTP', '状态码', '接口'],
+        aliases: ['HTTP状态码查询', '响应码', '状态码大全'],
+        keywords: ['http status', 'status code', 'response code', '404', '500'],
+      },
+      {
         label: '颜色转换器',
         name: 'color-transform',
         icon: 'i-lucide:palette',
