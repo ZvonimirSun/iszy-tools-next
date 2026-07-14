@@ -531,6 +531,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['password strength', 'entropy', 'security'],
       },
       {
+        label: 'RSA密钥生成',
+        name: 'rsa-key-pair',
+        icon: 'i-lucide:key-round',
+        description: '在线使用 Web Crypto 在浏览器本地生成 RSA 公私钥 PEM，支持 2048、3072、4096 bit 等密钥长度。',
+        tags: ['RSA', '密钥', '安全'],
+        aliases: ['RSA Key Pair', '公私钥生成', 'PEM生成'],
+        keywords: ['rsa', 'key pair', 'public key', 'private key', 'pem'],
+      },
+      {
         label: '文本HASH',
         name: 'hash-text',
         icon: 'i-lucide:text-cursor-input',
