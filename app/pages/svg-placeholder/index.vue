@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { createSvgDataUrl, createSvgPlaceholder } from './children/svgPlaceholder.service'
+import { createSvgBase64DataUrl, createSvgDataUrl, createSvgPlaceholder } from './children/svgPlaceholder.service'
 
 const width = ref(800)
 const height = ref(450)
 const text = ref('800 x 450')
 const background = ref('#E5E7EB')
 const foreground = ref('#111827')
+const fontSize = ref(45)
+const exactSize = ref(true)
 const { copy } = useCopy()
 
 const svg = computed(() => createSvgPlaceholder({
@@ -14,8 +16,11 @@ const svg = computed(() => createSvgPlaceholder({
   text: text.value,
   background: background.value,
   foreground: foreground.value,
+  fontSize: fontSize.value,
+  exactSize: exactSize.value,
 }))
 const dataUrl = computed(() => createSvgDataUrl(svg.value))
+const base64DataUrl = computed(() => createSvgBase64DataUrl(svg.value))
 
 function downloadSvg() {
   const blob = new Blob([svg.value], { type: 'image/svg+xml;charset=utf-8' })
@@ -46,6 +51,12 @@ function downloadSvg() {
       <UFormField label="文字色">
         <UInput v-model="foreground" class="w-full font-mono" />
       </UFormField>
+      <UFormField label="字体大小">
+        <UInputNumber v-model="fontSize" class="w-full" :min="1" :max="1000" />
+      </UFormField>
+      <UFormField label="尺寸属性">
+        <USwitch v-model="exactSize" label="写入 width/height" class="pt-2" />
+      </UFormField>
     </div>
 
     <div class="overflow-hidden rounded-lg border border-muted bg-muted/30 p-4">
@@ -61,6 +72,17 @@ function downloadSvg() {
           </UButton>
           <UButton color="primary" icon="i-lucide:download" @click="downloadSvg">
             下载 SVG
+          </UButton>
+        </div>
+      </div>
+    </ContainerToolItem>
+
+    <ContainerToolItem label="Base64 Data URL">
+      <div class="flex flex-col gap-2">
+        <UTextarea :model-value="base64DataUrl" class="w-full font-mono" :rows="4" resize readonly />
+        <div class="flex justify-end">
+          <UButton color="neutral" variant="outline" icon="i-lucide:copy" @click="copy(base64DataUrl)">
+            复制 Base64
           </UButton>
         </div>
       </div>
