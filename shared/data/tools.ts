@@ -177,6 +177,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['text statistics', 'word count', 'characters', 'bytes'],
       },
       {
+        label: '字符串打码',
+        name: 'string-obfuscator',
+        icon: 'i-lucide:scan-text',
+        description: '在线对 Token、邮箱、账号等敏感字符串做遮罩处理，支持保留前后字符、替换字符和逐行处理。',
+        tags: ['文本', '脱敏', '安全'],
+        aliases: ['文本脱敏', '字符串遮罩', 'Token打码'],
+        keywords: ['string obfuscator', 'mask', 'redact', 'secret'],
+      },
+      {
         label: 'Lorem Ipsum生成',
         name: 'lorem-ipsum',
         icon: 'i-lucide:text',
