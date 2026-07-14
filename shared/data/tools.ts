@@ -513,6 +513,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['token generator', 'random string', 'password', 'secret'],
       },
       {
+        label: 'ULID生成器',
+        name: 'ulid',
+        icon: 'i-lucide:list-ordered',
+        description: '在线批量生成 ULID 可排序唯一标识，支持固定时间戳和大小写输出，适合日志、事件和数据库 ID。',
+        tags: ['ULID', '生成器', 'ID'],
+        aliases: ['可排序ID', '唯一ID', '随机ID'],
+        keywords: ['ulid', 'sortable id', 'identifier'],
+      },
+      {
         label: '文本HASH',
         name: 'hash-text',
         icon: 'i-lucide:text-cursor-input',
