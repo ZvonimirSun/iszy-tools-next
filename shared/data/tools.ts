@@ -722,6 +722,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['screen record', 'media recorder', 'webm'],
       },
       {
+        label: 'SVG占位图生成',
+        name: 'svg-placeholder',
+        icon: 'i-lucide:image-plus',
+        description: '在线生成指定尺寸、文字和颜色的 SVG 占位图，可复制源码或下载文件，适合原型和布局占位。',
+        tags: ['SVG', '图片', '占位图'],
+        aliases: ['占位图', 'Placeholder', 'SVG生成'],
+        keywords: ['svg placeholder', 'image placeholder', 'mockup'],
+      },
+      {
         label: '这是什么动漫',
         name: 'what-anime-is-this',
         icon: 'i-lucide:scan-search',
