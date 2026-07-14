@@ -6,6 +6,15 @@ describe('tokenGenerator.service', () => {
     expect(createTokenCharset({ uppercase: true, lowercase: false, numbers: true, symbols: false })).toBe('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
   })
 
+  it('符号字符集覆盖常见标点', () => {
+    const charset = createTokenCharset({ uppercase: false, lowercase: false, numbers: false, symbols: true })
+
+    expect(charset).toContain('.')
+    expect(charset).toContain('@')
+    expect(charset).toContain('#')
+    expect(charset).toContain('+')
+  })
+
   it('生成指定数量和长度的 token', () => {
     const tokens = generateTokens({
       length: 12,

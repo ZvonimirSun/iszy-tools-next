@@ -10,7 +10,7 @@ export interface TokenGeneratorOptions {
 const UPPERCASE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 const LOWERCASE_CHARS = 'abcdefghijklmnopqrstuvwxyz'
 const NUMBER_CHARS = '0123456789'
-const SYMBOL_CHARS = '!@#$%^&*_-+=?'
+const SYMBOL_CHARS = '.,;:!?./-"\'#{([-|\\@)]=}*+!$%^&_+='
 
 export function createTokenCharset(options: Pick<TokenGeneratorOptions, 'uppercase' | 'lowercase' | 'numbers' | 'symbols'>) {
   return [
