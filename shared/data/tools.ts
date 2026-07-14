@@ -324,6 +324,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['converter', 'config', 'format'],
       },
       {
+        label: 'JSON转CSV',
+        name: 'json-csv',
+        icon: 'i-lucide:table',
+        description: '在线将 JSON 对象或对象数组转换为 CSV，支持字段自动推断、嵌套对象展开、分隔符选择和文件下载。',
+        tags: ['JSON', 'CSV', '格式转换'],
+        aliases: ['json to csv', 'CSV转换', '表格转换'],
+        keywords: ['json csv', 'export', 'spreadsheet', 'table'],
+      },
+      {
         label: 'TOML格式化',
         name: 'toml-formatter',
         icon: 'i-lucide:file-cog',
