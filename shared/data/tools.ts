@@ -333,6 +333,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['docker', 'compose', 'container', 'yaml'],
       },
       {
+        label: 'Chmod计算器',
+        name: 'chmod-calculator',
+        icon: 'i-lucide:file-lock',
+        description: '在线计算 Linux chmod 权限，支持读写执行勾选、八进制权限、符号权限和 chmod 命令互转。',
+        tags: ['Linux', '权限', 'Chmod'],
+        aliases: ['权限计算器', '文件权限', 'chmod'],
+        keywords: ['chmod', 'permission', 'octal', 'linux'],
+      },
+      {
         label: 'JSON/YAML转换',
         name: 'json-yaml',
         icon: 'i-lucide:replace-all',
