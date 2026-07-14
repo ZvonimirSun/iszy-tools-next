@@ -504,6 +504,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['uuid v4', 'uuid v7', 'identifier'],
       },
       {
+        label: 'Token生成器',
+        name: 'token-generator',
+        icon: 'i-lucide:ticket',
+        description: '在线使用 Web Crypto 批量生成随机 Token，支持长度、数量、大小写字母、数字和符号字符集配置。',
+        tags: ['Token', '随机', '生成器'],
+        aliases: ['随机Token', '密码生成', '密钥生成'],
+        keywords: ['token generator', 'random string', 'password', 'secret'],
+      },
+      {
         label: '文本HASH',
         name: 'hash-text',
         icon: 'i-lucide:text-cursor-input',
