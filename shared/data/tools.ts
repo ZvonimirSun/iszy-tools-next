@@ -186,6 +186,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['string obfuscator', 'mask', 'redact', 'secret'],
       },
       {
+        label: 'Emoji选择器',
+        name: 'emoji-picker',
+        icon: 'i-lucide:smile',
+        description: '在线搜索和复制常用 Emoji，支持按分类筛选和中英文关键词查找，适合文案、提交信息和聊天内容。',
+        tags: ['Emoji', '文本', '符号'],
+        aliases: ['表情选择器', 'Emoji复制', '表情符号'],
+        keywords: ['emoji picker', 'unicode', 'copy', 'symbol'],
+      },
+      {
         label: 'Lorem Ipsum生成',
         name: 'lorem-ipsum',
         icon: 'i-lucide:text',
