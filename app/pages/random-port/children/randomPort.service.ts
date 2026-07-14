@@ -5,14 +5,17 @@ export interface RandomPortOptions {
   unique: boolean
 }
 
+const MIN_DYNAMIC_PORT = 1024
+const MAX_PORT = 65535
+
 export function generateRandomPorts(options: RandomPortOptions) {
+  if (options.min > options.max) {
+    throw new Error('最小端口不能大于最大端口')
+  }
+
   const min = clampPort(options.min)
   const max = clampPort(options.max)
   const count = Math.min(1000, Math.max(1, Math.trunc(options.count)))
-
-  if (min > max) {
-    throw new Error('最小端口不能大于最大端口')
-  }
 
   if (options.unique && count > max - min + 1) {
     throw new Error('唯一端口数量不能超过范围大小')
@@ -37,10 +40,10 @@ export function generateRandomPorts(options: RandomPortOptions) {
 
 function clampPort(value: number) {
   if (!Number.isFinite(value)) {
-    return 1024
+    return MIN_DYNAMIC_PORT
   }
 
-  return Math.min(65535, Math.max(0, Math.trunc(value)))
+  return Math.min(MAX_PORT, Math.max(MIN_DYNAMIC_PORT, Math.trunc(value)))
 }
 
 function randomInt(min: number, max: number) {

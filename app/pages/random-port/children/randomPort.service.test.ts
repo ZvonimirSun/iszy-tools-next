@@ -9,6 +9,12 @@ describe('randomPort.service', () => {
     expect(ports.every(port => port >= 3000 && port <= 3010)).toBe(true)
   })
 
+  it('避开系统保留端口范围', () => {
+    const ports = generateRandomPorts({ min: 0, max: 2000, count: 20, unique: true })
+
+    expect(ports.every(port => port >= 1024 && port <= 2000)).toBe(true)
+  })
+
   it('支持唯一端口', () => {
     const ports = generateRandomPorts({ min: 4000, max: 4010, count: 10, unique: true })
 

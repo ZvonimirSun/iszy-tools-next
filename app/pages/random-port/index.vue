@@ -49,10 +49,10 @@ function useDevRange() {
   <div class="mx-auto flex w-full max-w-3xl flex-col gap-4">
     <div class="grid gap-3 md:grid-cols-3">
       <UFormField label="最小端口">
-        <UInputNumber v-model="min" class="w-full" :min="0" :max="65535" />
+        <UInputNumber v-model="min" class="w-full" :min="1024" :max="65535" />
       </UFormField>
       <UFormField label="最大端口">
-        <UInputNumber v-model="max" class="w-full" :min="0" :max="65535" />
+        <UInputNumber v-model="max" class="w-full" :min="1024" :max="65535" />
       </UFormField>
       <UFormField label="数量">
         <UInputNumber v-model="count" class="w-full" :min="1" :max="1000" />
