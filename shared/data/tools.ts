@@ -405,6 +405,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['url parser', 'query', 'search params', 'protocol', 'hostname'],
       },
       {
+        label: 'HTML实体转换',
+        name: 'html-entities',
+        icon: 'i-lucide:code',
+        description: '在线进行 HTML 实体编码和解码，支持常见命名实体以及十进制、十六进制数字实体，适合页面片段和接口文本处理。',
+        tags: ['HTML', '实体', '编码'],
+        aliases: ['HTML转义', 'HTML反转义', '实体编码'],
+        keywords: ['html entities', 'escape', 'unescape', 'entity'],
+      },
+      {
         label: '二维码编解码',
         name: 'qrcode',
         icon: 'i-lucide:qr-code',
