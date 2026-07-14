@@ -2,15 +2,30 @@
 import { generateLoremIpsum } from './children/loremIpsum.service'
 
 const paragraphs = ref(3)
-const sentencesPerParagraph = ref(4)
-const wordsPerSentence = ref(12)
+const sentenceMin = ref(3)
+const sentenceMax = ref(8)
+const wordMin = ref(8)
+const wordMax = ref(15)
+const startWithLoremIpsum = ref(true)
+const asHtml = ref(false)
+const refreshKey = ref(0)
 const { copy } = useCopy()
 
-const outputText = computed(() => generateLoremIpsum({
-  paragraphs: paragraphs.value,
-  sentencesPerParagraph: sentencesPerParagraph.value,
-  wordsPerSentence: wordsPerSentence.value,
-}))
+const outputText = computed(() => {
+  void refreshKey.value
+
+  return generateLoremIpsum({
+    paragraphs: paragraphs.value,
+    sentencesPerParagraph: [sentenceMin.value, sentenceMax.value],
+    wordsPerSentence: [wordMin.value, wordMax.value],
+    startWithLoremIpsum: startWithLoremIpsum.value,
+    asHtml: asHtml.value,
+  })
+})
+
+function refresh() {
+  refreshKey.value += 1
+}
 </script>
 
 <template>
@@ -19,12 +34,28 @@ const outputText = computed(() => generateLoremIpsum({
       <UFormField label="段落数">
         <UInputNumber v-model="paragraphs" class="w-full" :min="1" :max="50" />
       </UFormField>
-      <UFormField label="每段句子数">
-        <UInputNumber v-model="sentencesPerParagraph" class="w-full" :min="1" :max="20" />
+      <UFormField label="每段句子最少">
+        <UInputNumber v-model="sentenceMin" class="w-full" :min="1" :max="50" />
       </UFormField>
-      <UFormField label="每句单词数">
-        <UInputNumber v-model="wordsPerSentence" class="w-full" :min="3" :max="40" />
+      <UFormField label="每段句子最多">
+        <UInputNumber v-model="sentenceMax" class="w-full" :min="1" :max="50" />
       </UFormField>
+      <UFormField label="每句单词最少">
+        <UInputNumber v-model="wordMin" class="w-full" :min="1" :max="50" />
+      </UFormField>
+      <UFormField label="每句单词最多">
+        <UInputNumber v-model="wordMax" class="w-full" :min="1" :max="50" />
+      </UFormField>
+      <div class="flex flex-wrap items-center gap-3 pt-2">
+        <USwitch v-model="startWithLoremIpsum" label="以 Lorem ipsum 开头" />
+        <USwitch v-model="asHtml" label="HTML 段落" />
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-2">
+      <UButton color="primary" icon="i-lucide:refresh-cw" @click="refresh">
+        重新生成
+      </UButton>
     </div>
 
     <ContainerToolItem label="占位文本">
