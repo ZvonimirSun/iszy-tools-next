@@ -1,3 +1,5 @@
+import JSON5 from 'json5'
+
 export interface JsonCsvOptions {
   delimiter?: ',' | ';' | '\t'
   includeBom?: boolean
@@ -11,7 +13,7 @@ export interface JsonCsvResult {
 
 export function convertJsonToCsv(input: string, options: JsonCsvOptions = {}): JsonCsvResult {
   const delimiter = options.delimiter ?? ','
-  const parsed = JSON.parse(input) as unknown
+  const parsed = JSON5.parse(input) as unknown
   const sourceRows = normalizeRows(parsed)
   const rows = sourceRows.map(row => flattenObject(row))
   const fields = collectFields(rows)

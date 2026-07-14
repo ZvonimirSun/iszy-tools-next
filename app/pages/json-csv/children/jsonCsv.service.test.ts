@@ -9,6 +9,15 @@ describe('jsonCsv.service', () => {
     expect(result.csv).toBe('name,age,city\nAlice,18,\nBob,,Paris')
   })
 
+  it('支持 JSON5 输入', () => {
+    const result = convertJsonToCsv(`[
+      // user row
+      { name: 'Alice', age: 18 },
+    ]`)
+
+    expect(result.csv).toBe('name,age\nAlice,18')
+  })
+
   it('展开嵌套对象并序列化数组', () => {
     const result = convertJsonToCsv('[{"user":{"name":"Alice"},"tags":["a","b"]}]')
 
