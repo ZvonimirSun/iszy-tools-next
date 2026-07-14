@@ -540,6 +540,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['rsa', 'key pair', 'public key', 'private key', 'pem'],
       },
       {
+        label: 'OTP生成校验',
+        name: 'otp',
+        icon: 'i-lucide:shield-keyhole',
+        description: '在线生成和校验 TOTP 一次性验证码，支持 Base32 Secret、otpauth URI、SHA 算法和时间窗口校验。',
+        tags: ['OTP', 'TOTP', '认证'],
+        aliases: ['一次性密码', 'MFA验证码', '双因素认证'],
+        keywords: ['otp', 'totp', 'mfa', 'authenticator', 'otpauth'],
+      },
+      {
         label: '文本HASH',
         name: 'hash-text',
         icon: 'i-lucide:text-cursor-input',
