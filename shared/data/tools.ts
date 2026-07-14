@@ -415,6 +415,15 @@ export const tools: OriginToolMenu[] = [
         requiresNetwork: true,
       },
       {
+        label: 'Open Graph Meta生成',
+        name: 'open-graph-meta',
+        icon: 'i-lucide:share-2',
+        description: '在线生成 Open Graph 和 Twitter Card meta 标签，适合网页分享预览和 SEO 片段调试。',
+        tags: ['HTML', 'SEO', 'Meta'],
+        aliases: ['OG Meta', '分享标签', 'Twitter Card'],
+        keywords: ['open graph', 'meta tag', 'twitter card', 'seo'],
+      },
+      {
         label: 'glTF模型浏览',
         name: '3d-view',
         icon: 'i-lucide:box',
