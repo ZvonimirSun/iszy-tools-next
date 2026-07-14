@@ -163,6 +163,9 @@ importers:
       dayjs:
         specifier: ^1.11.21
         version: 1.11.21
+      emojilib:
+        specifier: ^4.0.3
+        version: 4.0.3
       eslint-linter-browserify:
         specifier: ^10.4.1
         version: 10.4.1
@@ -259,6 +262,9 @@ importers:
       ua-parser-js:
         specifier: ^2.0.10
         version: 2.0.10
+      unicode-emoji-json:
+        specifier: ^0.9.0
+        version: 0.9.0
       unstorage:
         specifier: ^1.17.5
         version: 1.17.5(db0@0.3.4)(idb-keyval@6.2.5)(ioredis@5.11.0)
@@ -6632,6 +6638,9 @@ packages:
   emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
 
+  emojilib@4.0.3:
+    resolution: {integrity: sha512-KbWiYre9aRSaPbHrHZIz9zmoM+21LAsK1VFJtnTh1VCtWE/rNMDviGhQTmselFl95dhqtGlY22iH0leG5BuW0g==}
+
   empathic@2.0.1:
     resolution: {integrity: sha512-YGRs8knHhKHVShLkFET/rWAU8kmHbOV5LwN938RHI0pljAJ1Gf6SzXsSmRaEzcXTtOOmVqJ5+WtQPL5uigY50Q==}
     engines: {node: '>=14'}
@@ -10195,6 +10204,9 @@ packages:
 
   unhead@2.1.15:
     resolution: {integrity: sha512-MCt5T90mCWyr3Z6pUCdM9lVRXoMoVBlL7z7U4CYVIiaDiuzad/UCfLuMqz5MeNmpZUgoBCQnrucJimU7EZR+XA==}
+
+  unicode-emoji-json@0.9.0:
+    resolution: {integrity: sha512-HdrQW/7SdbXUsTd8uTATv7LvQJkCSgbAgRCDCtOhQ6xn3EAx+xZHQtRniOXWJK3ywIqPegkNhP4U4EbuFsiQng==}
 
   unicorn-magic@0.3.0:
     resolution: {integrity: sha512-+QBBXBCvifc56fsbuxZQ6Sic3wqqc3WWaqxs58gvJrcOuN83HGTCwz3oS5phzU9LthRNE9VrJCFCLUgHeeFnfA==}
@@ -18998,6 +19010,8 @@ snapshots:
 
   emoji-regex@9.2.2: {}
 
+  emojilib@4.0.3: {}
+
   empathic@2.0.1: {}
 
   encodeurl@2.0.0: {}
@@ -23427,6 +23441,8 @@ snapshots:
   unhead@2.1.15:
     dependencies:
       hookable: 6.1.1
+
+  unicode-emoji-json@0.9.0: {}
 
   unicorn-magic@0.3.0: {}
 

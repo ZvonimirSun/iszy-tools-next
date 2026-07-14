@@ -16,17 +16,20 @@ const results = computed(() => searchEmojis(query.value, category.value))
       <USelect v-model="category" :items="categories" />
     </div>
 
-    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
       <button
         v-for="item in results"
         :key="`${item.emoji}-${item.name}`"
-        class="rounded-lg border border-muted bg-muted/30 p-3 text-left transition hover:border-primary hover:bg-primary/5"
+        class="grid grid-cols-[2.5rem_minmax(0,1fr)] items-center gap-3 rounded-lg border border-muted bg-muted/30 p-3 text-left transition hover:border-primary hover:bg-primary/5"
         type="button"
         @click="copy(item.emoji)"
       >
-        <span class="block text-3xl">{{ item.emoji }}</span>
-        <span class="mt-2 block truncate text-sm font-medium">{{ item.name }}</span>
-        <span class="mt-1 block text-xs text-muted">{{ item.category }}</span>
+        <span class="text-3xl">{{ item.emoji }}</span>
+        <span class="min-w-0">
+          <span class="block truncate text-sm font-medium">{{ item.title }}</span>
+          <span class="mt-1 block truncate font-mono text-xs text-muted">{{ item.codePoints }}</span>
+          <span class="mt-1 block truncate font-mono text-xs text-muted">{{ item.unicode }}</span>
+        </span>
       </button>
     </div>
 
