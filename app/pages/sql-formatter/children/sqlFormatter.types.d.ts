@@ -1,18 +1,18 @@
 declare module 'sql-formatter' {
-  export type SqlLanguage =
-    | 'sql'
-    | 'mysql'
-    | 'postgresql'
-    | 'sqlite'
-    | 'mariadb'
-    | 'transactsql'
-    | 'plsql'
-    | 'bigquery'
-    | 'db2'
-    | 'snowflake'
-    | 'spark'
-    | 'trino'
-    | 'tsql'
+  export type SqlLanguage
+    = | 'sql'
+      | 'mysql'
+      | 'postgresql'
+      | 'sqlite'
+      | 'mariadb'
+      | 'transactsql'
+      | 'plsql'
+      | 'bigquery'
+      | 'db2'
+      | 'snowflake'
+      | 'spark'
+      | 'trino'
+      | 'tsql'
 
   export interface FormatOptions {
     language?: SqlLanguage

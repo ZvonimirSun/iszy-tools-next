@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { percentChange, percentRatio, percentageOf } from './percentageCalculator.service'
+import { percentageOf, percentChange, percentRatio } from './percentageCalculator.service'
 
 describe('percentageCalculator.service', () => {
   it('计算某数的百分比', () => {

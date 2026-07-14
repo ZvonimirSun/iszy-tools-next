@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { generateIpv6Ula } from './children/ipv6Ula.service'
 import type { Ipv6UlaResult } from './children/ipv6Ula.service'
+import { generateIpv6Ula } from './children/ipv6Ula.service'
 
 const subnetCount = ref(8)
 const result = ref<Ipv6UlaResult | null>(null)

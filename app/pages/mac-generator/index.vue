@@ -17,9 +17,9 @@ const separatorOptions = [
 
 const generated = computed(() => {
   try {
-    refreshKey.value
     return {
       error: '',
+      refreshKey: refreshKey.value,
       macs: generateMacAddresses({
         prefix: prefix.value,
         count: count.value,
@@ -32,6 +32,7 @@ const generated = computed(() => {
   catch (error) {
     return {
       error: error instanceof Error ? error.message : String(error),
+      refreshKey: refreshKey.value,
       macs: [],
     }
   }

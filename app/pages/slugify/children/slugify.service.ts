@@ -11,7 +11,7 @@ export function slugifyText(value: string, options: SlugifyOptions = {}) {
   const separator = sanitizeSeparator(options.separator ?? DEFAULT_SEPARATOR)
   const keepCjk = options.keepCjk ?? true
   const lowercase = options.lowercase ?? true
-  const allowedPattern = keepCjk ? /[^\p{Letter}\p{Number}]+/gu : /[^A-Za-z0-9]+/g
+  const allowedPattern = keepCjk ? /[^\p{Letter}\p{Number}]+/gu : /[^A-Z0-9]+/gi
   const edgeSeparatorPattern = new RegExp(`^${escapeRegExp(separator)}+|${escapeRegExp(separator)}+$`, 'g')
   const repeatedSeparatorPattern = new RegExp(`${escapeRegExp(separator)}+`, 'g')
 

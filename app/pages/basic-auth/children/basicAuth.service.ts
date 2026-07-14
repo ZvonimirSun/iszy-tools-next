@@ -18,9 +18,5 @@ function encodeBase64Utf8(value: string) {
     binary += String.fromCharCode(byte)
   }
 
-  if (typeof btoa === 'function') {
-    return btoa(binary)
-  }
-
-  return Buffer.from(bytes).toString('base64')
+  return btoa(binary)
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formatPercentValue, percentChange, percentRatio, percentageOf } from './children/percentageCalculator.service'
+import { formatPercentValue, percentageOf, percentChange, percentRatio } from './children/percentageCalculator.service'
 
 const value = ref(200)
 const percent = ref(15)

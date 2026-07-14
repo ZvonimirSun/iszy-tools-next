@@ -11,7 +11,7 @@ export interface PasswordStrengthResult {
 const LOWERCASE_REGEX = /[a-z]/
 const UPPERCASE_REGEX = /[A-Z]/
 const NUMBER_REGEX = /\d/
-const SYMBOL_REGEX = /[^A-Za-z0-9]/
+const SYMBOL_REGEX = /[^A-Z0-9]/i
 const COMMON_PATTERNS = [
   /password/i,
   /qwerty/i,

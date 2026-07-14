@@ -16,7 +16,8 @@ export function analyzeText(value: string): TextStatistics {
   const sentences = value
     .match(SENTENCE_REGEX)
     ?.map(sentence => sentence.trim())
-    .filter(Boolean).length ?? 0
+    .filter(Boolean)
+    .length ?? 0
 
   return {
     characters: value.length,

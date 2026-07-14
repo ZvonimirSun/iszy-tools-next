@@ -33,9 +33,7 @@ export function generateLoremIpsum(options: LoremOptions) {
 
   return Array.from({ length: paragraphs }, (_, paragraphIndex) =>
     Array.from({ length: sentencesPerParagraph }, (_, sentenceIndex) =>
-      createSentence(wordsPerSentence, paragraphIndex * sentencesPerParagraph + sentenceIndex),
-    ).join(' '),
-  ).join('\n\n')
+      createSentence(wordsPerSentence, paragraphIndex * sentencesPerParagraph + sentenceIndex)).join(' ')).join('\n\n')
 }
 
 function createSentence(length: number, offset: number) {

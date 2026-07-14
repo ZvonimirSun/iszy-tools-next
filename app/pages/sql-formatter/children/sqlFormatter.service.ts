@@ -1,5 +1,5 @@
-import { format } from 'sql-formatter'
 import type { FormatOptions, SqlLanguage } from 'sql-formatter'
+import { format } from 'sql-formatter'
 
 export interface SqlFormatterOptions {
   language: SqlLanguage

@@ -73,7 +73,7 @@ export const httpStatusGroups: HttpStatusGroup[] = [
       { code: 415, phrase: 'Unsupported Media Type', description: '请求媒体类型不受支持。' },
       { code: 416, phrase: 'Range Not Satisfiable', description: '范围请求无法满足。' },
       { code: 417, phrase: 'Expectation Failed', description: '服务器无法满足 Expect 请求头。' },
-      { code: 418, phrase: "I'm a teapot", description: '彩蛋状态码。' },
+      { code: 418, phrase: 'I\'m a teapot', description: '彩蛋状态码。' },
       { code: 421, phrase: 'Misdirected Request', description: '请求被发送到无法产生响应的服务器。' },
       { code: 422, phrase: 'Unprocessable Content', description: '请求格式正确，但语义无法处理。' },
       { code: 423, phrase: 'Locked', description: 'WebDAV 资源被锁定。' },

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { createOtpAuthUri, decodeBase32, encodeBase32, generateTotp, verifyTotp } from './otp.service'
 
 describe('otp.service', () => {
-  it('Base32 编解码可往返', () => {
+  it('base32 编解码可往返', () => {
     const bytes = new TextEncoder().encode('hello')
     const encoded = encodeBase32(bytes)
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { createJsonDiffSummary, diffJson, formatJsonValue } from './children/jsonDiff.service'
 import type { JsonDiffKind } from './children/jsonDiff.service'
+import { createJsonDiffSummary, diffJson, formatJsonValue } from './children/jsonDiff.service'
 
 const leftText = ref('{\n  "name": "Alice",\n  "age": 18,\n  "roles": ["admin"],\n  "enabled": true\n}')
 const rightText = ref('{\n  "name": "Alice",\n  "age": 19,\n  "roles": ["admin", "editor"],\n  "city": "Shanghai"\n}')

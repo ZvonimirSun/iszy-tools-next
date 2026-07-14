@@ -10,9 +10,9 @@ const { copy } = useCopy()
 
 const generated = computed(() => {
   try {
-    refreshKey.value
     return {
       error: '',
+      refreshKey: refreshKey.value,
       ports: generateRandomPorts({
         min: min.value,
         max: max.value,
@@ -24,6 +24,7 @@ const generated = computed(() => {
   catch (error) {
     return {
       error: error instanceof Error ? error.message : String(error),
+      refreshKey: refreshKey.value,
       ports: [],
     }
   }

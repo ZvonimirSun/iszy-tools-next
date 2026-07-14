@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { convertTemperature, temperatureUnits } from './children/temperatureConverter.service'
 import type { TemperatureUnit } from './children/temperatureConverter.service'
+import { convertTemperature, temperatureUnits } from './children/temperatureConverter.service'
 
 const inputValue = ref(25)
 const inputUnit = ref<TemperatureUnit>('celsius')

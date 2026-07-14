@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { generateRsaKeyPair } from './children/rsaKeyPair.service'
 import type { RsaKeyPairOptions, RsaKeyPairResult } from './children/rsaKeyPair.service'
+import { generateRsaKeyPair } from './children/rsaKeyPair.service'
 
 const modulusLength = ref<RsaKeyPairOptions['modulusLength']>(2048)
 const loading = ref(false)

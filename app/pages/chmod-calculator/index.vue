@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { chmodStateToOctal, chmodStateToSymbolic, createEmptyChmodState, parseChmodOctal } from './children/chmodCalculator.service'
 import type { ChmodState, PermissionSet } from './children/chmodCalculator.service'
+import { chmodStateToOctal, chmodStateToSymbolic, createEmptyChmodState, parseChmodOctal } from './children/chmodCalculator.service'
 
 const state = reactive<ChmodState>(createEmptyChmodState())
 const octalInput = ref(chmodStateToOctal(state))
@@ -22,7 +22,7 @@ const octal = computed(() => chmodStateToOctal(state))
 const symbolic = computed(() => chmodStateToSymbolic(state))
 const command = computed(() => `chmod ${octal.value} file`)
 
-watch(octal, value => {
+watch(octal, (value) => {
   octalInput.value = value
 })
 

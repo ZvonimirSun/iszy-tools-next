@@ -25,10 +25,9 @@ const generated = computed(() => {
     }
   }
 
-  refreshKey.value
-
   return {
     error: '',
+    refreshKey: refreshKey.value,
     ulids: generateUlids({
       count: count.value,
       lowercase: lowercase.value,
