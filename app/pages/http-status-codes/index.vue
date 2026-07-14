@@ -59,7 +59,7 @@ function copyStatus(code: number, phrase: string) {
           <article
             v-for="status in group.codes"
             :key="status.code"
-            class="grid gap-3 px-4 py-3 sm:grid-cols-[5rem_minmax(0,12rem)_minmax(0,1fr)_2rem] sm:items-center"
+            class="grid gap-3 px-4 py-3 sm:grid-cols-[5rem_minmax(0,12rem)_5rem_minmax(0,1fr)_2rem] sm:items-center"
           >
             <span class="font-mono text-xl font-semibold tabular-nums">
               {{ status.code }}
@@ -67,6 +67,9 @@ function copyStatus(code: number, phrase: string) {
             <span class="min-w-0 font-mono text-sm">
               {{ status.phrase }}
             </span>
+            <UBadge color="neutral" variant="soft" class="w-fit">
+              {{ status.type }}
+            </UBadge>
             <p class="min-w-0 text-sm text-muted">
               {{ status.description }}
             </p>
