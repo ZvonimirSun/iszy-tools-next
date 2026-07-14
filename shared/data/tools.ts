@@ -522,6 +522,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['ulid', 'sortable id', 'identifier'],
       },
       {
+        label: '密码强度分析',
+        name: 'password-strength',
+        icon: 'i-lucide:shield-check',
+        description: '在线本地估算密码强度、熵和不同攻击速率下的破解时间，并给出基础改进建议。',
+        tags: ['密码', '安全', '强度'],
+        aliases: ['密码检测', '密码安全', '强度分析'],
+        keywords: ['password strength', 'entropy', 'security'],
+      },
+      {
         label: '文本HASH',
         name: 'hash-text',
         icon: 'i-lucide:text-cursor-input',
