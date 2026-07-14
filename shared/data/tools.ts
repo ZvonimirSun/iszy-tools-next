@@ -853,6 +853,15 @@ export const tools: OriginToolMenu[] = [
         aliases: ['贷款计算', '等额本息', '等额本金'],
         keywords: ['mortgage', 'loan'],
       },
+      {
+        label: '百分比计算器',
+        name: 'percentage-calculator',
+        icon: 'i-lucide:percent',
+        description: '在线计算某数的百分比、两个数的占比以及增长或下降百分比，适合日常换算和数据分析。',
+        tags: ['百分比', '计算器', '数学'],
+        aliases: ['百分比计算', '占比计算', '增长率'],
+        keywords: ['percentage', 'percent', 'ratio', 'change'],
+      },
     ],
   },
   {
