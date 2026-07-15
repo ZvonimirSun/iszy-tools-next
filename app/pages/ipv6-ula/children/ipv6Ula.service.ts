@@ -1,13 +1,27 @@
+import SHA1 from 'crypto-js/sha1'
+
 export interface Ipv6UlaResult {
   prefix: string
   globalId: string
   subnets: string[]
+  firstRoutableBlock: string
+  lastRoutableBlock: string
 }
 
 export function generateIpv6Ula(subnetCount = 4): Ipv6UlaResult {
   const globalIdBytes = new Uint8Array(5)
   globalThis.crypto.getRandomValues(globalIdBytes)
   return createIpv6Ula(globalIdBytes, subnetCount)
+}
+
+export function generateIpv6UlaFromMac(macAddress: string, timestamp = Date.now(), subnetCount = 4): Ipv6UlaResult {
+  if (!isValidMacAddress(macAddress)) {
+    throw new Error('请输入合法的 MAC 地址')
+  }
+
+  const hash = SHA1(`${timestamp}${macAddress.trim()}`).toString()
+  const globalId = hash.slice(-10)
+  return createIpv6Ula(hexToBytes(globalId), subnetCount)
 }
 
 export function createIpv6Ula(globalIdBytes: Uint8Array, subnetCount = 4): Ipv6UlaResult {
@@ -26,8 +40,18 @@ export function createIpv6Ula(globalIdBytes: Uint8Array, subnetCount = 4): Ipv6U
   return {
     prefix,
     globalId: globalIdBytesToText(globalIdBytes),
+    firstRoutableBlock: `${hextets.join(':')}:0::/64`,
+    lastRoutableBlock: `${hextets.join(':')}:ffff::/64`,
     subnets: Array.from({ length: count }, (_, index) => `${hextets.join(':')}:${index.toString(16)}::/64`),
   }
+}
+
+function isValidMacAddress(value: string) {
+  return /^(?:[\da-f]{2}[:-]){5}[\da-f]{2}$/i.test(value.trim())
+}
+
+function hexToBytes(value: string) {
+  return Uint8Array.from(value.match(/.{2}/g)!.map(hex => Number.parseInt(hex, 16)))
 }
 
 function bytesToHextet(left: number, right: number) {
