@@ -774,6 +774,16 @@ export const tools: OriginToolMenu[] = [
     label: '网络运维',
     children: [
       {
+        label: 'P2P文件传输',
+        name: 'webrtc-file-transfer',
+        icon: 'i-lucide:send',
+        description: '在线通过 WebRTC DataChannel 在浏览器之间点对点传输文件，服务端仅用于临时信令和 ICE 配置。',
+        tags: ['WebRTC', 'P2P', '文件', '传输'],
+        aliases: ['点对点传文件', '浏览器传文件', 'WebRTC传文件'],
+        keywords: ['webrtc', 'datachannel', 'file transfer', 'p2p'],
+        requiresNetwork: true,
+      },
+      {
         label: 'CIDR计算器',
         name: 'cidr-calculator',
         icon: 'i-lucide:network',
