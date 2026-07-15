@@ -1,5 +1,5 @@
 export interface RsaKeyPairOptions {
-  modulusLength: 1024 | 2048 | 3072 | 4096
+  modulusLength: number
 }
 
 export interface RsaKeyPairResult {
@@ -11,6 +11,8 @@ export async function generateRsaKeyPair(options: RsaKeyPairOptions): Promise<Rs
   if (!globalThis.crypto?.subtle) {
     throw new Error('当前环境不支持 Web Crypto API')
   }
+
+  validateRsaModulusLength(options.modulusLength)
 
   const keyPair = await globalThis.crypto.subtle.generateKey(
     {
@@ -31,6 +33,12 @@ export async function generateRsaKeyPair(options: RsaKeyPairOptions): Promise<Rs
   return {
     publicKey: formatPem('PUBLIC KEY', publicKey),
     privateKey: formatPem('PRIVATE KEY', privateKey),
+  }
+}
+
+export function validateRsaModulusLength(modulusLength: number) {
+  if (!Number.isInteger(modulusLength) || modulusLength < 1024 || modulusLength > 16384 || modulusLength % 8 !== 0) {
+    throw new Error('RSA 密钥长度必须是 1024 到 16384 之间且为 8 的倍数')
   }
 }
 

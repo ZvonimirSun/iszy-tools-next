@@ -1,19 +1,12 @@
 <script setup lang="ts">
-import type { RsaKeyPairOptions, RsaKeyPairResult } from './children/rsaKeyPair.service'
+import type { RsaKeyPairResult } from './children/rsaKeyPair.service'
 import { generateRsaKeyPair } from './children/rsaKeyPair.service'
 
-const modulusLength = ref<RsaKeyPairOptions['modulusLength']>(2048)
+const modulusLength = ref(2048)
 const loading = ref(false)
 const errorMessage = ref('')
 const result = ref<RsaKeyPairResult | null>(null)
 const { copy } = useCopy()
-
-const modulusOptions = [
-  { label: '1024 bit（仅测试）', value: 1024 },
-  { label: '2048 bit', value: 2048 },
-  { label: '3072 bit', value: 3072 },
-  { label: '4096 bit', value: 4096 },
-]
 
 async function generate() {
   loading.value = true
@@ -47,7 +40,7 @@ onMounted(() => {
 
     <div class="grid gap-3 rounded-lg border border-muted bg-muted/30 p-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
       <UFormField label="密钥长度">
-        <USelect v-model="modulusLength" :items="modulusOptions" class="w-full" />
+        <UInputNumber v-model="modulusLength" class="w-full" :min="1024" :max="16384" :step="8" />
       </UFormField>
       <UButton color="primary" icon="i-lucide:key-round" :loading="loading" @click="generate">
         生成密钥
