@@ -57,7 +57,7 @@
     "@vueuse/nuxt": "^14.3.0",
     "@vueuse/router": "^14.3.0",
     "@zvonimirsun/iszy-common": "^1.2.2",
-    "@zvonimirsun/iszy-nuxt-auth-layer": "^0.1.8",
+    "@zvonimirsun/iszy-nuxt-auth-layer": "^0.2.3",
     "@zvonimirsun/leaflet-geoman": "^1.2.0",
     "@zvonimirsun/map-sdk": "^1.2.1",
     "@zvonimirsun/pinia-plugin-persistedstate": "^1.1.2",
