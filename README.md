@@ -6,6 +6,10 @@
 
 一个基于 Nuxt 4 的前端工具集应用。
 
+## 文档
+
+详细架构、工具目录和代码索引请查看 [DeepWiki](https://deepwiki.com/ZvonimirSun/iszy-tools-next)。
+
 ## 项目安装
 
 ```shell

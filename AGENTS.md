@@ -25,8 +25,8 @@
 - Nuxt 4、Vue 3、TypeScript、pnpm。
 - Nuxt UI v4、Tailwind CSS v4。
 - Pinia 管理客户端状态，持久化使用项目自定义 IndexedDB 持久化插件。
-- Nitro server 负责服务端 API、认证代理和 session 中间件。
-- Redis 用于服务端 session 存储。
+- Nitro server 负责工具列表过滤、少量必要服务端 API 和后端能力代理。
+- 认证、OAuth、Redis session 与通用用户状态由 `@zvonimirsun/iszy-nuxt-auth-layer` 提供，本项目只保留工具权限和业务差异。
 - Vitest 负责单元测试，ESLint 使用 Antfu 风格配置。
 
 ## 部署约束与产品基调
@@ -63,6 +63,54 @@ shared/
   utils/              # 前后端共享工具
 ```
 
+## 关键文件索引
+
+### 应用入口与布局
+
+- `app/app.vue`：Nuxt 应用入口。
+- `app/app.config.ts`：Nuxt UI 主题与应用级配置。
+- `app/layouts/default.vue`、`wide.vue`、`full.vue`：通用页面布局。
+- `app/components/app/Header.vue`、`Footer.vue`：站点头尾组件。
+- `app/error.vue`：全局错误页。
+- `nuxt.config.ts`：Nuxt、模块、运行时配置、路由 pagePattern 等项目配置。
+
+### 工具目录与页面
+
+- `shared/data/tools.ts`：工具目录、权限、路由名和展示元数据唯一入口。
+- `server/api/tools/index.get.ts`：按登录态和权限过滤工具列表。
+- `app/stores/tools.ts`、`origin-tools.ts`：工具列表、收藏和访问记录相关状态。
+- `app/utils/getCurrentTool.ts`、`app/composables/useCurrentTool.ts`：按路由识别当前工具。
+- `app/pages/<tool-name>/index.vue`：复杂工具页面入口。
+- `app/pages/<tool-name>/children/`：复杂工具的页面内组件、服务、测试、worker、类型。
+- `app/pages/[...all].vue`：兜底页面和旧路径兼容相关入口。
+
+### 认证与用户状态
+
+- `app/middleware/auth.global.ts`：全局路由鉴权和工具访问控制。
+- `app/stores/user.ts`：用户状态消费入口；通用登录态能力来自认证 layer，不保存后端 token。
+- `@zvonimirsun/iszy-nuxt-auth-layer`：登录、登出、OAuth、SSO、Redis session、`authFetch` 等通用认证能力来源。
+- `nuxt.config.ts`：通过 `extends` 继承认证 layer，并声明本项目运行时配置。
+
+### 设置、持久化与工具能力
+
+- `app/pages/settings/index.vue`：设置页入口。
+- `app/pages/settings/children/`：工具专属设置组件。
+- `app/stores/settings.ts`：全局设置。
+- `app/plugins/init.ts`：客户端初始化逻辑。
+- `app/plugins/cleanup-pwa.client.ts`：旧 PWA 资源清理。
+- `app/libs/`：PDF、QR、Leaflet 等第三方库封装。
+- `app/composables/`：跨页面组合式函数。
+
+### 服务端、配置与共享类型
+
+- `server/api/`：本项目自有 Nitro API 路由；新增前先确认是否必须服务端实现。
+- `server/utils/`：服务端通用工具。
+- `server/types/`：服务端类型。
+- `shared/types/`：前后端共享类型。
+- `shared/utils/`：前后端共享工具。
+- `@zvonimirsun/iszy-common`：用户、RBAC、DTO、枚举等共享模型优先来源。
+- `@zvonimirsun/iszy-nuxt-auth-layer`：共享认证 layer，消费前确认本项目覆盖的工具权限逻辑仍保留。
+
 ## 工具页面约定
 
 - 工具目录统一维护在 `shared/data/tools.ts`。
@@ -87,13 +135,15 @@ shared/
 - `server/api/tools/index.get.ts` 会按用户权限过滤工具列表，并设置工具的 `noAccess` 状态。
 - 工具权限使用 `tool:<tool-name>:access` 形式，超级权限使用项目既有的全量工具权限语义。
 - `app/middleware/auth.global.ts` 根据当前路由匹配工具并执行访问控制：未登录跳转登录页，权限不足抛出 403。
+- 登录、登出、OAuth、SSO、session cookie 与 token 刷新由 `@zvonimirsun/iszy-nuxt-auth-layer` 提供；本项目不要重复实现一套认证 BFF。
 - 服务端持有后端访问凭据，浏览器侧通过 httpOnly session cookie 维持登录态；不要把后端 token 暴露给客户端状态。
 
 ## 服务端与配置
 
 - 外部 API 地址通过运行时配置注入，代码中不要硬编码具体域名。
-- 服务端请求后端接口应优先使用 `server/utils/authFetch.ts` 等既有工具，以继承 session、凭据和错误处理逻辑。
-- `server/middleware/session.ts` 负责 session 读写；`server/utils/sessionStore.ts` 提供 session 存取封装。
+- AGENTS/README/示例配置只能写变量名、用途、默认空值或占位符；不要暴露线上实际 API 地址、Redis 地址、OAuth secret、对象存储 key、大模型 key 等本地不提交环境变量值。
+- 排查或记录配置问题时使用脱敏占位，例如 `<API_ORIGIN>`、`<REDIS_HOST>`、`<SECRET>`。
+- 服务端请求后端接口应优先使用认证 layer 提供的 `authFetch` 等既有工具，以继承 session、凭据和错误处理逻辑。
 - 新增服务端接口时注意区分公开接口和需要登录的接口，不要绕过既有认证约定。
 - 新增服务端接口前先判断能否纯前端实现；如果只是格式转换、解析、压缩、文件生成、哈希计算或图片/PDF 处理，默认应放在浏览器端。
 - 服务端接口应避免接收和处理大文件。需要上传的场景优先考虑对象存储直传、浏览器本地处理后下载，或明确限制文件大小。
@@ -138,3 +188,7 @@ shared/
 - 不要回滚用户改动；如果无关，保持不动。
 - 大规模重命名时，先说明范围，并在验证中区分纯重命名和内容变更。
 - 避免无关格式化和批量整理，尤其不要因为小改动重排整个文件或更新无关 lockfile 元数据。
+- Commit 使用常见前缀：`feat`、`fix`、`chore`、`docs`、`refactor`、`test`、`perf`、`style`、`build`、`ci`。
+- Commit 格式建议：`<type>: <中文提交内容>`，例如 `feat: 新增 CDN 查询工具`、`fix: 修复登录态刷新失败处理`、`chore: 更新工具依赖`。
+- 提交内容使用中文说明本次变更，不要只写英文或含糊的 `update`、`misc`。
+- 涉及认证 layer、common 包或 API 的配套改动时，按仓库边界拆分提交，并在提交内容中说明关联关系。
