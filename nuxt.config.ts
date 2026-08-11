@@ -19,6 +19,7 @@ const pagePattern = [
 export default defineNuxtConfig({
   extends: ['@zvonimirsun/iszy-nuxt-auth-layer'],
   runtimeConfig: {
+    apiOrigin: '',
     public: {
       url: 'http://localhost:3000',
       title: 'ISZY Tools Next',
