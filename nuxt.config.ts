@@ -94,6 +94,11 @@ export default defineNuxtConfig({
     },
   },
   icon: {
+    clientBundle: {
+      scan: {
+        globInclude: ['{app,shared}/**/*.{ts,vue}'],
+      },
+    },
     customCollections: [
       {
         prefix: 'custom',
