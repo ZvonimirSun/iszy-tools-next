@@ -116,8 +116,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       '@tldraw/assets':
-        specifier: 3.15.5
-        version: 3.15.5
+        specifier: 5.3.0
+        version: 5.3.0
       '@vueuse/core':
         specifier: ^14.4.0
         version: 14.4.0(vue@3.5.41(typescript@6.0.3))
@@ -3830,8 +3830,9 @@ packages:
       y-protocols: ^1.0.1
       yjs: ^13.5.38
 
-  '@tldraw/assets@3.15.5':
-    resolution: {integrity: sha512-/CvwluA5QysCXx/YtfMT/hMxZD9NH4G6LVaAgSKIc4jx4aQc4MAtlrfn+Q20/OuBBNhDt8a9PAon10FCj19MOQ==}
+  '@tldraw/assets@5.3.0':
+    resolution: {integrity: sha512-FBsNm9d9xT++pgu5KgDPoEOJFUg5s9hlvAADnO2tsn9gOPNIuXe6eHyKoXZDD/K7k4VKo6FBUpoPtGDn7Gxckw==}
+    engines: {node: '>=22.12.0'}
 
   '@tldraw/editor@3.15.5':
     resolution: {integrity: sha512-/PGs/SOfuJw5FOgmfqlwVcS887mK4DOHQjxEchS3pg/R/80KTA6j7BNpiHxWQ1FhYHGg+A2QEAijKNcscyK8zw==}
@@ -3861,6 +3862,10 @@ packages:
 
   '@tldraw/utils@3.15.5':
     resolution: {integrity: sha512-kdRLl2oMCbN5i2agVJ1ZsL3/ipiBGVQiS33/0NrqijoA9zFyM7sNgr8sb+6vjNbV1HrXHHSxeBHVCusBlZu8iQ==}
+
+  '@tldraw/utils@5.3.0':
+    resolution: {integrity: sha512-QC9Q6/v/ICqS0A8PeS1zkGxfbXJfufbP2vJU/46S59bvGz6LpkG96a4XKj+KR9b8b1TK0q7sVFGjoOrXpAXnRg==}
+    engines: {node: '>=22.12.0'}
 
   '@tldraw/validate@3.15.5':
     resolution: {integrity: sha512-DyvEySVHJ7cCqCMd5stDTYllEZGHZEEpAuQQeb+fQTsxf9X+iO3la6hjnLbALewsBFakzma6r1M9aDrA3LSGkA==}
@@ -15154,9 +15159,9 @@ snapshots:
       y-protocols: 1.0.7(yjs@13.6.31)
       yjs: 13.6.31
 
-  '@tldraw/assets@3.15.5':
+  '@tldraw/assets@5.3.0':
     dependencies:
-      '@tldraw/utils': 3.15.5
+      '@tldraw/utils': 5.3.0
 
   '@tldraw/editor@3.15.5(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
@@ -15208,6 +15213,13 @@ snapshots:
   '@tldraw/utils@3.15.5':
     dependencies:
       fractional-indexing-jittered: 1.0.0
+      lodash.isequal: 4.5.0
+      lodash.isequalwith: 4.4.0
+      lodash.throttle: 4.1.1
+      lodash.uniq: 4.5.0
+
+  '@tldraw/utils@5.3.0':
+    dependencies:
       lodash.isequal: 4.5.0
       lodash.isequalwith: 4.4.0
       lodash.throttle: 4.1.1
