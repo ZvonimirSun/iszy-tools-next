@@ -121,7 +121,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^9.0.0",
+    "@antfu/eslint-config": "^9.3.0",
     "@eslint/config-inspector": "^3.0.4",
     "@nuxt/devtools": "^3.2.4",
     "@nuxt/eslint": "^1.15.2",
