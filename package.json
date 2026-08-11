@@ -123,7 +123,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^9.0.0",
     "@eslint/config-inspector": "^3.0.4",
-    "@nuxt/devtools": "^3.2.4",
+    "@nuxt/devtools": "^3.3.1",
     "@nuxt/eslint": "^1.15.2",
     "@types/crypto-js": "^4.2.2",
     "@types/culori": "^4.0.1",
