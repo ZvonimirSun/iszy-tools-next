@@ -100,7 +100,7 @@
     "shpjs": "^6.2.0",
     "smol-toml": "^1.6.1",
     "sql-formatter": "^15.8.2",
-    "tailwindcss": "^4.3.0",
+    "tailwindcss": "^4.3.3",
     "three": "^0.184.0",
     "tldraw": "3.15.5",
     "topojson-client": "^3.1.0",
