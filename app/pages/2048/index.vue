@@ -63,7 +63,6 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <!-- eslint-disable vue/no-unused-refs -->
   <div>
     <div class="panel">
       <div class="wrapper">

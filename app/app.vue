@@ -26,22 +26,23 @@ const fullPath = computed(() => {
 
 const link = computed(() => {
   const links = []
-  links.push({ rel: 'canonical', href: fullPath.value })
+  links.push({ rel: 'canonical' as const, href: fullPath.value })
   if (favicon) {
     if (favicon.small) {
-      links.push({ rel: 'icon', type: 'image/png', sizes: '16x16', href: favicon.small })
+      links.push({ rel: 'icon' as const, type: 'image/png', sizes: '16x16', href: favicon.small })
     }
     if (favicon.medium) {
-      links.push({ rel: 'icon', type: 'image/png', sizes: '32x32', href: favicon.medium })
+      links.push({ rel: 'icon' as const, type: 'image/png', sizes: '32x32', href: favicon.medium })
     }
     if (favicon.appleTouchIcon) {
-      links.push({ rel: 'apple-touch-icon', sizes: '180x180', href: favicon.appleTouchIcon })
+      links.push({ rel: 'apple-touch-icon' as const, sizes: '180x180', href: favicon.appleTouchIcon })
     }
     if (favicon.safariPinnedTab) {
-      links.push({ rel: 'mask-icon', href: favicon.safariPinnedTab })
+      // Unhead 3 omits Safari's valid mask-icon relation from its LinkRel type.
+      links.push({ rel: 'mask-icon' as 'icon', href: favicon.safariPinnedTab })
     }
     if (favicon.androidManifest) {
-      links.push({ rel: 'manifest', href: favicon.androidManifest })
+      links.push({ rel: 'manifest' as const, href: favicon.androidManifest })
     }
   }
   return links

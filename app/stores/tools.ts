@@ -58,7 +58,7 @@ export const useToolsStore = defineStore('tools', () => {
 
   const isFav = computed(() => {
     return (label: string): boolean => {
-      return favorite.value.filter(item => (item.label === label)).length > 0
+      return favorite.value.some(item => item.label === label)
     }
   })
 
