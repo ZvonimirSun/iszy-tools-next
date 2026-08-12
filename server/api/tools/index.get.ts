@@ -5,31 +5,34 @@ export default defineEventHandler(async (event): Promise<ResultDto<OriginToolMen
   const { features: { showAllTools } } = useRuntimeConfig()
 
   let user: PublicUser | null = null
-  try {
-    const res = await authFetch(event)<ResultDto<PublicUser>>('/user/me')
-    user = res.data!
+  if (getSessionId(event)) {
+    try {
+      const res = await authFetch(event)<ResultDto<PublicUser>>('/user/me')
+      user = res.data!
+    }
+    catch (e) {}
   }
-  catch (e) {}
   const isSuperAdmin = new Set((user?.roles ?? []).map(role => role.name)).has('superadmin')
   const privilegeMap = new Set((user?.privileges || []).map(p => p.type))
 
   const filteredTools: OriginToolMenu[] = tools.map((tool) => {
-    const filteredChildren = tool.children.filter((child) => {
+    const filteredChildren = tool.children.flatMap((child) => {
       if ('requiresAuth' in child && child.requiresAuth) {
         // todo 检查角色权限
-        child.noAccess = !checkAccess(child, privilegeMap, isSuperAdmin)
+        const nextChild = {
+          ...child,
+          noAccess: !checkAccess(child, privilegeMap, isSuperAdmin),
+        }
 
-        if (showAllTools) {
-          return true
+        if (showAllTools || !nextChild.noAccess) {
+          return [nextChild]
         }
-        else {
-          // 如果工具需要认证但用户未登录，或者用户没有访问权限，则不显示该工具
-          return !child.noAccess
-        }
+
+        // 如果工具需要认证但用户未登录，或者用户没有访问权限，则不显示该工具
+        return []
       }
-      else {
-        return true
-      }
+
+      return [child]
     })
     return {
       ...tool,

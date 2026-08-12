@@ -44,6 +44,7 @@ export const useSettingsStore = defineStore('settings', () => {
     } satisfies AiChatSettings,
   })
   const finishSync = ref(false)
+  let getSyncDataPromise: Promise<void> | null = null
   let stopModulesSyncWatch: (() => void) | null = null
 
   const syncData = debounce(() => {
@@ -76,27 +77,42 @@ export const useSettingsStore = defineStore('settings', () => {
     })
   }
 
-  async function getSyncData(userStore = useUserStore()) {
+  function getSyncData(userStore = useUserStore()) {
     if (!userStore.logged) {
       return
     }
-    try {
-      const data = await $fetch<ResultDto<any>>('/api/tools/settings/tools-next')
-      if (data.success) {
-        finishSync.value = true
-        if (data.data) {
-          merge(modules.value, data.data)
-        }
-        else {
-          syncData()
-        }
-        stopModulesSyncWatch?.()
-        stopModulesSyncWatch = watch(modules, syncData, {
-          deep: true,
-        })
-      }
+
+    if (getSyncDataPromise) {
+      return getSyncDataPromise
     }
-    catch (err) {}
+
+    finishSync.value = false
+    const request = (async () => {
+      try {
+        const data = await $fetch<ResultDto<any>>('/api/tools/settings/tools-next')
+        if (data.success) {
+          if (data.data) {
+            merge(modules.value, data.data)
+          }
+          else {
+            syncData()
+          }
+          stopModulesSyncWatch?.()
+          stopModulesSyncWatch = watch(modules, syncData, {
+            deep: true,
+          })
+        }
+      }
+      catch (err) {}
+      finally {
+        finishSync.value = true
+      }
+    })()
+
+    getSyncDataPromise = request.finally(() => {
+      getSyncDataPromise = null
+    })
+    return getSyncDataPromise
   }
 
   return {

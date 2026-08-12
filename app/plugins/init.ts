@@ -13,18 +13,14 @@ export default defineNuxtPlugin({
       return settingsStore.getSyncData(userStore)
     }
 
-    authEvents.on('profileUpdated', profileUpdatedHandler)
-    authEvents.on('loginSuccess', loginSuccessHandler)
+    await Promise.all([
+      userStore.pullProfile(false, fetcher),
+      originToolsStore.init(fetcher),
+    ])
 
-    try {
-      await userStore.pullProfile(false, fetcher)
-      await originToolsStore.init(fetcher)
-    }
-    finally {
-      if (import.meta.server) {
-        authEvents.off('profileUpdated', profileUpdatedHandler)
-        authEvents.off('loginSuccess', loginSuccessHandler)
-      }
+    if (import.meta.client) {
+      authEvents.on('profileUpdated', profileUpdatedHandler)
+      authEvents.on('loginSuccess', loginSuccessHandler)
     }
 
     onNuxtReady(() => {
