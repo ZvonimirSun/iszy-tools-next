@@ -11,3 +11,6 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    ignore:
+      - dependency-name: "tldraw"
+      - dependency-name: "@tldraw/assets"
