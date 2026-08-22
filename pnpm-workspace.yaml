@@ -5,29 +5,7 @@ shellEmulator: true
 blockExoticSubdeps: false
 
 overrides:
-  '@codemirror/commands': ^6.10.4
-  '@codemirror/language': ^6.12.4
-  '@codemirror/lint': ^6.9.7
-  '@codemirror/state': ^6.7.1
-  '@codemirror/view': ^6.43.8
-  '@internationalized/date': ^3.12.3
-  citty: ^0.2.2
-  eslint: ^10.8.1
-  jsonc-eslint-parser: ^3.3.0
-  typescript: ^6.0.3
-  vue-router: ^5.2.0
   xlsx: https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz#sha512-8IfgFctB7fkvqkTGF2MnrDrC6vzE28Wcc1aSbdDQ+4/WFtzfS73YuapbuaPZwGqpR2e0EeDMIrFOJubQVLWFNA==
-
-ignoredBuiltDependencies:
-  - '@parcel/watcher'
-  - '@tailwindcss/oxide'
-  - esbuild
-  - unrs-resolver
-  - vue-demi
-  - json-editor-vue
-
-onlyBuiltDependencies:
-  - vue-demi
 
 allowBuilds:
   '@parcel/watcher': false
