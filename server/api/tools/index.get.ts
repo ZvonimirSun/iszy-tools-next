@@ -1,7 +1,7 @@
 import type { PublicUser, RawPrivilege, ResultDto } from '@zvonimirsun/iszy-common'
 import { tools } from '#shared/data/tools'
 
-export default defineEventHandler(async (event): Promise<ResultDto<OriginToolMenu[]>> => {
+export default defineCachedEventHandler(async (event): Promise<ResultDto<OriginToolMenu[]>> => {
   const { features: { showAllTools } } = useRuntimeConfig()
 
   let user: PublicUser | null = null
@@ -45,6 +45,13 @@ export default defineEventHandler(async (event): Promise<ResultDto<OriginToolMen
     data: filteredTools,
     message: '获取成功',
   }
+}, {
+  name: 'api-tools',
+  base: 'redis',
+  maxAge: 60 * 5,
+  swr: true,
+  getKey: () => 'anonymous',
+  shouldBypassCache: event => Boolean(getSessionId(event)),
 })
 
 function checkAccess(tool: ToolItem, privilegeMap: Set<RawPrivilege['type']>, bypass: boolean) {
