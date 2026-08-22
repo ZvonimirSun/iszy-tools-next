@@ -79,6 +79,8 @@ const favoriteSortableItems = computed({
 
 const isSearching = computed(() => Boolean(searchStr.value.trim()))
 
+const toolCardGridClass = 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4'
+
 function getMenuHash(label: string) {
   return `menu-${label}`
 }
@@ -136,7 +138,7 @@ onMounted(() => {
             v-model="favoriteSortableItems"
             item-key="label"
             tag="div"
-            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+            :class="toolCardGridClass"
             :force-fallback="true"
             :fallback-on-body="true"
             ghost-class="opacity-50"
@@ -192,7 +194,7 @@ onMounted(() => {
           </draggable>
           <div
             v-else-if="item.kind === 'favorite'"
-            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+            :class="toolCardGridClass"
           >
             <UPageCard
               v-for="tool in item.children"
@@ -227,7 +229,7 @@ onMounted(() => {
               </UTooltip>
             </UPageCard>
           </div>
-          <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <div v-else :class="toolCardGridClass">
             <UPageCard
               v-for="(tool) in item.children"
               :key="tool.name"
@@ -265,7 +267,7 @@ onMounted(() => {
         <div
           v-for="(item, index) in toolMenus"
           :key="index"
-          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+          :class="toolCardGridClass"
         >
           <NuxtLink
             :id="getMenuHash(item.label)"
