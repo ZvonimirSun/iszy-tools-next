@@ -1,22 +1,20 @@
 <script setup lang="ts">
-import { UAParser } from 'ua-parser-js'
+import UAParser from 'ua-parser-js'
 
-const parser = new UAParser()
 const uaInput = ref('')
-const parsedResult = ref<ReturnType<typeof parser.getResult> | null>(null)
-
-const requestHeaders = useRequestHeaders(['user-agent'])
-
-function parseUa() {
+const parsedResult = computed(() => {
   const ua = uaInput.value.trim()
   if (!ua) {
-    parsedResult.value = null
-    return
+    return null
   }
+  return new UAParser(ua).getResult()
+})
 
-  parser.setUA(ua)
-  parsedResult.value = parser.getResult()
+function formatNameVersion(name?: string, version?: string) {
+  return `${name || '-'} ${version || ''}`.trim()
 }
+
+const requestHeaders = useRequestHeaders(['user-agent'])
 
 function useCurrentUa() {
   if (!import.meta.client)
@@ -31,8 +29,6 @@ function clear() {
 if (requestHeaders['user-agent']) {
   uaInput.value = requestHeaders['user-agent']
 }
-
-watch(uaInput, parseUa, { immediate: true })
 
 onMounted(() => {
   useCurrentUa()
@@ -73,19 +69,19 @@ onMounted(() => {
       <div class="grid gap-2 md:grid-cols-3">
         <UFormField label="浏览器">
           <UInput
-            :model-value="parsedResult ? `${parsedResult.browser.name || '-'} ${parsedResult.browser.version || ''}`.trim() : ''"
+            :model-value="parsedResult ? formatNameVersion(parsedResult.browser.name, parsedResult.browser.version) : ''"
             readonly
           />
         </UFormField>
         <UFormField label="渲染引擎">
           <UInput
-            :model-value="parsedResult ? `${parsedResult.engine.name || '-'} ${parsedResult.engine.version || ''}`.trim() : ''"
+            :model-value="parsedResult ? formatNameVersion(parsedResult.engine.name, parsedResult.engine.version) : ''"
             readonly
           />
         </UFormField>
         <UFormField label="操作系统">
           <UInput
-            :model-value="parsedResult ? `${parsedResult.os.name || '-'} ${parsedResult.os.version || ''}`.trim() : ''"
+            :model-value="parsedResult ? formatNameVersion(parsedResult.os.name, parsedResult.os.version) : ''"
             readonly
           />
         </UFormField>
@@ -103,7 +99,7 @@ onMounted(() => {
         </UFormField>
         <UFormField label="设备信息">
           <UInput
-            :model-value="parsedResult ? `${parsedResult.device.vendor || '-'} ${parsedResult.device.model || ''}`.trim() : ''"
+            :model-value="parsedResult ? formatNameVersion(parsedResult.device.vendor, parsedResult.device.model) : ''"
             readonly
           />
         </UFormField>
