@@ -77,20 +77,27 @@ const nextPieceName = ref<TetrominoName>('t')
 const state = ref<GameState>('ready')
 const score = ref(0)
 const clearedLines = ref(0)
+const endedManually = ref(false)
 const level = computed(() => Math.floor(clearedLines.value / 10) + 1)
 const bestScore = computed(() => mounted.value ? settingsStore.modules.tetris.bestScore : 0)
 const tickMs = computed(() => Math.max(120, 820 - (level.value - 1) * 70))
-const pauseActionLabel = computed(() => {
+const canEndGame = computed(() => state.value === 'playing' || state.value === 'paused')
+const actionLabel = computed(() => {
+  if (state.value === 'playing') {
+    return '暂停'
+  }
   if (state.value === 'paused') {
     return '继续'
   }
-  return state.value === 'playing' ? '暂停' : '开始'
+  return '开始'
 })
-const pauseActionIcon = computed(() => {
-  if (state.value === 'paused' || state.value === 'ready' || state.value === 'over') {
-    return 'i-lucide:play'
+const overlayActionLabel = computed(() => state.value === 'over' ? '再来一局' : actionLabel.value)
+const actionIcon = computed(() => state.value === 'playing' ? 'i-lucide:pause' : 'i-lucide:play')
+const overlayMessage = computed(() => {
+  if (state.value === 'over') {
+    return endedManually.value ? '本局已结束，可以重新开始。' : '方块堆满了，重新开始再来一局。'
   }
-  return 'i-lucide:pause'
+  return '使用方向键或按钮控制方块。'
 })
 const cells = computed(() => {
   const merged = board.value.map(row => [...row] as DisplayCell[])
@@ -272,6 +279,7 @@ function spawnPiece() {
   currentPiece.value = piece
 
   if (!isValid(piece)) {
+    endedManually.value = false
     state.value = 'over'
     stopTimer()
     updateBestScore()
@@ -285,6 +293,7 @@ function updateBestScore() {
 }
 
 function startGame() {
+  endedManually.value = false
   board.value = createBoard()
   score.value = 0
   clearedLines.value = 0
@@ -294,7 +303,17 @@ function startGame() {
   restartTimer()
 }
 
-function togglePause() {
+function endGame() {
+  if (!canEndGame.value) {
+    return
+  }
+  endedManually.value = true
+  state.value = 'over'
+  stopTimer()
+  updateBestScore()
+}
+
+function toggleGame() {
   if (state.value === 'ready' || state.value === 'over') {
     startGame()
     return
@@ -327,7 +346,7 @@ function stopTimer() {
 }
 
 function handleKeydown(event: KeyboardEvent) {
-  const keys = ['ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp', ' ', 'p', 'P', 'r', 'R']
+  const keys = ['ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp', ' ', 'p', 'P', 'r', 'R', 'Escape']
   if (!keys.includes(event.key)) {
     return
   }
@@ -349,10 +368,13 @@ function handleKeydown(event: KeyboardEvent) {
     hardDrop()
   }
   else if (event.key.toLowerCase() === 'p') {
-    togglePause()
+    toggleGame()
   }
   else if (event.key.toLowerCase() === 'r') {
     startGame()
+  }
+  else if (event.key === 'Escape') {
+    endGame()
   }
 }
 
@@ -422,14 +444,30 @@ onBeforeUnmount(() => {
               class="tetris-cell"
               :class="colorClass[cell]"
             />
+            <div v-if="state === 'ready' || state === 'paused' || state === 'over'" class="tetris-message">
+              <div class="tetris-message-title">
+                {{ state === 'over' ? '游戏结束' : state === 'paused' ? '已暂停' : '俄罗斯方块' }}
+              </div>
+              <div class="tetris-message-text">
+                {{ overlayMessage }}
+              </div>
+              <UButton class="mt-3" color="primary" :icon="actionIcon" @click="toggleGame">
+                {{ overlayActionLabel }}
+              </UButton>
+            </div>
           </div>
 
           <div class="tetris-controls">
+            <div />
+            <UButton block color="neutral" variant="soft" icon="i-lucide:rotate-cw" @click="rotatePiece">
+              旋转
+            </UButton>
+            <div />
             <UButton block color="neutral" variant="soft" icon="i-lucide:arrow-left" @click="movePiece(-1, 0)">
               左
             </UButton>
-            <UButton block color="neutral" variant="soft" icon="i-lucide:rotate-cw" @click="rotatePiece">
-              旋转
+            <UButton block color="primary" variant="soft" :icon="actionIcon" @click="toggleGame">
+              {{ actionLabel }}
             </UButton>
             <UButton block color="neutral" variant="soft" icon="i-lucide:arrow-right" @click="movePiece(1, 0)">
               右
@@ -437,12 +475,10 @@ onBeforeUnmount(() => {
             <UButton block color="neutral" variant="soft" icon="i-lucide:arrow-down" @click="softDrop">
               下落
             </UButton>
-            <UButton block color="primary" variant="soft" icon="i-lucide:chevrons-down" @click="hardDrop">
+            <UButton block color="neutral" variant="soft" icon="i-lucide:chevrons-down" @click="hardDrop">
               直落
             </UButton>
-            <UButton block color="neutral" variant="soft" :icon="pauseActionIcon" @click="togglePause">
-              {{ pauseActionLabel }}
-            </UButton>
+            <div />
           </div>
         </div>
       </section>
@@ -499,22 +535,14 @@ onBeforeUnmount(() => {
           </div>
 
           <div class="flex gap-2">
-            <UButton
-              class="flex-1"
-              color="primary"
-              :icon="state === 'playing' ? 'i-lucide:rotate-ccw' : 'i-lucide:play'"
-              @click="startGame"
-            >
-              {{ state === 'playing' ? '重开' : '开始' }}
+            <UButton class="flex-1" color="primary" :icon="actionIcon" @click="toggleGame">
+              {{ actionLabel }}
             </UButton>
-            <UButton
-              class="flex-1"
-              color="neutral"
-              variant="soft"
-              :icon="pauseActionIcon"
-              @click="togglePause"
-            >
-              {{ pauseActionLabel }}
+            <UButton class="flex-1" color="neutral" variant="soft" icon="i-lucide:rotate-ccw" @click="startGame">
+              重开
+            </UButton>
+            <UButton class="flex-1" color="neutral" variant="soft" icon="i-lucide:circle-stop" :disabled="!canEndGame" @click="endGame">
+              结束
             </UButton>
           </div>
 
@@ -529,6 +557,7 @@ onBeforeUnmount(() => {
               <span>直落</span><span>空格</span>
               <span>暂停</span><span>P</span>
               <span>重开</span><span>R</span>
+              <span>结束</span><span>Esc</span>
             </div>
           </div>
         </ContainerToolItem>
@@ -608,6 +637,7 @@ onBeforeUnmount(() => {
 }
 
 .tetris-board {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(10, minmax(0, 1fr));
   grid-template-rows: repeat(20, minmax(0, 1fr));
@@ -618,6 +648,34 @@ onBeforeUnmount(() => {
   border-radius: calc(var(--ui-radius) * 2);
   background: var(--ui-bg-elevated);
   box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+}
+
+.tetris-message {
+  position: absolute;
+  inset: calc(var(--spacing) * 2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--spacing) * 4);
+  border-radius: calc(var(--ui-radius) * 2);
+  background: color-mix(in oklab, var(--ui-bg) 72%, transparent);
+  text-align: center;
+  backdrop-filter: blur(6px);
+}
+
+.tetris-message-title {
+  color: var(--ui-text-highlighted);
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+}
+
+.tetris-message-text {
+  margin-top: calc(var(--spacing) * 1);
+  color: var(--ui-text-muted);
+  font-size: .875rem;
+  line-height: 1.25rem;
 }
 
 .tetris-preview {
