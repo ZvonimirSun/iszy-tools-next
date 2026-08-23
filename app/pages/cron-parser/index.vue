@@ -33,9 +33,24 @@ const macroItems = [
 
 const fieldRuleRows = [
   { symbol: '*', description: '任意值' },
-  { symbol: ',', description: '多个值分隔' },
-  { symbol: '-', description: '范围' },
+  { symbol: ',', description: '列举多个值' },
+  { symbol: '-', description: '连续范围' },
   { symbol: '/', description: '步长' },
+]
+
+const symbolRows = [
+  { symbol: '*', meaning: '任意值', example: '* * * * *', equivalent: '每分钟' },
+  { symbol: '-', meaning: '连续范围', example: '1-10 * * * *', equivalent: '第 1 到 10 分钟' },
+  { symbol: ',', meaning: '列举多个值', example: '1,10 * * * *', equivalent: '在第 1 和 10 分钟' },
+  { symbol: '/', meaning: '步长', example: '*/10 * * * *', equivalent: '每 10 分钟' },
+  { symbol: '@yearly', meaning: '每年 1 月 1 日 0 点执行一次', example: '@yearly', equivalent: '0 0 1 1 *' },
+  { symbol: '@annually', meaning: '与 @yearly 相同', example: '@annually', equivalent: '0 0 1 1 *' },
+  { symbol: '@monthly', meaning: '每月 1 日 0 点执行一次', example: '@monthly', equivalent: '0 0 1 * *' },
+  { symbol: '@weekly', meaning: '每周日 0 点执行一次', example: '@weekly', equivalent: '0 0 * * 0' },
+  { symbol: '@daily', meaning: '每天 0 点执行一次', example: '@daily', equivalent: '0 0 * * *' },
+  { symbol: '@midnight', meaning: '与 @daily 相同', example: '@midnight', equivalent: '0 0 * * *' },
+  { symbol: '@hourly', meaning: '每小时整点执行一次', example: '@hourly', equivalent: '0 * * * *' },
+  { symbol: '@reboot', meaning: '系统启动时执行', example: '@reboot', equivalent: '' },
 ]
 
 const fieldSpecificRows: Record<FieldKey, Array<{ symbol: string, description: string }>> = {
@@ -52,6 +67,15 @@ const fieldSpecificRows: Record<FieldKey, Array<{ symbol: string, description: s
   ],
 }
 
+const cronFormatDiagram = `┌──────────── [optional] seconds (0 - 59)
+| ┌────────── minute (0 - 59)
+| | ┌──────── hour (0 - 23)
+| | | ┌────── day of month (1 - 31)
+| | | | ┌──── month (1 - 12) OR jan,feb,mar,apr ...
+| | | | | ┌── day of week (0 - 6, sunday=0) OR sun,mon ...
+| | | | | |
+* * * * * * command`
+
 const normalizedExpression = computed(() => expression.value.trim().replace(/\s+/g, ' '))
 const fieldValues = computed(() => expandMacro(normalizedExpression.value).split(' '))
 const activeFieldIndex = computed(() => cronFields.findIndex(field => field.key === activeField.value))
@@ -61,7 +85,6 @@ const activeFieldRows = computed(() => [
   ...fieldRuleRows,
   ...fieldSpecificRows[activeField.value],
 ])
-
 const parseResult = computed(() => {
   const value = normalizedExpression.value
   if (!value) {
@@ -249,6 +272,33 @@ function useMacro(value: string) {
             <div class="text-muted">
               {{ row.description }}
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-lg border border-muted bg-muted/20 p-3">
+      <h2 class="text-base font-medium text-highlighted">
+        字段说明
+      </h2>
+      <pre class="mt-3 overflow-auto rounded-md border border-muted bg-default p-3 font-mono text-xs leading-5 text-highlighted sm:text-sm">{{ cronFormatDiagram }}</pre>
+      <div class="mt-3 overflow-auto rounded-md border border-muted bg-default">
+        <div class="min-w-[36rem]">
+          <div class="grid grid-cols-[7.5rem_minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,0.9fr)] gap-3 border-b border-muted px-3 py-2 text-sm font-medium text-muted">
+            <span>符号</span>
+            <span>含义</span>
+            <span>示例</span>
+            <span>等价表达式</span>
+          </div>
+          <div
+            v-for="row in symbolRows"
+            :key="row.symbol"
+            class="grid grid-cols-[7.5rem_minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,0.9fr)] gap-3 border-b border-muted px-3 py-2 text-sm last:border-b-0"
+          >
+            <span class="font-mono text-highlighted">{{ row.symbol }}</span>
+            <span class="text-muted">{{ row.meaning }}</span>
+            <span class="font-mono text-highlighted">{{ row.example }}</span>
+            <span class="font-mono text-highlighted">{{ row.equivalent || '—' }}</span>
           </div>
         </div>
       </div>
