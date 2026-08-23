@@ -15,6 +15,10 @@ const initialSnake: Point[] = [
   { x: 6, y: 10 },
 ]
 const initialFood: Point = { x: 14, y: 10 }
+const initialMoveIntervalMs = 360
+const minMoveIntervalMs = 140
+const moveIntervalStepMs = 20
+const speedUpEveryFood = 5
 const directionOffset: Record<Direction, Point> = {
   up: { x: 0, y: -1 },
   down: { x: 0, y: 1 },
@@ -50,8 +54,13 @@ const pendingDirection = ref<Direction>('right')
 const state = ref<GameState>('ready')
 const score = ref(0)
 const eaten = ref(0)
+const endedManually = ref(false)
 const bestScore = computed(() => mounted.value ? settingsStore.modules.snake.bestScore : 0)
-const speedMs = computed(() => Math.max(100, 260 - Math.floor(eaten.value / 5) * 15))
+const speedMs = computed(() => Math.max(
+  minMoveIntervalMs,
+  initialMoveIntervalMs - Math.floor(eaten.value / speedUpEveryFood) * moveIntervalStepMs,
+))
+const canEndGame = computed(() => state.value === 'playing' || state.value === 'paused')
 const actionLabel = computed(() => {
   if (state.value === 'playing') {
     return '暂停'
@@ -61,9 +70,14 @@ const actionLabel = computed(() => {
   }
   return '开始'
 })
+const overlayActionLabel = computed(() => state.value === 'over' ? '再来一局' : actionLabel.value)
 const actionIcon = computed(() => state.value === 'playing' ? 'i-lucide:pause' : 'i-lucide:play')
-const controlActionLabel = computed(() => state.value === 'paused' ? '继续' : '暂停')
-const controlActionIcon = computed(() => state.value === 'paused' ? 'i-lucide:play' : 'i-lucide:pause')
+const overlayMessage = computed(() => {
+  if (state.value === 'over') {
+    return endedManually.value ? '本局已结束，可以重新开始。' : '撞到边界或自己了，重新开始再来一局。'
+  }
+  return '使用方向键或按钮控制移动。'
+})
 const cells = computed<CellKind[]>(() => {
   const result = Array.from<CellKind>({ length: boardSize * boardSize }).fill('empty')
   result[toIndex(food.value)] = 'food'
@@ -134,9 +148,20 @@ function resetGame() {
 }
 
 function startGame() {
+  endedManually.value = false
   resetGame()
   state.value = 'playing'
   restartTimer()
+}
+
+function endGame() {
+  if (!canEndGame.value) {
+    return
+  }
+  endedManually.value = true
+  state.value = 'over'
+  stopTimer()
+  updateBestScore()
 }
 
 function toggleGame() {
@@ -165,6 +190,7 @@ function step() {
   const bodyForCollision = willEat ? snake.value : snake.value.slice(0, -1)
 
   if (!isInside(nextHead) || isSnakePoint(nextHead, bodyForCollision)) {
+    endedManually.value = false
     state.value = 'over'
     stopTimer()
     updateBestScore()
@@ -225,6 +251,10 @@ function handleKeydown(event: KeyboardEvent) {
     event.preventDefault()
     startGame()
   }
+  else if (event.key === 'Escape' && canEndGame.value) {
+    event.preventDefault()
+    endGame()
+  }
 }
 
 watch(speedMs, () => {
@@ -284,10 +314,10 @@ onBeforeUnmount(() => {
                 {{ state === 'over' ? '游戏结束' : state === 'paused' ? '已暂停' : '贪吃蛇' }}
               </div>
               <div class="snake-message-text">
-                {{ state === 'over' ? '撞到边界或自己了，重新开始再来一局。' : '使用方向键或按钮控制移动。' }}
+                {{ overlayMessage }}
               </div>
               <UButton class="mt-3" color="primary" :icon="actionIcon" @click="toggleGame">
-                {{ actionLabel }}
+                {{ overlayActionLabel }}
               </UButton>
             </div>
           </div>
@@ -301,8 +331,8 @@ onBeforeUnmount(() => {
             <UButton block color="neutral" variant="soft" :icon="directionIcon.left" @click="setDirection('left')">
               左
             </UButton>
-            <UButton block color="primary" variant="soft" :icon="controlActionIcon" @click="toggleGame">
-              {{ controlActionLabel }}
+            <UButton block color="primary" variant="soft" :icon="actionIcon" @click="toggleGame">
+              {{ actionLabel }}
             </UButton>
             <UButton block color="neutral" variant="soft" :icon="directionIcon.right" @click="setDirection('right')">
               右
@@ -354,11 +384,14 @@ onBeforeUnmount(() => {
           </div>
 
           <div class="flex gap-2">
-            <UButton class="flex-1" color="primary" :icon="state === 'playing' ? 'i-lucide:rotate-ccw' : actionIcon" @click="state === 'playing' ? startGame() : toggleGame()">
-              {{ state === 'playing' ? '重开' : actionLabel }}
+            <UButton class="flex-1" color="primary" :icon="actionIcon" @click="toggleGame">
+              {{ actionLabel }}
             </UButton>
             <UButton class="flex-1" color="neutral" variant="soft" icon="i-lucide:rotate-ccw" @click="startGame">
               重开
+            </UButton>
+            <UButton class="flex-1" color="neutral" variant="soft" icon="i-lucide:circle-stop" :disabled="!canEndGame" @click="endGame">
+              结束
             </UButton>
           </div>
 
@@ -370,6 +403,7 @@ onBeforeUnmount(() => {
               <span>移动</span><span>方向键 / WASD</span>
               <span>暂停</span><span>空格 / P</span>
               <span>重开</span><span>R</span>
+              <span>结束</span><span>Esc</span>
             </div>
           </div>
         </ContainerToolItem>
