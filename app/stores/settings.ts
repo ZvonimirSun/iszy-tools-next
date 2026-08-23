@@ -3,6 +3,7 @@ import type { AiChatSettings } from '#shared/types/aiChat'
 import type { ImgHostingConfig } from '~/pages/img-hosting/children/imgHosting'
 import { debounce, merge } from 'lodash-es'
 import { createDefaultAiChatSettings } from '#shared/data/aiChat'
+import { createDefaultMinesweeperSettings } from '~/pages/minesweeper/children/minesweeper.service'
 
 export const useSettingsStore = defineStore('settings', () => {
   const general = ref({
@@ -27,6 +28,7 @@ export const useSettingsStore = defineStore('settings', () => {
     snake: {
       bestScore: 0,
     },
+    minesweeper: createDefaultMinesweeperSettings(),
     imgHosting: {
       configs: [] as ImgHostingConfig[],
       activeConfigId: null as string | null,

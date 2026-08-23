@@ -988,6 +988,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['game', 'arcade'],
       },
       {
+        label: '扫雷',
+        name: 'minesweeper',
+        icon: 'i-lucide:bomb',
+        description: '在线游玩经典扫雷小游戏，支持初级、中级、高级和自定义棋盘，触控插旗，并自动保存各难度最快成绩。',
+        tags: ['游戏', '扫雷', 'Minesweeper'],
+        aliases: ['扫雷游戏', 'minesweeper', '踩地雷'],
+        keywords: ['game', 'mine', 'flag'],
+      },
+      {
         label: '奥利奥生成器',
         name: 'oreooo',
         icon: 'i-lucide:sandwich',
