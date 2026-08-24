@@ -123,8 +123,8 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2
       '@zvonimirsun/iszy-nuxt-auth-layer':
-        specifier: ^0.2.5
-        version: 0.2.5(cd8d4d6563f01b7a83bc7f1325bbaa0f)
+        specifier: ^0.2.6
+        version: 0.2.6(cd8d4d6563f01b7a83bc7f1325bbaa0f)
       '@zvonimirsun/leaflet-geoman':
         specifier: ^1.2.2
         version: 1.2.2(leaflet@1.9.4)
@@ -5312,8 +5312,8 @@ packages:
   '@zvonimirsun/iszy-common@1.2.2':
     resolution: {integrity: sha512-YL+IljwrgUCpZlSZj8vFd/wZOfZSbQGsrXdsD+NKp3WGIjVCUdpVxjfgm3mCtul2Cu7bHxYBUpw0l6g5myWEiA==}
 
-  '@zvonimirsun/iszy-nuxt-auth-layer@0.2.5':
-    resolution: {integrity: sha512-ECO2fAG+jb8JWf3Hmbyv2MWaCkEDOXPRO0R1mNGRVcW9pZ5idyRDFyn6IR4HOszOMrEWEQu3edXPqeLbs/WeyA==}
+  '@zvonimirsun/iszy-nuxt-auth-layer@0.2.6':
+    resolution: {integrity: sha512-QgG4nJmJyyJtgsWzQIGy1QA1gEQg/ZckFG+x/oBcPHACMhqjzuivblDV65lglo1BN2o192Y0QFwt8AO64H5jpA==}
     peerDependencies:
       '@nuxt/ui': '>=4.0.0'
       '@pinia/nuxt': '>=0.11.0'
@@ -18042,7 +18042,7 @@ snapshots:
     dependencies:
       uuid: 14.0.2
 
-  '@zvonimirsun/iszy-nuxt-auth-layer@0.2.5(cd8d4d6563f01b7a83bc7f1325bbaa0f)':
+  '@zvonimirsun/iszy-nuxt-auth-layer@0.2.6(cd8d4d6563f01b7a83bc7f1325bbaa0f)':
     dependencies:
       '@nuxt/ui': 4.11.0(6889092b421f7079758991875c9c0650)
       '@pinia/nuxt': 0.11.3(magicast@0.5.3)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.41(typescript@6.0.3)))
