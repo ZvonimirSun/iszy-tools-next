@@ -144,7 +144,7 @@
     "@types/wellknown": "^0.5.8",
     "@typescript-eslint/eslint-plugin": "^8.67.0",
     "@typescript-eslint/parser": "^8.67.0",
-    "baseline-browser-mapping": "^2.11.17",
+    "baseline-browser-mapping": "^2.11.20",
     "cross-env": "^10.1.0",
     "eslint": "^10.9.0",
     "ofetch": "^1.5.1",
