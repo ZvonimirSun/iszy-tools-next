@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ImgHostingConfig } from './imgHosting.d'
-import { uploadFile } from './imgHosting.service'
+import { getFileUrl, uploadFile } from './imgHosting.service'
 
 const props = defineProps<{
   config: ImgHostingConfig | null
@@ -37,6 +37,7 @@ async function handleUpload(files: FileList | File[]) {
   const fileList = Array.from(files)
   if (!fileList.length)
     return
+  const config = { ...props.config, config: { ...props.config.config } }
 
   loading.value = true
   progress.value = 0
@@ -45,23 +46,22 @@ async function handleUpload(files: FileList | File[]) {
     try {
       const fileToUpload = store.commonConfig.renameTimeStamp ? renameWithTimestamp(file) : file
 
-      const result = await uploadFile(props.config, fileToUpload, (pct) => {
+      const result = await uploadFile(config, fileToUpload, (pct) => {
         progress.value = pct
       })
 
       emit('uploaded', result)
 
       if (store.commonConfig.copyUrlAfterUpload) {
-        let text = store.commonConfig.customCopyContent.replace(/\$url/g, result.url)
-        if (text === store.commonConfig.customCopyContent && !store.commonConfig.customCopyContent.includes('$url')) {
-          text = result.url
-        }
         try {
+          const url = await getFileUrl(config, result)
+          const template = store.commonConfig.customCopyContent
+          const text = template.includes('$url') ? template.replace(/\$url/g, () => url) : url
           await copy(text)
-          toast.add({ title: '上传成功，地址已复制' })
+          toast.add({ title: config.privateBucket && !config.config.customUrl?.trim() ? '上传成功，已复制签名链接，有效期 1 小时' : '上传成功，地址已复制' })
         }
         catch {
-          toast.add({ title: '上传成功，但复制失败', color: 'warning' })
+          toast.add({ title: '上传成功，但获取链接或复制失败', color: 'warning' })
         }
       }
       else {

@@ -7,6 +7,10 @@ const toast = useToast()
 
 // 通用设置
 const commonConfig = store.commonConfig
+const loadImagesByDefault = computed({
+  get: () => store.commonConfig.loadImagesByDefault ?? true,
+  set: (value: boolean) => { store.commonConfig.loadImagesByDefault = value },
+})
 
 const copyFormatType = ref<'standard' | 'markdown' | 'custom'>('standard')
 const customContent = ref('$url')
@@ -69,6 +73,7 @@ function startEdit(config: ImgHostingConfig) {
     id: config.id,
     type: config.type,
     name: config.name,
+    privateBucket: config.privateBucket ?? false,
     config: { ...config.config },
   })
 }
@@ -106,6 +111,7 @@ function deleteConfig(id: string) {
 
 function onTypeChange() {
   draft.config = {}
+  draft.privateBucket = false
   const newUploader = getUploader(draft.type)
   const newDefaultName = newUploader?.name ?? draft.type
   // 如果名称为空或仍是某个 uploader 的默认名称，则自动更新为新类型名称
@@ -148,6 +154,15 @@ onMounted(() => {
         <div class="flex items-center justify-between">
           <span class="text-sm">上传后自动复制 URL</span>
           <USwitch v-model="commonConfig.copyUrlAfterUpload" />
+        </div>
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <span class="text-sm">默认加载图片</span>
+            <p class="mt-1 text-xs text-toned">
+              关闭后列表不加载缩略图，点击大图时才加载，减少存储读取请求。
+            </p>
+          </div>
+          <USwitch v-model="loadImagesByDefault" aria-label="默认加载图片" />
         </div>
 
         <USeparator />
@@ -310,6 +325,10 @@ onMounted(() => {
           </UFormField>
 
           <USeparator />
+
+          <UFormField v-if="activeUploader?.signUrl" label="私有桶" description="默认关闭。开启后使用自定义域名时仍使用自定义域名；未配置自定义域名时，预览和复制会生成有效期为 1 小时的签名链接。">
+            <USwitch v-model="draft.privateBucket" aria-label="私有桶" />
+          </UFormField>
 
           <UFormField
             v-for="field in activeFields"

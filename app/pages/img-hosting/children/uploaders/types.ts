@@ -29,6 +29,8 @@ export interface UploaderConfig {
   type: string
   /** 用户自定义配置名称 */
   name: string
+  /** 旧配置未设置时按公有桶处理 */
+  privateBucket?: boolean
   /** 各字段的键值对 */
   config: Record<string, string>
 }
@@ -50,6 +52,8 @@ export interface Uploader {
   name: string
   /** 字段元数据列表，按顺序渲染 */
   fields: FieldMeta[]
+  /** 按需生成私有对象的 GET 签名链接；未实现时不支持私有桶 */
+  signUrl?: (config: UploaderConfig, key: string, expiresIn: number) => Promise<string>
   /** 验证配置，返回错误列表（空数组表示合法） */
   validate: (config: UploaderConfig) => string[]
   /** 上传文件，返回文件 key 和访问 URL */

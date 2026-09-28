@@ -35,6 +35,7 @@ export const useSettingsStore = defineStore('settings', () => {
       commonConfig: {
         renameTimeStamp: true,
         copyUrlAfterUpload: true,
+        loadImagesByDefault: true,
         customCopyContent: '$url',
       },
     },

@@ -1,6 +1,7 @@
 import type { FieldMeta, FileItem, ProgressCallback, Uploader, UploaderConfig } from './types'
-import { DeleteObjectsCommand, paginateListObjectsV2, S3Client } from '@aws-sdk/client-s3'
+import { DeleteObjectsCommand, GetObjectCommand, paginateListObjectsV2, S3Client } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
 // ------------------------------------------------------------------ meta
 
@@ -47,6 +48,16 @@ function buildUrl(config: UploaderConfig, fileKey: string): string {
 }
 
 // ------------------------------------------------------------------ interface impl
+
+export async function signUrl(config: UploaderConfig, key: string, expiresIn: number): Promise<string> {
+  const client = createClient(config)
+  try {
+    return await getSignedUrl(client, new GetObjectCommand({ Bucket: config.config.bucket, Key: key }), { expiresIn })
+  }
+  finally {
+    client.destroy()
+  }
+}
 
 export function validate(config: UploaderConfig): string[] {
   const errors: string[] = []
@@ -119,5 +130,5 @@ export async function remove(config: UploaderConfig, keys: string[]): Promise<vo
 
 // ------------------------------------------------------------------ export
 
-const s3Uploader: Uploader = { type, name, fields, validate, upload, list, remove }
+const s3Uploader: Uploader = { type, name, fields, validate, upload, list, remove, signUrl }
 export default s3Uploader

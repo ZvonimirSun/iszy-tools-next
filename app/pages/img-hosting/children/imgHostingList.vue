@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui'
 import type { ImgHostingConfig, ImgHostingFileItem } from './imgHosting.d'
+import { createFileUrlResolver, getFileUrl } from './imgHosting.service'
+import ImgHostingImage from './ImgHostingImage.vue'
 
 const props = defineProps<{
   files: ImgHostingFileItem[]
@@ -15,22 +17,41 @@ const emit = defineEmits<{
 
 const store = useImgHostingStore()
 const { copy } = useCopy()
+const toast = useToast()
+const loadImagesByDefault = computed(() => store.commonConfig.loadImagesByDefault ?? true)
+const configKey = computed(() => JSON.stringify(props.config))
+const resolveUrl = computed(() => {
+  // 同一配置对象原地编辑时也要清除旧签名缓存。
+  void configKey.value
+  return createFileUrlResolver(props.config)
+})
+
+async function copyFile(file: ImgHostingFileItem, format: (url: string) => string) {
+  try {
+    const url = await getFileUrl(props.config, file)
+    await copy(format(url), {
+      notificationMessage: props.config?.privateBucket && !props.config.config.customUrl?.trim() ? '已复制签名链接，有效期 1 小时' : undefined,
+    })
+  }
+  catch {
+    toast.add({ title: '获取链接或复制失败，请检查存储配置后重试', color: 'error' })
+  }
+}
 
 function getCopyItems(file: ImgHostingFileItem): DropdownMenuItem[] {
-  const htmlUrl = file.url.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   const formats = [
-    { label: 'URL', text: file.url },
-    { label: 'Markdown', text: `![](${file.url})` },
-    { label: 'HTML', text: `<img src="${htmlUrl}" alt="" />` },
-    { label: 'BBCode', text: `[img]${file.url}[/img]` },
+    { label: 'URL', format: (url: string) => url },
+    { label: 'Markdown', format: (url: string) => `![](${url})` },
+    { label: 'HTML', format: (url: string) => `<img src="${url.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}" alt="" />` },
+    { label: 'BBCode', format: (url: string) => `[img]${url}[/img]` },
   ]
   const template = store.commonConfig.customCopyContent
   if (template.includes('$url') && template !== '$url' && template !== '![]($url)') {
-    formats.push({ label: '自定义', text: template.replace(/\$url/g, () => file.url) })
+    formats.push({ label: '自定义', format: (url: string) => template.replace(/\$url/g, () => url) })
   }
-  return formats.map(({ label, text }) => ({
+  return formats.map(({ label, format }) => ({
     label,
-    onSelect: () => copy(text),
+    onSelect: () => copyFile(file, format),
   }))
 }
 
@@ -115,6 +136,10 @@ onUnmounted(() => {
 const previewOpen = ref(false)
 const previewIndex = ref(0)
 
+watch(configKey, () => {
+  previewOpen.value = false
+})
+
 const previewFile = computed(() => props.files[previewIndex.value] ?? null)
 
 function openPreview(index: number) {
@@ -190,12 +215,11 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
         class="group relative rounded-lg border border-muted overflow-hidden bg-muted/20 cursor-pointer"
         @click="openPreview(index)"
       >
-        <img
-          :src="file.url"
-          :alt="file.key"
-          loading="lazy"
-          class="aspect-square object-cover w-full"
-        >
+        <ImgHostingImage v-if="loadImagesByDefault" :file="file" :resolve-url="resolveUrl" />
+        <div v-else class="aspect-square flex flex-col items-center justify-center gap-2 text-toned">
+          <UIcon name="i-lucide:image" class="size-8" />
+          <span class="text-xs">点击查看大图</span>
+        </div>
         <!-- 悬停操作层 -->
         <div class="absolute inset-0 z-10 bg-black/0 group-hover:bg-black/40 transition-colors flex items-end justify-center gap-1 p-2 opacity-100 sm:opacity-0 group-hover:opacity-100 group-focus-within:opacity-100">
           <div @click.stop>
@@ -288,12 +312,12 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
             :disabled="previewIndex === 0"
             @click="prevImage"
           />
-          <img
-            v-if="previewFile"
-            :src="previewFile.url"
-            :alt="previewFile.key"
-            class="max-w-full max-h-[70vh] object-contain rounded"
-          >
+          <ImgHostingImage
+            v-if="previewOpen && previewFile"
+            :file="previewFile"
+            :resolve-url="resolveUrl"
+            preview
+          />
           <UButton
             icon="i-lucide:chevron-right"
             color="neutral"
