@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { DropdownMenuItem } from '@nuxt/ui'
 import type { ImgHostingConfig, ImgHostingFileItem } from './imgHosting.d'
 
 const props = defineProps<{
@@ -15,12 +16,22 @@ const emit = defineEmits<{
 const store = useImgHostingStore()
 const { copy } = useCopy()
 
-function copyFileUrl(file: ImgHostingFileItem) {
-  let text = store.commonConfig.customCopyContent.replace(/\$url/g, file.url)
-  if (text === store.commonConfig.customCopyContent && !store.commonConfig.customCopyContent.includes('$url')) {
-    text = file.url
+function getCopyItems(file: ImgHostingFileItem): DropdownMenuItem[] {
+  const htmlUrl = file.url.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  const formats = [
+    { label: 'URL', text: file.url },
+    { label: 'Markdown', text: `![](${file.url})` },
+    { label: 'HTML', text: `<img src="${htmlUrl}" alt="" />` },
+    { label: 'BBCode', text: `[img]${file.url}[/img]` },
+  ]
+  const template = store.commonConfig.customCopyContent
+  if (template.includes('$url') && template !== '$url' && template !== '![]($url)') {
+    formats.push({ label: '自定义', text: template.replace(/\$url/g, () => file.url) })
   }
-  copy(text)
+  return formats.map(({ label, text }) => ({
+    label,
+    onSelect: () => copy(text),
+  }))
 }
 
 const deleteConfirmOpen = ref(false)
@@ -186,16 +197,18 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
           class="aspect-square object-cover w-full"
         >
         <!-- 悬停操作层 -->
-        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-end justify-center gap-1 p-2 opacity-0 group-hover:opacity-100">
-          <UTooltip text="复制 URL">
-            <UButton
-              icon="i-lucide:copy"
-              size="xs"
-              color="neutral"
-              variant="soft"
-              @click.stop="copyFileUrl(file)"
-            />
-          </UTooltip>
+        <div class="absolute inset-0 z-10 bg-black/0 group-hover:bg-black/40 transition-colors flex items-end justify-center gap-1 p-2 opacity-100 sm:opacity-0 group-hover:opacity-100 group-focus-within:opacity-100">
+          <div @click.stop>
+            <UDropdownMenu :items="getCopyItems(file)" :modal="false" :content="{ align: 'start' }">
+              <UButton
+                icon="i-lucide:copy"
+                aria-label="选择复制格式"
+                size="xs"
+                color="neutral"
+                variant="soft"
+              />
+            </UDropdownMenu>
+          </div>
           <UTooltip text="删除">
             <UButton
               icon="i-lucide:trash-2"
@@ -293,9 +306,11 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
       <template #footer>
         <div class="flex justify-between items-center w-full text-xs text-toned">
           <span v-if="previewFile">{{ formatSize(previewFile.size) }} · {{ formatDate(previewFile.lastModified) }}</span>
-          <UButton size="xs" color="neutral" variant="outline" @click="previewFile && copyFileUrl(previewFile)">
-            <UIcon name="i-lucide:copy" class="size-3 mr-1" />复制 URL
-          </UButton>
+          <UDropdownMenu v-if="previewFile" :items="getCopyItems(previewFile)" :modal="false">
+            <UButton size="xs" color="neutral" variant="outline" icon="i-lucide:copy" trailing-icon="i-lucide:chevron-down">
+              复制
+            </UButton>
+          </UDropdownMenu>
         </div>
       </template>
     </UModal>

@@ -153,7 +153,10 @@ onMounted(() => {
         <USeparator />
 
         <div>
-          <span class="text-sm font-medium">链接复制格式</span>
+          <span class="text-sm font-medium">上传后自动复制格式</span>
+          <p class="mt-1 text-xs text-toned">
+            仅用于上传后的自动复制，图片列表中可单独选择复制格式。
+          </p>
           <div class="mt-2 flex flex-col gap-2">
             <label class="flex items-center gap-2 cursor-pointer">
               <input
