@@ -2,7 +2,7 @@
 import AiChatSettings from './children/AiChatSettings.vue'
 import JsonEditorSettings from './children/JsonEditorSettings.vue'
 
-const { title, adminOrigin } = usePublicConfig()
+const { title, adminOrigin, features: { authEnabled } } = usePublicConfig()
 const seoTitle = computed(() => `个人设置 - ${title}`)
 const seoDescription = '管理个人偏好、首页展示、第三方登录绑定、应用配置和登录设备。'
 
@@ -50,8 +50,10 @@ const visibleAppSettingItems = computed(() => {
 
 <template>
   <div class="w-full h-full flex flex-col gap-4 items-start">
-    <AccountSecurityPanel :admin-origin="adminOrigin" login-redirect="/settings" />
-    <USeparator />
+    <template v-if="authEnabled">
+      <AccountSecurityPanel :admin-origin="adminOrigin" login-redirect="/settings" />
+      <USeparator />
+    </template>
     <h3 class="text-xl text-pretty font-semibold text-highlighted">
       全局设置
     </h3>

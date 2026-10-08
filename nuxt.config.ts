@@ -39,6 +39,7 @@ export default defineNuxtConfig({
         androidManifest: '',
       },
       features: {
+        authEnabled: true,
         tlDraw: {
           persistenceKey: '',
         },

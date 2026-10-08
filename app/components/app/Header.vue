@@ -1,7 +1,8 @@
 <script setup lang="ts">
-const { title, logo } = usePublicConfig()
+const { title, logo, features: { authEnabled } } = usePublicConfig()
 const tool = useCurrentTool()
 const userStore = useUserStore()
+const logged = computed(() => authEnabled && userStore.logged)
 
 const route = useRoute()
 const settingsPath = computed(() => {
@@ -33,11 +34,11 @@ const settingsPath = computed(() => {
     <template #right>
       <ColorModeButtonExtend />
       <UTooltip
-        :text="userStore.logged ? '个人中心' : '网站设置'"
+        :text="logged ? '个人中心' : '网站设置'"
       >
         <ULink :to="settingsPath">
           <UButton
-            v-if="userStore.logged"
+            v-if="logged"
             icon="icon-park-outline:user"
             color="neutral"
             variant="ghost"

@@ -2,10 +2,10 @@ import type { PublicUser, RawPrivilege, ResultDto } from '@zvonimirsun/iszy-comm
 import { tools } from '#shared/data/tools'
 
 export default defineEventHandler(async (event): Promise<ResultDto<OriginToolMenu[]>> => {
-  const { features: { showAllTools } } = useRuntimeConfig()
+  const { features: { showAllTools }, public: { features: { authEnabled } } } = useRuntimeConfig()
 
   let user: PublicUser | null = null
-  if (getSessionId(event)) {
+  if (authEnabled && getSessionId(event)) {
     try {
       const res = await authFetch(event)<ResultDto<PublicUser>>('/user/me')
       user = res.data!
@@ -24,7 +24,7 @@ export default defineEventHandler(async (event): Promise<ResultDto<OriginToolMen
           noAccess: !checkAccess(child, privilegeMap, isSuperAdmin),
         }
 
-        if (showAllTools || !nextChild.noAccess) {
+        if (authEnabled && (showAllTools || !nextChild.noAccess)) {
           return [nextChild]
         }
 

@@ -1,6 +1,7 @@
 export default defineNuxtPlugin({
   async setup() {
     const fetcher = useRequestFetch() as Fetcher
+    const { public: { features: { authEnabled } } } = useRuntimeConfig()
 
     const userStore = useUserStore()
     const originToolsStore = useOriginToolsStore()
@@ -14,7 +15,7 @@ export default defineNuxtPlugin({
     }
 
     await Promise.all([
-      userStore.pullProfile(false, fetcher),
+      authEnabled ? userStore.pullProfile(false, fetcher) : Promise.resolve(),
       originToolsStore.init(fetcher),
     ])
 
@@ -24,7 +25,9 @@ export default defineNuxtPlugin({
     }
 
     onNuxtReady(() => {
-      settingsStore.getSyncData(userStore)
+      if (authEnabled) {
+        settingsStore.getSyncData(userStore)
+      }
     })
   },
 })
