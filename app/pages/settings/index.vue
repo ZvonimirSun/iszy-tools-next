@@ -19,6 +19,7 @@ useSeoMeta({
 })
 
 const toolsStore = useToolsStore()
+const userStore = useUserStore()
 const settingsStore = useSettingsStore()
 const settings = settingsStore.general
 const feedbackUrl = 'https://github.com/ZvonimirSun/iszy-tools-next/discussions'
@@ -29,6 +30,7 @@ const appSettingItems = [
     label: 'JSON编辑器',
     path: '/json-editor',
     component: JsonEditorSettings,
+    settings: [{ requiresAuth: true }],
   },
   {
     key: 'aiChat',
@@ -36,6 +38,7 @@ const appSettingItems = [
     label: 'AI 对话',
     path: '/ai-chat',
     component: AiChatSettings,
+    requiresAuth: true,
   },
 ] as const
 type AppSettingKey = typeof appSettingItems[number]['key']
@@ -43,7 +46,10 @@ const openedAppSettingKey = ref<AppSettingKey>()
 const visibleAppSettingItems = computed(() => {
   return appSettingItems.filter((item) => {
     const tool = toolsStore.toolItemsMap[item.toolName]
-    return !!tool && !tool.noAccess
+    if (!tool || tool.noAccess || (!authEnabled && 'requiresAuth' in item && item.requiresAuth)) {
+      return false
+    }
+    return !('settings' in item) || item.settings.some(setting => !setting.requiresAuth || userStore.logged)
   })
 })
 </script>
@@ -93,42 +99,44 @@ const visibleAppSettingItems = computed(() => {
         </UButton>
       </ULink>
     </div>
-    <USeparator />
-    <h3 class="text-xl text-pretty font-semibold text-highlighted">
-      应用设置
-    </h3>
-    <div class="flex w-full flex-col gap-3">
-      <div
-        v-for="item in visibleAppSettingItems"
-        :key="item.key"
-        class="rounded-lg border border-muted bg-elevated/50"
-      >
-        <div class="flex items-center gap-2 px-2 py-2">
-          <UButton
-            color="neutral"
-            variant="ghost"
-            class="min-w-0 flex-1 justify-between px-2 py-1.5"
-            @click="openedAppSettingKey = openedAppSettingKey === item.key ? undefined : item.key"
-          >
-            <span class="truncate text-base font-medium text-highlighted">{{ item.label }}</span>
-            <UIcon name="i-lucide:chevron-down" class="size-4 transition-transform" :class="{ 'rotate-180': openedAppSettingKey === item.key }" />
-          </UButton>
-          <ULink :to="item.path">
+    <template v-if="visibleAppSettingItems.length">
+      <USeparator />
+      <h3 class="text-xl text-pretty font-semibold text-highlighted">
+        应用设置
+      </h3>
+      <div class="flex w-full flex-col gap-3">
+        <div
+          v-for="item in visibleAppSettingItems"
+          :key="item.key"
+          class="rounded-lg border border-muted bg-elevated/50"
+        >
+          <div class="flex items-center gap-2 px-2 py-2">
             <UButton
-              size="sm"
               color="neutral"
-              variant="soft"
-              icon="i-lucide:external-link"
+              variant="ghost"
+              class="min-w-0 flex-1 justify-between px-2 py-1.5"
+              @click="openedAppSettingKey = openedAppSettingKey === item.key ? undefined : item.key"
             >
-              打开
+              <span class="truncate text-base font-medium text-highlighted">{{ item.label }}</span>
+              <UIcon name="i-lucide:chevron-down" class="size-4 transition-transform" :class="{ 'rotate-180': openedAppSettingKey === item.key }" />
             </UButton>
-          </ULink>
-        </div>
-        <div v-if="openedAppSettingKey === item.key" class="border-t border-muted p-4">
-          <component :is="item.component" />
+            <ULink :to="item.path">
+              <UButton
+                size="sm"
+                color="neutral"
+                variant="soft"
+                icon="i-lucide:external-link"
+              >
+                打开
+              </UButton>
+            </ULink>
+          </div>
+          <div v-if="openedAppSettingKey === item.key" class="border-t border-muted p-4">
+            <component :is="item.component" />
+          </div>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
