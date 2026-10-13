@@ -1,214 +1,126 @@
 <script setup lang="ts">
-import { createOtpAuthUri, generateBase32Secret, generateTotp, verifyTotp } from './children/otp.service'
+import { parseSecretInput } from './children/input'
+import { generateTotp } from './children/otp.service'
 
-const secret = ref('')
-const issuer = ref('ISZY')
-const account = ref('user@example.com')
-const period = ref(30)
-const digits = ref(6)
-const algorithm = ref<'SHA-1' | 'SHA-256' | 'SHA-512'>('SHA-1')
-const verificationCode = ref('')
+const input = ref('')
+const mode = ref('auto')
+const selected = ref(-1)
 const now = ref(Date.now())
-const verifyResult = ref<boolean | null>(null)
+const mounted = ref(false)
 const { copy } = useCopy()
-
-let timer: ReturnType<typeof setInterval> | undefined
-
-const digitOptions = [
-  { label: '6 位', value: 6 },
-  { label: '8 位', value: 8 },
+const modes = [
+  { label: '自动识别', value: 'auto' },
+  { label: 'TOTP 数字验证码', value: 'totp' },
+  { label: 'Steam 5 位验证码', value: 'steam' },
 ]
-const algorithmOptions = [
-  { label: 'SHA-1', value: 'SHA-1' },
-  { label: 'SHA-256', value: 'SHA-256' },
-  { label: 'SHA-512', value: 'SHA-512' },
-]
-
-const generated = computedAsync(async () => {
-  if (!secret.value.trim()) {
-    return {
-      error: '',
-      token: '',
-      remainingSeconds: 0,
-    }
-  }
-
+const parsed = computed(() => {
   try {
-    const result = await generateTotp({
-      secret: secret.value,
-      timestamp: now.value,
-      period: period.value,
-      digits: digits.value,
-      algorithm: algorithm.value,
-    })
-    return {
-      error: '',
-      token: result.token,
-      remainingSeconds: result.remainingSeconds,
-    }
+    return { candidates: parseSecretInput(input.value), error: '' }
   }
   catch (error) {
-    return {
-      error: error instanceof Error ? error.message : String(error),
-      token: '',
-      remainingSeconds: 0,
-    }
+    return { candidates: [], error: error instanceof Error ? error.message : String(error) }
   }
-}, { error: '', token: '', remainingSeconds: 0 })
-
-const otpAuthUri = computed(() => {
-  if (!secret.value.trim()) {
-    return ''
-  }
-
-  return createOtpAuthUri({
-    secret: secret.value,
-    issuer: issuer.value,
-    account: account.value,
-    period: period.value,
-    digits: digits.value,
-    algorithm: algorithm.value,
-  })
 })
-
-function refreshSecret() {
-  secret.value = generateBase32Secret()
-  verifyResult.value = null
-}
-
-async function verify() {
-  if (!verificationCode.value) {
-    verifyResult.value = null
-    return
+watch(input, () => {
+  selected.value = -1
+}, { flush: 'sync' })
+const candidate = computed(() => parsed.value.candidates.length === 1
+  ? parsed.value.candidates[0]
+  : parsed.value.candidates[selected.value])
+const steam = computed(() => mode.value === 'steam' || (mode.value === 'auto' && candidate.value?.steam === true))
+const period = computed(() => steam.value ? 30 : candidate.value?.period ?? 30)
+const counter = computed(() => Math.floor(now.value / 1000 / period.value))
+const remaining = computed(() => period.value - Math.floor(now.value / 1000) % period.value)
+const signature = computed(() => JSON.stringify([candidate.value, steam.value, counter.value]))
+const generated = computedAsync(async () => {
+  const currentSignature = signature.value
+  if (!mounted.value || !candidate.value) {
+    return { token: '', error: '', signature: currentSignature }
   }
+  try {
+    const result = await generateTotp({ ...candidate.value, steam: steam.value, timestamp: counter.value * period.value * 1000 })
+    return { token: result.token, error: '', signature: currentSignature }
+  }
+  catch (error) {
+    return { token: '', error: error instanceof Error ? error.message : String(error), signature: currentSignature }
+  }
+}, { token: '', error: '', signature: '' })
+const token = computed(() => generated.value.signature === signature.value ? generated.value.token : '')
+const error = computed(() => parsed.value.error || (generated.value.signature === signature.value ? generated.value.error : ''))
+const choices = computed(() => parsed.value.candidates.map((item, index) => ({
+  label: `${item.label} · ${item.secret.slice(0, 4)}…${item.secret.slice(-4)}`,
+  value: index,
+})))
 
-  verifyResult.value = await verifyTotp(verificationCode.value, {
-    secret: secret.value,
-    timestamp: now.value,
-    period: period.value,
-    digits: digits.value,
-    algorithm: algorithm.value,
-    window: 1,
-  })
+async function copyCode() {
+  // Recompute at click time so a rollover or returning from a suspended tab cannot copy an expired code.
+  if (candidate.value) {
+    const result = await generateTotp({ ...candidate.value, steam: steam.value, timestamp: Date.now() })
+    await copy(result.token)
+    now.value = Date.now()
+  }
 }
 
+let timer: ReturnType<typeof setInterval> | undefined
 onMounted(() => {
-  refreshSecret()
+  mounted.value = true
+  now.value = Date.now()
   timer = setInterval(() => {
     now.value = Date.now()
-  }, 1000)
+  }, 250)
 })
-
-onBeforeUnmount(() => {
-  if (timer) {
-    clearInterval(timer)
-  }
-})
+onBeforeUnmount(() => clearInterval(timer))
 </script>
 
 <template>
-  <div class="mx-auto flex w-full max-w-4xl flex-col gap-4">
-    <UAlert
-      color="neutral"
-      variant="soft"
-      icon="i-lucide:shield-alert"
-      title="Secret 和验证码仅在浏览器本地处理，不会上传或保存。"
-    />
-
-    <div class="grid gap-3 rounded-lg border border-muted bg-muted/30 p-4 md:grid-cols-[minmax(0,1fr)_auto]">
-      <UFormField label="Base32 Secret">
-        <UInput v-model="secret" class="w-full font-mono" placeholder="Base32 secret" />
+  <div class="mx-auto flex w-full max-w-3xl flex-col gap-4">
+    <UAlert color="neutral" variant="soft" icon="i-lucide:shield-check" title="密钥和卡密仅在浏览器本地处理，不上传、不保存；粘贴的链接不会被访问。" />
+    <UFormField label="密钥 / 2FA 链接 / 完整卡密" description="支持 Base32、otpauth://、steam://、带密钥的 2FA 链接，以及用 ----、竖线、空格或换行分隔的卡密。">
+      <UTextarea
+        v-model="input"
+        class="w-full font-mono"
+        :rows="5"
+        placeholder="粘贴密钥，或 账号----密码----密钥----附加字段"
+        autocomplete="off"
+        :spellcheck="false"
+      />
+    </UFormField>
+    <div class="flex flex-wrap items-end gap-3">
+      <UFormField label="验证码类型" class="min-w-0 flex-1">
+        <USelect v-model="mode" :items="modes" class="w-full" />
       </UFormField>
-      <UButton color="primary" icon="i-lucide:refresh-cw" class="self-end" @click="refreshSecret">
-        生成 Secret
+      <UButton color="neutral" variant="outline" icon="i-lucide:eraser" :disabled="!input" @click="input = ''">
+        清空
       </UButton>
     </div>
-
-    <div class="grid gap-3 md:grid-cols-4">
-      <UFormField label="Issuer">
-        <UInput v-model="issuer" class="w-full" />
-      </UFormField>
-      <UFormField label="Account">
-        <UInput v-model="account" class="w-full" />
-      </UFormField>
-      <UFormField label="位数">
-        <USelect v-model="digits" :items="digitOptions" class="w-full" />
-      </UFormField>
-      <UFormField label="算法">
-        <USelect v-model="algorithm" :items="algorithmOptions" class="w-full" />
-      </UFormField>
-    </div>
-
-    <UAlert
-      v-if="generated.error"
-      color="error"
-      variant="soft"
-      icon="i-lucide:circle-alert"
-      :title="generated.error"
-    />
-
-    <div class="grid gap-4 lg:grid-cols-2">
-      <ContainerToolItem label="当前 TOTP">
-        <div class="grid gap-3">
-          <div class="rounded-lg border border-muted p-4 text-center">
-            <p class="font-mono text-4xl font-semibold tracking-widest">
-              {{ generated.token || '------' }}
-            </p>
-            <p class="mt-2 text-sm text-muted">
-              剩余 {{ generated.remainingSeconds }} 秒
-            </p>
-          </div>
-          <UButton
-            :disabled="!generated.token"
-            color="neutral"
-            variant="outline"
-            icon="i-lucide:copy"
-            @click="copy(generated.token)"
-          >
-            复制验证码
-          </UButton>
-        </div>
-      </ContainerToolItem>
-
-      <ContainerToolItem label="校验验证码">
-        <div class="grid gap-3">
-          <UInput v-model="verificationCode" class="w-full font-mono" placeholder="输入验证码..." />
-          <UButton color="primary" icon="i-lucide:check" @click="verify">
-            校验
-          </UButton>
-          <UAlert
-            v-if="verifyResult !== null"
-            :color="verifyResult ? 'success' : 'error'"
-            variant="soft"
-            :icon="verifyResult ? 'i-lucide:check-circle' : 'i-lucide:x-circle'"
-            :title="verifyResult ? '验证码有效' : '验证码无效'"
-          />
-        </div>
-      </ContainerToolItem>
-    </div>
-
-    <ContainerToolItem label="otpauth URI">
-      <div class="grid gap-2">
-        <UTextarea
-          :model-value="otpAuthUri"
-          class="w-full font-mono"
-          :rows="3"
-          resize
-          readonly
-          placeholder="otpauth URI 将显示在这里..."
-        />
-        <div class="flex justify-end">
-          <UButton
-            :disabled="!otpAuthUri"
-            color="neutral"
-            variant="outline"
-            icon="i-lucide:copy"
-            @click="copy(otpAuthUri)"
-          >
-            复制 URI
-          </UButton>
-        </div>
+    <p class="text-sm text-muted">
+      普通密钥默认生成 6 位数字，每 30 秒刷新。otpauth 链接沿用其算法、位数和周期；Steam 密钥可手动选择 Steam 模式。
+    </p>
+    <UFormField v-if="choices.length > 1" label="发现多个候选密钥，请选择正确字段">
+      <USelect v-model="selected" :items="choices" placeholder="选择密钥" class="w-full" />
+    </UFormField>
+    <UAlert v-if="error" color="error" variant="soft" :title="error" />
+    <ContainerToolItem label="当前动态验证码">
+      <div class="flex flex-col gap-4 p-6 text-center">
+        <p class="text-sm text-muted">
+          {{ candidate ? `${steam ? 'Steam · 5 位' : `TOTP · ${candidate.digits ?? 6} 位`} · ${period} 秒` : '粘贴密钥后自动生成' }}
+        </p>
+        <p class="select-all font-mono text-4xl font-semibold tracking-widest sm:text-5xl" aria-label="当前验证码">
+          {{ token || '------' }}
+        </p>
+        <template v-if="token">
+          <UProgress :model-value="remaining" :max="period" :color="remaining <= 5 ? 'warning' : 'primary'" />
+          <p class="text-sm text-muted">
+            {{ remaining }} 秒后自动刷新
+          </p>
+        </template>
+        <UButton :disabled="!token" icon="i-lucide:copy" size="lg" class="justify-center" @click="copyCode">
+          复制验证码
+        </UButton>
       </div>
     </ContainerToolItem>
+    <p class="text-sm text-muted">
+      验证码依赖设备时间，请保持系统时间准确。无标签卡密按 Base32 字段识别；若识别不正确，请单独粘贴密钥。
+    </p>
   </div>
 </template>

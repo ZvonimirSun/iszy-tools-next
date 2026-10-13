@@ -130,6 +130,25 @@ export const useToolsStore = defineStore('tools', () => {
 
   function fixFavorite() {
     const allTools = originToolsStore.toolItems
+    const otpTool = allTools.find(item => item.name === 'otp')
+    if (otpTool) {
+      // Both former OTP tools now share one entry; retain favorites and access history.
+      for (const record of [...favorite.value, ...statistics.value]) {
+        if (record.name === 'otp' || record.name === 'totp-generator' || record.label === 'OTP生成校验') {
+          record.name = otpTool.name
+          record.label = otpTool.label
+        }
+      }
+      favorite.value = favorite.value.filter((item, index, items) => item.name !== 'otp'
+        || items.findIndex(record => record.name === 'otp') === index)
+      const otpStatistics = statistics.value.filter(item => item.name === 'otp')
+      const first = otpStatistics[0]
+      if (first && otpStatistics.length > 1) {
+        first.times = otpStatistics.reduce((sum, item) => sum + item.times, 0)
+        first.lastAccessTime = Math.max(...otpStatistics.map(item => item.lastAccessTime))
+        statistics.value = statistics.value.filter(item => item.name !== 'otp' || item === first)
+      }
+    }
     for (const tool of favorite.value) {
       const tmp = allTools.find(item => (item.label === tool.label))
       if (!tmp) {

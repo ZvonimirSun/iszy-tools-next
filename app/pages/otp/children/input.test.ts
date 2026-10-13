@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { generateTotp } from '../../otp/children/otp.service'
 import { parseSecretInput } from './input'
+import { generateTotp } from './otp.service'
 
 // Public Bitwarden SDK test vectors, not account credentials:
 // https://github.com/bitwarden/sdk-internal/blob/a249a7d8ea06fa8f82c741c79e9c3d0164673a05/crates/bitwarden-vault/src/totp.rs#L401

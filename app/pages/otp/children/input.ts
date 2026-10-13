@@ -1,5 +1,5 @@
-import type { TotpOptions } from '../../otp/children/otp.service'
-import { decodeBase32 } from '../../otp/children/otp.service'
+import type { TotpOptions } from './otp.service'
+import { decodeBase32 } from './otp.service'
 
 export interface ParsedSecret extends TotpOptions {
   label: string
