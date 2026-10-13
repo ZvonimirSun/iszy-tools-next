@@ -6,21 +6,41 @@ export interface TotpOptions {
   period?: number
   digits?: number
   algorithm?: 'SHA-1' | 'SHA-256' | 'SHA-512'
+  steam?: boolean
 }
 
 export async function generateTotp(options: TotpOptions) {
-  const period = options.period ?? 30
+  const period = options.steam ? 30 : options.period ?? 30
   const digits = options.digits ?? 6
+  if (!Number.isInteger(period) || period <= 0 || ![6, 8].includes(digits)) {
+    throw new Error('周期必须是正整数，验证码位数必须为 6 或 8')
+  }
   const timestamp = options.timestamp ?? Date.now()
   const counter = Math.floor(timestamp / 1000 / period)
   const secret = decodeBase32(options.secret)
-  const digest = await hmac(secret, counter, options.algorithm ?? 'SHA-1')
+  if (!secret.length) {
+    throw new Error('Secret 不能为空')
+  }
+  const digest = await hmac(secret, counter, options.steam ? 'SHA-1' : options.algorithm ?? 'SHA-1')
   const offset = digest[digest.length - 1]! & 0x0F
   const binary = ((digest[offset]! & 0x7F) << 24)
     | (digest[offset + 1]! << 16)
     | (digest[offset + 2]! << 8)
     | digest[offset + 3]!
-  const token = String(binary % 10 ** digits).padStart(digits, '0')
+  // Same character order as Bitwarden SDK (used by Vaultwarden Web Vault):
+  // https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-vault/src/totp.rs
+  let token = ''
+  if (options.steam) {
+    const alphabet = '23456789BCDFGHJKMNPQRTVWXY'
+    let value = binary
+    for (let index = 0; index < 5; index += 1) {
+      token += alphabet[value % alphabet.length]
+      value = Math.floor(value / alphabet.length)
+    }
+  }
+  else {
+    token = String(binary % 10 ** digits).padStart(digits, '0')
+  }
 
   return {
     token,
