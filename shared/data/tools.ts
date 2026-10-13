@@ -622,6 +622,15 @@ export const tools: OriginToolMenu[] = [
         keywords: ['rsa', 'key pair', 'public key', 'private key', 'pem'],
       },
       {
+        label: '动态验证码',
+        name: 'totp-generator',
+        icon: 'i-lucide:timer',
+        description: '在浏览器本地从 Base32 密钥、otpauth / 2FA 链接或完整卡密生成动态验证码，支持 TOTP 数字与 Steam 5 位验证码、自动刷新和一键复制。',
+        tags: ['TOTP', '2FA', 'Steam', '卡密'],
+        aliases: ['动态验证码生成', 'Steam验证码', '卡密验证码'],
+        keywords: ['totp', '2fa', 'steam guard', 'otpauth', '动态口令'],
+      },
+      {
         label: 'OTP生成校验',
         name: 'otp',
         icon: 'i-lucide:lock-keyhole',
