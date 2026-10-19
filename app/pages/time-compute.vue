@@ -12,23 +12,23 @@ function toDateTimeInputValue(value: dayjs.Dayjs) {
   return value.format('YYYY-MM-DDTHH:mm:ss')
 }
 
-const timestampInput = ref(`${Date.now()}`)
+const timestampInput = ref('')
 const timestampUnit = ref<TimestampUnit>('ms')
 const timestampToTimeResult = ref('')
 const convertTimestampError = ref('')
 
-const datetimeInput = ref(toDateTimeInputValue(dayjs()))
+const datetimeInput = ref('')
 const timeToTimestampMs = ref('')
 const timeToTimestampS = ref('')
 const convertDatetimeError = ref('')
 
-const baseDatetimeInput = ref(toDateTimeInputValue(dayjs()))
+const baseDatetimeInput = ref('')
 const offsetDays = ref(1)
 const afterDaysResult = ref('')
 const addDaysError = ref('')
 
-const startDatetimeInput = ref(toDateTimeInputValue(dayjs()))
-const endDatetimeInput = ref(toDateTimeInputValue(dayjs().add(1, 'day')))
+const startDatetimeInput = ref('')
+const endDatetimeInput = ref('')
 const diffCalendarDays = ref<number | null>(null)
 const diffExactDays = ref<number | null>(null)
 const diffDaysError = ref('')
@@ -111,6 +111,12 @@ function calculateDateDiff() {
 }
 
 onMounted(() => {
+  const now = dayjs()
+  timestampInput.value = `${now.valueOf()}`
+  datetimeInput.value = toDateTimeInputValue(now)
+  baseDatetimeInput.value = toDateTimeInputValue(now)
+  startDatetimeInput.value = toDateTimeInputValue(now)
+  endDatetimeInput.value = toDateTimeInputValue(now.add(1, 'day'))
   convertTimestampToTime()
   convertTimeToTimestamp()
   calculateAfterDays()

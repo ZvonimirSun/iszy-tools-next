@@ -4,7 +4,11 @@ import { generateUlids } from './children/ulid.service'
 const count = ref(10)
 const lowercase = ref(false)
 const fixedTimestamp = ref(false)
-const timestampText = ref(new Date().toISOString())
+const timestampText = ref('')
+const mounted = useMounted()
+onMounted(() => {
+  timestampText.value = new Date().toISOString()
+})
 const refreshKey = ref(0)
 const { copy } = useCopy()
 
@@ -18,6 +22,8 @@ const timestamp = computed(() => {
 })
 
 const generated = computed(() => {
+  if (!mounted.value)
+    return { error: '', ulids: [] }
   if (timestamp.value === null) {
     return {
       error: '固定时间戳不是合法日期时间',

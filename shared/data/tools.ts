@@ -1,6 +1,6 @@
-import type { OriginToolMenu } from '#shared/types/tool'
+import type { ToolMenu } from '../types/tool'
 
-export const tools: OriginToolMenu[] = [
+export const tools: ToolMenu[] = [
   {
     label: 'GIS工具',
     children: [

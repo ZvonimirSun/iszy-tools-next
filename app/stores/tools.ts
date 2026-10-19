@@ -1,5 +1,6 @@
 import type { OptionalExcept } from '@zvonimirsun/iszy-common'
 import type { Favorite, Statistic, ToolMenu, ToolRecord } from '#shared/types/tool'
+import { tools } from '#shared/data/tools'
 
 export const useToolsStore = defineStore('tools', () => {
   const originToolsStore = useOriginToolsStore()
@@ -18,7 +19,7 @@ export const useToolsStore = defineStore('tools', () => {
   const toolMenus = computed<ToolMenu[]>(() => {
     const settings = settingsStore.general
     const oriToolMenus = originToolsStore.toolMenus
-    const oriToolItems = originToolsStore.toolItems
+    const oriToolItems = oriToolMenus.flatMap(menu => menu.children)
 
     let tmp: ToolMenu[] = []
     if (settings.showType) {
@@ -52,7 +53,7 @@ export const useToolsStore = defineStore('tools', () => {
 
   const toolsFilter = computed(() => {
     return (tools: ToolItem[], keyword: string): ToolItem[] => {
-      return filterToolsBySearchKeywords(tools, normalizeSearchKeywords(keyword))
+      return filterToolsBySearchKeywords(tools.filter(tool => toolItemsMap.value[tool.name]), normalizeSearchKeywords(keyword))
     }
   })
 
@@ -129,7 +130,7 @@ export const useToolsStore = defineStore('tools', () => {
   }
 
   function fixFavorite() {
-    const allTools = originToolsStore.toolItems
+    const allTools = tools.flatMap(menu => menu.children)
     const otpTool = allTools.find(item => item.name === 'otp')
     if (otpTool) {
       // Both former OTP tools now share one entry; retain favorites and access history.

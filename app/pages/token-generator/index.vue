@@ -9,7 +9,10 @@ const numbers = ref(true)
 const symbols = ref(false)
 const { copy } = useCopy()
 
+const mounted = useMounted()
 const generated = computed(() => {
+  if (!mounted.value)
+    return { error: '', tokens: [] }
   try {
     return {
       error: '',

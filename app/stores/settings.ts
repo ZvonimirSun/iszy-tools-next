@@ -49,6 +49,8 @@ export const useSettingsStore = defineStore('settings', () => {
   const finishSync = ref(false)
   let getSyncDataPromise: Promise<void> | null = null
   let stopModulesSyncWatch: (() => void) | null = null
+  let syncRevision = 0
+  let syncController: AbortController | null = null
 
   const syncData = debounce(() => {
     if (!useUserStore().logged) {
@@ -63,6 +65,17 @@ export const useSettingsStore = defineStore('settings', () => {
     }
   })
 
+  function resetSync() {
+    syncRevision++
+    syncController?.abort()
+    syncController = null
+    getSyncDataPromise = null
+    stopModulesSyncWatch?.()
+    stopModulesSyncWatch = null
+    syncData.cancel()
+    finishSync.value = false
+  }
+
   async function afterSync() {
     if (!useUserStore().logged) {
       return
@@ -70,14 +83,8 @@ export const useSettingsStore = defineStore('settings', () => {
     if (finishSync.value) {
       return
     }
-    return new Promise<void>((resolve) => {
-      const { stop } = watch(finishSync, (val) => {
-        if (val) {
-          stop()
-          resolve()
-        }
-      })
-    })
+    // Wait for the request itself so logout cancellation also releases callers.
+    await getSyncData()
   }
 
   function getSyncData(userStore = useUserStore()) {
@@ -90,9 +97,14 @@ export const useSettingsStore = defineStore('settings', () => {
     }
 
     finishSync.value = false
+    const current = ++syncRevision
+    syncController = new AbortController()
+    const signal = syncController.signal
     const request = (async () => {
       try {
-        const data = await $fetch<ResultDto<any>>('/api/tools/settings/tools-next')
+        const data = await $fetch<ResultDto<any>>('/api/tools/settings/tools-next', { signal })
+        if (current !== syncRevision)
+          return
         if (data.success) {
           if (data.data) {
             merge(modules.value, data.data)
@@ -108,12 +120,16 @@ export const useSettingsStore = defineStore('settings', () => {
       }
       catch (err) {}
       finally {
-        finishSync.value = true
+        if (current === syncRevision)
+          finishSync.value = true
       }
     })()
 
     getSyncDataPromise = request.finally(() => {
-      getSyncDataPromise = null
+      if (current === syncRevision) {
+        getSyncDataPromise = null
+        syncController = null
+      }
     })
     return getSyncDataPromise
   }
@@ -123,6 +139,7 @@ export const useSettingsStore = defineStore('settings', () => {
     modules,
     afterSync,
     getSyncData,
+    resetSync,
   }
 }, {
   persist: [

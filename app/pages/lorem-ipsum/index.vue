@@ -11,7 +11,10 @@ const asHtml = ref(false)
 const refreshKey = ref(0)
 const { copy } = useCopy()
 
+const mounted = useMounted()
 const outputText = computed(() => {
+  if (!mounted.value)
+    return ''
   void refreshKey.value
 
   return generateLoremIpsum({

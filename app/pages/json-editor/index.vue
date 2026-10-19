@@ -296,6 +296,12 @@ function updateMobileLayout() {
 }
 
 async function pullCloudDataIfNeeded() {
+  try {
+    await useAuthInitStore().ensureAuth()
+  }
+  catch {
+    return
+  }
   await useSettingsStore().afterSync()
   if (!store.syncCloud || syncPulled.value || isSyncLoading.value) {
     return

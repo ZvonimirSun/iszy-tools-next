@@ -8,7 +8,10 @@ const unique = ref(true)
 const refreshKey = ref(0)
 const { copy } = useCopy()
 
+const mounted = useMounted()
 const generated = computed(() => {
+  if (!mounted.value)
+    return { error: '', ports: [] }
   try {
     return {
       error: '',

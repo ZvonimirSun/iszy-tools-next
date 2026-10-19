@@ -57,7 +57,9 @@ const visibleAppSettingItems = computed(() => {
 <template>
   <div class="w-full h-full flex flex-col gap-4 items-start">
     <template v-if="authEnabled">
-      <AccountSecurityPanel :admin-origin="adminOrigin" login-redirect="/settings" />
+      <ClientOnly>
+        <AccountSecurityPanel :admin-origin="adminOrigin" login-redirect="/settings" />
+      </ClientOnly>
       <USeparator />
     </template>
     <h3 class="text-xl text-pretty font-semibold text-highlighted">

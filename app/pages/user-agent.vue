@@ -14,8 +14,6 @@ function formatNameVersion(name?: string, version?: string) {
   return `${name || '-'} ${version || ''}`.trim()
 }
 
-const requestHeaders = useRequestHeaders(['user-agent'])
-
 function useCurrentUa() {
   if (!import.meta.client)
     return
@@ -24,10 +22,6 @@ function useCurrentUa() {
 
 function clear() {
   uaInput.value = ''
-}
-
-if (requestHeaders['user-agent']) {
-  uaInput.value = requestHeaders['user-agent']
 }
 
 onMounted(() => {

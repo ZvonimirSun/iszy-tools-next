@@ -15,7 +15,10 @@ const separatorOptions = [
   { label: '无分隔符', value: '' },
 ]
 
+const mounted = useMounted()
 const generated = computed(() => {
+  if (!mounted.value)
+    return { error: '', macs: [] }
   try {
     return {
       error: '',

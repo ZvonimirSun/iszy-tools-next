@@ -1,5 +1,5 @@
 import { kebabCase } from 'scule'
-import { tools } from '#shared/data/tools'
+import { findRouteTool } from '#shared/utils/toolCatalog'
 
 export default defineNuxtRouteMiddleware(async (to, _from) => {
   const { features: { authEnabled } } = useRuntimeConfig().public
@@ -24,7 +24,7 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
 
   const toolsStore = useToolsStore()
   const currentTool = getCurrentTool(toolsStore, to)
-  const routeTool = tools.flatMap(menu => menu.children).find(tool => tool.name === to.path.slice(1))
+  const routeTool = findRouteTool(to.path)
   if (!authEnabled && routeTool && 'requiresAuth' in routeTool && routeTool.requiresAuth) {
     return navigateTo('/')
   }
@@ -37,18 +37,26 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
     })
   }
 
-  if (!currentTool || !currentTool.noAccess) {
+  if (!routeTool?.requiresAuth) {
     return
   }
+  if (import.meta.server)
+    return
   if (!authEnabled) {
     return navigateTo('/')
   }
   const userStore = useUserStore()
+  try {
+    await useAuthInitStore().ensureAuth()
+  }
+  catch {
+    throw createError({ statusCode: 503, statusMessage: '认证服务暂不可用，请刷新重试' })
+  }
   // 如果当前工具需要认证但用户未登录，重定向到登录页
   if (!userStore.logged) {
-    return navigateTo(`/login?redirect=${to.fullPath}`)
+    return navigateTo({ path: '/login', query: { redirect: to.fullPath } })
   }
-  else {
+  if (!useOriginToolsStore().memberTools.some(tool => tool.name === routeTool.name && !tool.noAccess)) {
     // 权限不足，重定向到403页
     throw createError({
       statusCode: 403,

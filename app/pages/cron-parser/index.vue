@@ -11,6 +11,7 @@ interface CronField {
 }
 
 const { copy } = useCopy()
+const mounted = useMounted()
 
 const expression = ref('5 4 * * *')
 const activeField = ref<FieldKey>('minute')
@@ -101,8 +102,7 @@ const parseResult = computed(() => {
       throwExceptionOnParseError: true,
       use24HourTimeFormat: true,
     })
-    const cron = new Cron(value)
-    const nextRuns = cron.nextRuns(5).map(date => formatDate(date))
+    const nextRuns = mounted.value ? new Cron(value).nextRuns(5).map(date => formatDate(date)) : []
     return {
       valid: true,
       description,

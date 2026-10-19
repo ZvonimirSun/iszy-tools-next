@@ -33,26 +33,31 @@ const settingsPath = computed(() => {
     </template>
     <template #right>
       <ColorModeButtonExtend />
-      <UTooltip
-        :text="logged ? '个人中心' : '网站设置'"
-      >
-        <ULink :to="settingsPath">
-          <UButton
-            v-if="logged"
-            icon="icon-park-outline:user"
-            color="neutral"
-            variant="ghost"
-            aria-label="个人中心"
-          />
-          <UButton
-            v-else
-            icon="icon-park-outline:setting-two"
-            color="neutral"
-            variant="ghost"
-            aria-label="网站设置"
-          />
-        </ULink>
-      </UTooltip>
+      <ClientOnly>
+        <UTooltip
+          :text="logged ? '个人中心' : '网站设置'"
+        >
+          <ULink :to="settingsPath">
+            <UButton
+              v-if="logged"
+              icon="icon-park-outline:user"
+              color="neutral"
+              variant="ghost"
+              aria-label="个人中心"
+            />
+            <UButton
+              v-else
+              icon="icon-park-outline:setting-two"
+              color="neutral"
+              variant="ghost"
+              aria-label="网站设置"
+            />
+          </ULink>
+        </UTooltip>
+        <template #fallback>
+          <span class="inline-block size-8" aria-hidden="true" />
+        </template>
+      </ClientOnly>
     </template>
   </UHeader>
 </template>
