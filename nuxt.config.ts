@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import ms from 'ms'
+import { createPageRouteRules } from './shared/utils/pageCache'
 
 const extensions = [
   '.js',
@@ -19,6 +20,9 @@ const pagePattern = [
 export default defineNuxtConfig({
   extends: ['@zvonimirsun/iszy-nuxt-auth-layer'],
   runtimeConfig: {
+    session: {
+      renewalScope: 'api',
+    },
     apiOrigin: '',
     public: {
       url: 'http://localhost:3000',
@@ -77,6 +81,12 @@ export default defineNuxtConfig({
     },
   },
   compatibilityDate: '2026-07-02',
+  routeRules: createPageRouteRules(),
+  nitro: {
+    storage: {
+      cache: { driver: 'memory' },
+    },
+  },
   devtools: { enabled: true },
   modules: [
     '@nuxt/ui',
