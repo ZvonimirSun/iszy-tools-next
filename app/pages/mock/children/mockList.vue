@@ -55,17 +55,17 @@ async function createOrEditPrj(prj: MockPrj) {
 
 <template>
   <div class="h-full w-full overflow-auto">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4">
+    <div class="mock-project-grid grid gap-4">
       <div
         v-for="(prj, index) of projects"
         :key="index"
-        class="flex aspect-3/2 flex-col overflow-hidden rounded-lg border border-default bg-elevated shadow-xs transition hover:shadow-sm"
+        class="flex min-h-64 min-w-0 flex-col overflow-hidden rounded-lg border border-default bg-elevated shadow-xs transition hover:shadow-sm"
       >
-        <div class="bg-muted px-4 py-2 text-lg font-bold text-highlighted line-clamp-2">
+        <div class="bg-muted px-4 py-3 text-lg font-bold text-highlighted break-all">
           {{ prj.name }}
         </div>
-        <div class="flex-1 overflow-auto px-4 py-2 text-sm leading-relaxed">
-          <table class="w-full">
+        <div class="flex-1 px-4 py-3 text-sm leading-relaxed">
+          <table class="w-full table-fixed">
             <tbody>
               <tr>
                 <td class="pr-2 text-right font-semibold align-top w-12">
@@ -87,7 +87,7 @@ async function createOrEditPrj(prj: MockPrj) {
                 <td class="pr-2 text-right font-semibold align-top">
                   描述:
                 </td>
-                <td class="text-toned align-top">
+                <td class="break-all text-toned align-top">
                   {{ prj.description || '-' }}
                 </td>
               </tr>
@@ -99,6 +99,7 @@ async function createOrEditPrj(prj: MockPrj) {
             icon="i-icon-park-outline:preview-open"
             color="primary"
             variant="ghost"
+            aria-label="打开项目"
             class="flex-1 rounded-none flex justify-center cursor-pointer"
             @click="selectProject(prj)"
           />
@@ -107,6 +108,7 @@ async function createOrEditPrj(prj: MockPrj) {
             color="primary"
             variant="ghost"
             class="flex-1 rounded-none flex justify-center cursor-pointer"
+            aria-label="编辑项目"
             @click="openEditPrjDialog(prj)"
           />
           <UPopover>
@@ -114,6 +116,7 @@ async function createOrEditPrj(prj: MockPrj) {
               icon="i-icon-park-outline:delete"
               color="error"
               variant="ghost"
+              aria-label="删除项目"
               class="flex-1 rounded-none flex justify-center cursor-pointer"
             />
             <template #content="{ close }">
@@ -136,7 +139,7 @@ async function createOrEditPrj(prj: MockPrj) {
         icon="i-lucide-plus"
         color="primary"
         variant="outline"
-        class="aspect-3/2 w-full items-center justify-center"
+        class="min-h-64 w-full items-center justify-center"
         @click="openCreatePrjDialog"
       >
         新增项目
@@ -180,5 +183,7 @@ async function createOrEditPrj(prj: MockPrj) {
 </template>
 
 <style scoped lang="scss">
-/* grid 布局已自适应，无需额外媒体查询 */
+.mock-project-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+}
 </style>

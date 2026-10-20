@@ -25,22 +25,23 @@ defineEmits<{ toggleFavorite: [tool: ToolItem] }>()
       :target="openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
       :description="tool.description || ' '"
       :ui="{
-        description: 'mt-4 h-14 overflow-hidden line-clamp-2 leading-7',
+        container: 'p-3 sm:p-6',
+        description: 'hidden sm:mt-4 sm:h-14 sm:line-clamp-2 sm:leading-7',
       }"
     >
       <template #title>
-        <span class="flex items-center gap-3 pr-8" :title="tool.label">
-          <span class="flex size-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-            <UIcon :name="tool.icon" class="size-5" />
+        <span class="flex min-w-0 items-start gap-2 sm:gap-3 sm:pr-6" :title="tool.label">
+          <span class="flex size-7 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary sm:size-10">
+            <UIcon :name="tool.icon" class="size-4 sm:size-5" />
           </span>
-          <span class="flex min-w-0 items-center gap-1">
-            <span class="block min-w-0 truncate leading-6">
+          <span class="flex w-full min-w-0 items-start gap-1 pt-0.5 sm:w-auto sm:pt-2">
+            <span class="block min-w-0 whitespace-normal break-words leading-6">
               {{ tool.label }}
             </span>
             <UIcon
               v-if="isExternalLink(tool.name)"
               name="i-lucide:external-link"
-              class="size-3.5 shrink-0 text-dimmed"
+              class="mt-1.5 size-3.5 shrink-0 text-dimmed"
             />
           </span>
         </span>

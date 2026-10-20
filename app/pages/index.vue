@@ -91,7 +91,7 @@ const favoriteSortableItems = computed({
 
 const isSearching = computed(() => Boolean(searchStr.value.trim()))
 
-const toolCardGridClass = 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4'
+const toolCardGridClass = 'grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4'
 
 function getMenuHash(label: string) {
   return `menu-${label}`
@@ -163,10 +163,11 @@ onMounted(() => {
                     class="group relative h-full bg-elevated border border-inverted hover:border-primary text-base cursor-move"
                     :to="tool.name"
                     :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
+                    :ui="{ container: 'flex items-center p-3 sm:p-6' }"
                   >
                     <template #title>
-                      <span class="flex min-w-0 items-center gap-1 pr-16">
-                        <span class="min-w-0 truncate">
+                      <span class="flex min-w-0 items-center gap-1 sm:pr-16">
+                        <span class="min-w-0 whitespace-normal break-words">
                           {{ tool.label }}
                         </span>
                         <UIcon
@@ -214,10 +215,11 @@ onMounted(() => {
                 class="group relative bg-elevated border border-inverted hover:border-primary text-base"
                 :to="tool.name"
                 :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
+                :ui="{ container: 'flex items-center p-3 sm:p-6' }"
               >
                 <template #title>
-                  <span class="flex min-w-0 items-center gap-1 pr-8">
-                    <span class="min-w-0 truncate">
+                  <span class="flex min-w-0 items-center gap-1 sm:pr-8">
+                    <span class="min-w-0 whitespace-normal break-words">
                       {{ tool.label }}
                     </span>
                     <UIcon
@@ -259,10 +261,11 @@ onMounted(() => {
                 class="group relative bg-elevated border border-inverted hover:border-primary text-base"
                 :to="tool.name"
                 :target="settings.openInNewTab || isExternalLink(tool.name) ? '_blank' : null"
+                :ui="{ container: 'flex items-center p-3 sm:p-6' }"
               >
                 <template #title>
-                  <span class="flex min-w-0 items-center gap-1 pr-8">
-                    <span class="min-w-0 truncate">
+                  <span class="flex min-w-0 items-center gap-1 sm:pr-8">
+                    <span class="min-w-0 whitespace-normal break-words">
                       {{ tool.label }}
                     </span>
                     <UIcon

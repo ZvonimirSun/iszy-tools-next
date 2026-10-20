@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import process from 'node:process'
 import ms from 'ms'
 import { createPageRouteRules } from './shared/utils/pageCache'
 
@@ -81,7 +82,7 @@ export default defineNuxtConfig({
     },
   },
   compatibilityDate: '2026-07-02',
-  routeRules: createPageRouteRules(),
+  routeRules: createPageRouteRules(process.env.NODE_ENV !== 'development'),
   nitro: {
     storage: {
       cache: { driver: 'memory' },
