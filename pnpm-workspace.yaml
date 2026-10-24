@@ -1,7 +1,6 @@
 minimumReleaseAgeExclude:
   - '@zvonimirsun/*'
 
-shellEmulator: true
 blockExoticSubdeps: false
 
 overrides:
