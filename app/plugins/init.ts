@@ -4,6 +4,8 @@ export default defineNuxtPlugin(() => {
   if (import.meta.server)
     return
 
+  // Discard a persisted account overlay before restoring the current session.
+  useSettingsStore().resetSync()
   const auth = useAuthInitStore()
   authEvents.on('profileUpdated', auth.profileUpdated)
   onNuxtReady(() => {

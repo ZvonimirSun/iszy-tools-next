@@ -3,8 +3,10 @@ export default defineNuxtPlugin(() => {
   const toolsStore = useToolsStore()
 
   router.afterEach((to) => {
-    const currentTool = getCurrentTool(toolsStore, to)
-    if (!currentTool || currentTool.noAccess) {
+    const currentTool = getCurrentTool(to)
+    // Metadata is static, while noAccess is derived from the user's catalog.
+    const visibleTool = currentTool && toolsStore.toolItemsMap[currentTool.name]
+    if (!currentTool || !visibleTool || visibleTool.noAccess) {
       return
     }
     toolsStore.access(currentTool)

@@ -51,6 +51,7 @@ export const useSettingsStore = defineStore('settings', () => {
   let stopModulesSyncWatch: (() => void) | null = null
   let syncRevision = 0
   let syncController: AbortController | null = null
+  const localModules = ref<typeof modules.value | null>(null)
 
   const syncData = debounce(() => {
     if (!useUserStore().logged) {
@@ -58,10 +59,17 @@ export const useSettingsStore = defineStore('settings', () => {
     }
 
     if (navigator.onLine) {
-      enqueueSyncTask(() => $fetch('/api/tools/settings/tools-next', {
-        method: 'POST',
-        body: modules.value,
-      }))
+      const current = syncRevision
+      const body = JSON.parse(JSON.stringify(modules.value))
+      enqueueSyncTask(() => {
+        if (current !== syncRevision || !useUserStore().logged)
+          return Promise.resolve()
+        return $fetch('/api/tools/settings/tools-next', {
+          method: 'POST',
+          body,
+          signal: syncController?.signal,
+        })
+      })
     }
   })
 
@@ -74,6 +82,11 @@ export const useSettingsStore = defineStore('settings', () => {
     stopModulesSyncWatch = null
     syncData.cancel()
     finishSync.value = false
+    // Account settings overlay local preferences only for that login session.
+    if (localModules.value) {
+      modules.value = localModules.value
+      localModules.value = null
+    }
   }
 
   async function afterSync() {
@@ -97,6 +110,7 @@ export const useSettingsStore = defineStore('settings', () => {
     }
 
     finishSync.value = false
+    localModules.value ??= JSON.parse(JSON.stringify(modules.value))
     const current = ++syncRevision
     syncController = new AbortController()
     const signal = syncController.signal
@@ -137,21 +151,25 @@ export const useSettingsStore = defineStore('settings', () => {
   return {
     general,
     modules,
+    localModules,
     afterSync,
     getSyncData,
     resetSync,
   }
 }, {
-  persist: [
-    {
-      storage: piniaPluginPersistedstate.cookies(),
-      pick: ['general'],
-    },
-    {
-      storage: piniaPluginPersistedstate.indexedDBStorage(),
-      omit: ['general'],
-    },
-  ],
+  // Read personal preferences only in the browser, never into shared HTML.
+  persist: import.meta.client
+    ? [
+        {
+          storage: piniaPluginPersistedstate.cookies(),
+          pick: ['general'],
+        },
+        {
+          storage: piniaPluginPersistedstate.indexedDBStorage(),
+          omit: ['general'],
+        },
+      ]
+    : false,
 })
 
 if (import.meta.hot) {

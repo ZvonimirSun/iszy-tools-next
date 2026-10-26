@@ -15,6 +15,17 @@ beforeEach(() => {
 })
 
 describe('settings synchronization cancellation', () => {
+  it('removes the previous account overlay before loading another account', async () => {
+    vi.stubGlobal('$fetch', vi.fn().mockResolvedValueOnce({ success: true, data: { jsonEditor: { syncCloud: true } } })
+      .mockResolvedValueOnce({ success: true, data: {} }))
+    const store = useSettingsStore()
+    await store.getSyncData()
+    expect(store.modules.jsonEditor.syncCloud).toBe(true)
+    store.resetSync()
+    expect(store.modules.jsonEditor.syncCloud).toBe(false)
+    await store.getSyncData()
+    expect(store.modules.jsonEditor.syncCloud).toBe(false)
+  })
   it('releases sync waiters on logout without merging an old account response', async () => {
     let reject!: (reason: Error) => void
     vi.stubGlobal('$fetch', vi.fn((_url, { signal }) => new Promise((_resolve, no) => {

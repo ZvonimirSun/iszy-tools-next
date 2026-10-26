@@ -11,10 +11,10 @@ describe('openGraphMeta.service', () => {
   it('生成 Open Graph 和 Twitter meta 标签', () => {
     const html = generateOpenGraphMeta(createDefaultOpenGraphMetaInput())
 
-    expect(html).toContain('property="og:title" value="ISZY Tools"')
-    expect(html).toContain('property="og:image:alt" value="ISZY Tools preview"')
-    expect(html).toContain('name="twitter:card" value="summary_large_image"')
-    expect(html).toContain('name="twitter:image:alt" value="ISZY Tools preview"')
+    expect(html).toContain('property="og:title" content="ISZY Tools"')
+    expect(html).toContain('property="og:image:alt" content="ISZY Tools preview"')
+    expect(html).toContain('name="twitter:card" content="summary_large_image"')
+    expect(html).toContain('name="twitter:image:alt" content="ISZY Tools preview"')
   })
 
   it('支持 article schema 和逗号列表字段', () => {
@@ -27,6 +27,13 @@ describe('openGraphMeta.service', () => {
 
     expect(metadata['article:author']).toEqual(['Alice', 'Bob'])
     expect(metadata['article:tag']).toEqual(['nuxt', 'tools'])
+  })
+
+  it('转义属性值且不生成空数字字段', () => {
+    const html = generateOpenGraphMeta({ ...createDefaultOpenGraphMetaInput(), title: '\"><script>&' })
+    expect(html).toContain('content="&quot;&gt;&lt;script&gt;&amp;"')
+    expect(html).not.toContain('<script>')
+    expect(html).not.toContain('og:video:duration')
   })
 
   it('支持 video/music 扩展类型和数字字段', () => {

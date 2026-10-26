@@ -1,8 +1,8 @@
 import type { ImgHostingConfig } from './imgHosting.d'
 import { describe, expect, it } from 'vitest'
 import { createDefaultConfig, validateConfig } from './imgHosting.service'
-import aliyun from './uploaders/aliyun'
-import s3 from './uploaders/s3'
+import { buildUrl as aliyunUrl } from './uploaders/aliyun'
+import { buildUrl as s3Url } from './uploaders/s3'
 
 function makeAliyunConfig(overrides: Partial<ImgHostingConfig> = {}): ImgHostingConfig {
   const { config: configOverrides, ...restOverrides } = overrides
@@ -84,17 +84,16 @@ describe('validateConfig', () => {
 
 // ------------------------------------------------------------------ buildUrl (via uploader internals tested indirectly)
 
-describe('阿里云 uploader URL 构建', () => {
-  // aliyun.ts 内部的 buildUrl 逻辑通过 upload 返回结果间接验证，
-  // 这里直接测试 validate 覆盖 fields。
-  it('阿里云 uploader 字段校验', () => {
-    const errors = aliyun.validate(makeAliyunConfig({ name: 'ok' }))
-    expect(errors).toHaveLength(0)
+describe('uploader URL 构建', () => {
+  it('编码对象路径但保留目录分隔符', () => {
+    expect(aliyunUrl(makeAliyunConfig(), 'img/a b#?.png')).toBe('https://my-bucket.oss-cn-beijing.aliyuncs.com/img/a%20b%23%3F.png')
+    expect(s3Url(makeS3Config(), 'img/a b.png')).toBe('https://s3.us-east-1.amazonaws.com/my-bucket/img/a%20b.png')
   })
 
-  it('s3 uploader 字段校验', () => {
-    const errors = s3.validate(makeS3Config())
-    expect(errors).toHaveLength(0)
+  it('使用自定义域名并避免重复路径前缀', () => {
+    const config = makeAliyunConfig({ config: { customUrl: 'https://cdn.example.com/', path: 'a.b/', options: '?v=2' } })
+    expect(aliyunUrl(config, 'a.b/file.png')).toBe('https://cdn.example.com/a.b/file.png?v=2')
+    expect(s3Url(config, 'a.b/file.png')).toBe('https://cdn.example.com/a.b/file.png?v=2')
   })
 })
 

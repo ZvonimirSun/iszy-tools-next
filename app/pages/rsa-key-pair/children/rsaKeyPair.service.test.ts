@@ -15,6 +15,14 @@ describe('rsaKeyPair.service', () => {
     expect(result.publicKey).toContain('-----END PUBLIC KEY-----')
     expect(result.privateKey).toContain('-----BEGIN PRIVATE KEY-----')
     expect(result.privateKey).toContain('-----END PRIVATE KEY-----')
+    const decode = (pem: string) => Uint8Array.from(atob(pem.replace(/-----[^-]+-----|\s/g, '')), char => char.charCodeAt(0))
+    const algorithm = { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }
+    const privateKey = await crypto.subtle.importKey('pkcs8', decode(result.privateKey), algorithm, false, ['sign'])
+    const publicKey = await crypto.subtle.importKey('spki', decode(result.publicKey), algorithm, false, ['verify'])
+    const message = new TextEncoder().encode('RSA round trip')
+    const signature = await crypto.subtle.sign(algorithm, privateKey, message)
+    expect(await crypto.subtle.verify(algorithm, publicKey, signature, message)).toBe(true)
+    expect(await crypto.subtle.verify(algorithm, publicKey, signature, new TextEncoder().encode('tampered'))).toBe(false)
   })
 
   it('校验 RSA 密钥长度范围和步进', () => {

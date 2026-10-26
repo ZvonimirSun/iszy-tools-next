@@ -58,6 +58,31 @@ describe('deferred authentication', () => {
     })
   })
 
+  it('reuses permissions from the authentication response without a second catalog request', async () => {
+    const memberTools = [{ name: 'mock', label: 'Mock', noAccess: false }]
+    user.pullProfile.mockResolvedValue({ success: true, data: { logged: true, memberTools } })
+    const auth = useAuthInitStore()
+    await Promise.all([auth.ensureAuth(), auth.ensureAuth()])
+    expect(useOriginToolsStore().memberTools).toEqual(memberTools)
+    expect(fetcher).not.toHaveBeenCalled()
+    expect(user.pullProfile).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not publish old permissions after an account change', async () => {
+    let resolve!: (value: unknown) => void
+    user.pullProfile.mockReturnValueOnce(new Promise((yes) => {
+      resolve = yes
+    }))
+    const auth = useAuthInitStore()
+    const old = auth.ensureAuth()
+    user.pullProfile.mockResolvedValue({ success: true, data: { logged: false, memberTools: [] } })
+    auth.profileUpdated({})
+    resolve({ success: true, data: { logged: true, memberTools: [{ name: 'mock' }] } })
+    await old
+    await auth.ensureAuth()
+    expect(useOriginToolsStore().memberTools).toEqual([])
+  })
+
   it('keeps a failed check distinct from an anonymous session and supports retry', async () => {
     user.pullProfile.mockRejectedValueOnce(new Error('offline'))
     const auth = useAuthInitStore()

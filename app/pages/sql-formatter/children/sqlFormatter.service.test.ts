@@ -27,7 +27,8 @@ describe('sqlFormatter.service', () => {
   })
 
   it('支持表格式缩进风格', () => {
-    const result = formatSql('select id,name from users', {
+    const input = 'select id,name from users'
+    const result = formatSql(input, {
       language: 'sql',
       keywordCase: 'upper',
       indentStyle: 'tabularLeft',
@@ -35,6 +36,15 @@ describe('sqlFormatter.service', () => {
       useTabs: false,
     })
 
-    expect(result).toContain('SELECT')
+    const standard = formatSql(input, {
+      language: 'sql',
+      keywordCase: 'upper',
+      indentStyle: 'standard',
+      tabWidth: 2,
+      useTabs: false,
+    })
+    expect(result).toContain('\n')
+    expect(result).not.toBe(standard)
+    expect(result).toMatch(/SELECT\s+id,\s+name/i)
   })
 })

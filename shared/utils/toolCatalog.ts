@@ -12,6 +12,11 @@ export function getMemberTools(catalog: ToolMenu[] = tools): ToolItem[] {
   return catalog.flatMap(menu => menu.children).filter(tool => tool.requiresAuth)
 }
 
+/** Complete static catalog used for public route metadata and cache registration. */
+export function getAllTools(catalog: ToolMenu[] = tools): ToolItem[] {
+  return catalog.flatMap(menu => menu.children)
+}
+
 export function filterMemberTools({ authEnabled, showAllTools, privileges = [], superadmin = false }: {
   authEnabled: boolean
   showAllTools: boolean

@@ -227,7 +227,14 @@ export function getOpenGraphSections(type: OpenGraphType) {
 }
 
 export function generateOpenGraphMeta(input: OpenGraphMetaInput) {
-  return generateMeta(createMetadata(input), { generateTwitterCompatibleMeta: true })
+  // oggen targets a legacy `value` attribute; HTML metadata uses `content`.
+  const escaped = Object.fromEntries(Object.entries(input).map(([key, value]) => [key, value
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')])) as OpenGraphMetaInput
+  return generateMeta(createMetadata(escaped), { generateTwitterCompatibleMeta: true })
+    .replace(/^<meta (property|name)="([^"]*)" value=/gm, '<meta $1="$2" content=')
 }
 
 export function createMetadata(input: OpenGraphMetaInput): MetadataConfig {
@@ -280,6 +287,8 @@ function normalizeValue(value: string, field?: OpenGraphField): MetadataValue | 
   }
 
   if (field?.numeric) {
+    if (!value.trim())
+      return undefined
     const number = Number(value)
     return Number.isFinite(number) ? number : undefined
   }

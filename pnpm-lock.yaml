@@ -336,6 +336,9 @@ importers:
       fflate:
         specifier: ^0.8.3
         version: 0.8.3
+      h3:
+        specifier: 1.15.11
+        version: 1.15.11
       ioredis:
         specifier: ^6.0.0
         version: 6.0.0(supports-color@10.2.2)
@@ -550,6 +553,9 @@ importers:
       eslint:
         specifier: ^10.13.0
         version: 10.14.0(jiti@2.7.0)(supports-color@10.2.2)
+      nitropack:
+        specifier: 2.13.4
+        version: 2.13.4(idb-keyval@6.2.5)(oxc-parser@0.153.0)(rolldown@1.2.14)(srvx@1.0.6)(supports-color@10.2.2)(vite@8.3.5)
       ofetch:
         specifier: ^1.5.1
         version: 1.5.1

@@ -34,12 +34,12 @@ function createClient(config: UploaderConfig): S3Client {
   })
 }
 
-function buildUrl(config: UploaderConfig, fileKey: string): string {
+export function buildUrl(config: UploaderConfig, fileKey: string): string {
   const c = config.config
   const path = (c.path || '').replace(/\/$/, '')
   const optionUrl = c.options || ''
-  const filename = path ? fileKey.replace(new RegExp(`^${path}/?`), '') : fileKey
-  const fullPath = path ? `${path}/${filename}` : filename
+  const filename = path && fileKey.startsWith(`${path}/`) ? fileKey.slice(path.length + 1) : fileKey
+  const fullPath = (path ? `${path}/${filename}` : filename).split('/').map(encodeURIComponent).join('/')
 
   if (c.customUrl) {
     return `${c.customUrl.replace(/\/$/, '')}/${fullPath}${optionUrl}`

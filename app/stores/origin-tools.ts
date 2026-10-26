@@ -17,6 +17,12 @@ export const useOriginToolsStore = defineStore('originTools', () => {
     memberStatus.value = 'idle'
   }
 
+  function acceptMemberTools(tools: ToolItem[]) {
+    clearMemberTools()
+    memberTools.value = tools
+    memberStatus.value = 'ready'
+  }
+
   function fetchMemberTools(force = false, fetcher: Fetcher = $fetch): Promise<void> {
     if (!force && pending)
       return pending
@@ -50,7 +56,7 @@ export const useOriginToolsStore = defineStore('originTools', () => {
     return request
   }
 
-  return { toolMenus, toolItems, memberTools, memberStatus, clearMemberTools, fetchMemberTools }
+  return { toolMenus, toolItems, memberTools, memberStatus, clearMemberTools, acceptMemberTools, fetchMemberTools }
 })
 
 if (import.meta.hot) {

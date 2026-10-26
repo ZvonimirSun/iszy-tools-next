@@ -21,7 +21,7 @@ export const useAuthInitStore = defineStore('authInit', () => {
     status.value = 'loading'
     const request = (async () => {
       try {
-        await userStore.pullProfile(false, checkFetcher)
+        const result = await userStore.pullProfile(force, checkFetcher)
         if (current !== revision)
           return pending ?? undefined
         if (!welcomeHandled) {
@@ -32,7 +32,11 @@ export const useAuthInitStore = defineStore('authInit', () => {
         // Start settings sync before publishing login readiness to page watchers.
         if (userStore.logged)
           void settingsStore.getSyncData(userStore)
-        await originToolsStore.fetchMemberTools(force)
+        const data = result?.data as { memberTools?: ToolItem[] } | undefined
+        if (data?.memberTools)
+          originToolsStore.acceptMemberTools(data.memberTools)
+        else
+          await originToolsStore.fetchMemberTools(force)
         if (current === revision)
           status.value = 'ready'
       }

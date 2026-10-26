@@ -22,8 +22,7 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
     return navigateTo('/')
   }
 
-  const toolsStore = useToolsStore()
-  const currentTool = getCurrentTool(toolsStore, to)
+  const currentTool = getCurrentTool(to)
   const routeTool = findRouteTool(to.path)
   if (!authEnabled && routeTool && 'requiresAuth' in routeTool && routeTool.requiresAuth) {
     return navigateTo('/')
