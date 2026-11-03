@@ -208,6 +208,7 @@ onBeforeUnmount(() => {
       />
 
       <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <!-- @vue-generic {false, File} -->
         <UFileUpload
           v-slot="{ open }"
           :model-value="undefined"

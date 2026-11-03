@@ -12,6 +12,7 @@ const loadingCommand = ref('')
 const { cdnOrigin } = usePublicConfig()
 
 const store = useLinuxCommandStore()
+const { data } = storeToRefs(store)
 
 const searchResults = computed(() => {
   if (keyword.value) {
@@ -117,10 +118,10 @@ async function query(c: string) {
         >
           <div class="min-w-0 flex-1">
             <p class="m-0 text-base font-semibold text-highlighted break-all">
-              {{ store.data[item].n }}
+              {{ data[item].n }}
             </p>
             <p class="m-0 mt-1 text-sm text-toned break-all">
-              {{ store.data[item].d }}
+              {{ data[item].d }}
             </p>
           </div>
 

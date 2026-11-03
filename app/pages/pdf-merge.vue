@@ -69,6 +69,7 @@ async function merge() {
 <template>
   <div class="w-full h-full flex flex-col items-start gap-4">
     <div class="flex gap-2">
+      <!-- @vue-generic {true, File} -->
       <UFileUpload v-slot="{ open }" :reset="true" :model-value="[]" multiple accept=".pdf" @update:model-value="addFiles">
         <UButton @click="open()">
           选择PDF文件

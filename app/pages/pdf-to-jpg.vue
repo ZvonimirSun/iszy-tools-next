@@ -97,6 +97,7 @@ async function convert() {
 <template>
   <div class="w-full h-full flex flex-col items-start gap-4">
     <div class="flex flex-wrap gap-2 items-center">
+      <!-- @vue-generic {true, File} -->
       <UFileUpload v-slot="{ open }" :model-value="[]" :reset="true" multiple accept=".pdf" @update:model-value="addFiles">
         <UButton @click="open()">
           选择PDF文件

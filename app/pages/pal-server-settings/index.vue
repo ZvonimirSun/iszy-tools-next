@@ -59,6 +59,7 @@ async function copyIni() {
   <div class="flex min-h-full w-full flex-col gap-4 overflow-auto">
     <ContainerToolItem label="配置操作" content-class="flex flex-col gap-3">
       <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <!-- @vue-generic {false, File} -->
         <UFileUpload
           v-slot="{ open }"
           :model-value="undefined"

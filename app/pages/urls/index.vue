@@ -22,12 +22,12 @@ const submitting = ref(false)
 const editingKeyword = ref('')
 const editingUrl = ref('')
 
-const form = reactive<ShortUrlForm>({
+const form = ref<ShortUrlForm>({
   keyword: '',
   url: '',
 })
 
-const searchForm = reactive<ShortUrlSearchForm>({
+const searchForm = ref<ShortUrlSearchForm>({
   search: '',
   searchField: 'all',
   orderBy: 'createdAt',
@@ -91,7 +91,7 @@ const columns: TableColumn<ShortUrlItem>[] = [
   { id: 'actions', header: '操作', meta: fixedColumnClass('w-72') },
 ]
 
-const pageCount = computed(() => Math.max(1, Math.ceil(total.value / searchForm.pageSize)))
+const pageCount = computed(() => Math.max(1, Math.ceil(total.value / searchForm.value.pageSize)))
 
 function buildShortUrl(keyword: string) {
   const origin = shortUrlOrigin || `${apiOrigin}/urls`
@@ -103,19 +103,19 @@ function formatDate(date: string) {
 }
 
 function getSortIcon(field: ShortUrlOrderField) {
-  if (searchForm.orderBy !== field) {
+  if (searchForm.value.orderBy !== field) {
     return 'i-lucide:chevrons-up-down'
   }
-  return searchForm.orderDirection === 'asc' ? 'i-lucide:chevron-up' : 'i-lucide:chevron-down'
+  return searchForm.value.orderDirection === 'asc' ? 'i-lucide:chevron-up' : 'i-lucide:chevron-down'
 }
 
 function setSort(field: ShortUrlOrderField) {
-  if (searchForm.orderBy === field) {
-    searchForm.orderDirection = searchForm.orderDirection === 'asc' ? 'desc' : 'asc'
+  if (searchForm.value.orderBy === field) {
+    searchForm.value.orderDirection = searchForm.value.orderDirection === 'asc' ? 'desc' : 'asc'
   }
   else {
-    searchForm.orderBy = field
-    searchForm.orderDirection = field === 'createdAt' || field === 'updatedAt' || field === 'clicks' ? 'desc' : 'asc'
+    searchForm.value.orderBy = field
+    searchForm.value.orderDirection = field === 'createdAt' || field === 'updatedAt' || field === 'clicks' ? 'desc' : 'asc'
   }
   pageIndex.value = 1
   refreshList()
@@ -132,18 +132,18 @@ function cancelEdit() {
 }
 
 function getListQuery() {
-  const clicks = searchForm.clicks
+  const clicks = searchForm.value.clicks
   return {
     pageIndex: pageIndex.value - 1,
-    pageSize: searchForm.pageSize,
-    search: searchForm.search.trim() || undefined,
-    searchField: searchForm.searchField,
-    orderBy: searchForm.orderBy,
-    orderDirection: searchForm.orderDirection,
-    clicksOperator: clicks == null ? undefined : searchForm.clicksOperator,
+    pageSize: searchForm.value.pageSize,
+    search: searchForm.value.search.trim() || undefined,
+    searchField: searchForm.value.searchField,
+    orderBy: searchForm.value.orderBy,
+    orderDirection: searchForm.value.orderDirection,
+    clicksOperator: clicks == null ? undefined : searchForm.value.clicksOperator,
     clicks,
-    createdOperator: searchForm.createdAt ? searchForm.createdOperator : undefined,
-    createdAt: searchForm.createdAt || undefined,
+    createdOperator: searchForm.value.createdAt ? searchForm.value.createdOperator : undefined,
+    createdAt: searchForm.value.createdAt || undefined,
   }
 }
 
@@ -167,7 +167,7 @@ async function refreshList() {
 }
 
 async function handleCreate() {
-  const url = form.url.trim()
+  const url = form.value.url.trim()
   if (!url) {
     toast.add({ title: '请输入原网址', color: 'warning' })
     return
@@ -177,11 +177,11 @@ async function handleCreate() {
   try {
     await createShortUrl({
       url,
-      keyword: form.keyword.trim(),
+      keyword: form.value.keyword.trim(),
     })
     toast.add({ title: '创建成功', color: 'success' })
-    form.url = ''
-    form.keyword = ''
+    form.value.url = ''
+    form.value.keyword = ''
     pageIndex.value = 1
     await refreshList()
   }
@@ -249,7 +249,7 @@ function handleSearch() {
 }
 
 function clearSearch() {
-  Object.assign(searchForm, {
+  Object.assign(searchForm.value, {
     search: '',
     searchField: 'all',
     orderBy: 'createdAt' as ShortUrlOrderField,

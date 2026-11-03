@@ -23,6 +23,7 @@ interface RunjsLog {
 const FRAME_SOURCE = 'runjs-frame'
 
 const store = useRunjsStore()
+const { code } = storeToRefs(store)
 const toast = useToast()
 
 const iframeRef = ref<HTMLIFrameElement>()
@@ -33,7 +34,7 @@ const depModalOpen = ref(false)
 const depDrafts = ref<RunjsDependency[]>([])
 const depEditError = ref('')
 
-const stackOpen = reactive<Record<number, boolean>>({})
+const stackOpen = ref<Record<number, boolean>>({})
 
 let logSeed = 0
 let runTimer: ReturnType<typeof setTimeout> | undefined
@@ -103,9 +104,7 @@ function saveDependencies(close: () => void) {
 
 function clearLogs() {
   logs.value = []
-  for (const key of Object.keys(stackOpen)) {
-    delete stackOpen[Number(key)]
-  }
+  stackOpen.value = {}
 }
 
 function pushLog(type: LogType, text: string, stack?: string) {
@@ -117,7 +116,7 @@ function pushLog(type: LogType, text: string, stack?: string) {
     text,
     stack,
   })
-  stackOpen[id] = false
+  stackOpen.value[id] = false
 }
 
 function run() {
@@ -211,7 +210,7 @@ function handleMessage(event: MessageEvent) {
     text: data.text || '',
     stack: data.stack,
   })
-  stackOpen[logSeed] = false
+  stackOpen.value[logSeed] = false
 }
 
 watch(() => store.code, () => {
@@ -333,8 +332,8 @@ onUnmounted(() => {
           class="flex-1"
           placeholder="输入 JavaScript（ES Module）代码..."
           :plugin="js"
-          :input-default="store.code"
-          @change="store.code = $event"
+          :input-default="code"
+          @change="code = $event"
         />
       </ContainerToolItem>
 

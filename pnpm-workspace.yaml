@@ -4,6 +4,8 @@ minimumReleaseAgeExclude:
 blockExoticSubdeps: false
 
 overrides:
+  '@codemirror/state': 6.7.6
+  '@codemirror/view': 6.43.15
   xlsx: https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz#sha512-8IfgFctB7fkvqkTGF2MnrDrC6vzE28Wcc1aSbdDQ+4/WFtzfS73YuapbuaPZwGqpR2e0EeDMIrFOJubQVLWFNA==
 
 allowBuilds:

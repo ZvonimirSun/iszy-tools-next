@@ -11,6 +11,24 @@ const selectedConfig = computed(() => {
   return chatStore.configs.find(config => config.id === selectedConfigId.value) || chatStore.configs[0] || null
 })
 
+const selectedApiKey = computed({
+  get: () => selectedConfig.value?.apiKey || '',
+  set: (value: string) => {
+    if (selectedConfig.value) {
+      selectedConfig.value.apiKey = value
+    }
+  },
+})
+const selectedModels = computed(() => selectedConfig.value?.models || [])
+const apiKeyVisible = computed(() => !!showApiKeys.value[selectedConfig.value?.id || ''])
+
+function toggleApiKeyVisibility() {
+  const id = selectedConfig.value?.id
+  if (id) {
+    showApiKeys.value[id] = !showApiKeys.value[id]
+  }
+}
+
 watch(() => chatStore.configs.length, () => {
   if (!selectedConfig.value) {
     selectedConfigId.value = chatStore.configs[0]?.id || ''
@@ -127,9 +145,9 @@ function removeModel(config: AiChatProviderConfig, id: string) {
           </UFormField>
           <UFormField label="API Key" class="md:col-span-2">
             <UInput
-              v-model="selectedConfig.apiKey"
+              v-model="selectedApiKey"
               class="w-full"
-              :type="showApiKeys[selectedConfig.id] ? 'text' : 'password'"
+              :type="apiKeyVisible ? 'text' : 'password'"
               placeholder="sk-..."
             >
               <template #trailing>
@@ -137,9 +155,9 @@ function removeModel(config: AiChatProviderConfig, id: string) {
                   color="neutral"
                   variant="link"
                   size="sm"
-                  :icon="showApiKeys[selectedConfig.id] ? 'i-lucide:eye-off' : 'i-lucide:eye'"
-                  :aria-label="showApiKeys[selectedConfig.id] ? '隐藏 API Key' : '显示 API Key'"
-                  @click="showApiKeys[selectedConfig.id] = !showApiKeys[selectedConfig.id]"
+                  :icon="apiKeyVisible ? 'i-lucide:eye-off' : 'i-lucide:eye'"
+                  :aria-label="apiKeyVisible ? '隐藏 API Key' : '显示 API Key'"
+                  @click="toggleApiKeyVisibility"
                 />
               </template>
             </UInput>
@@ -159,7 +177,7 @@ function removeModel(config: AiChatProviderConfig, id: string) {
 
         <div class="flex flex-col gap-3">
           <div
-            v-for="model in selectedConfig.models"
+            v-for="model in selectedModels"
             :key="model.id"
             class="grid grid-cols-1 gap-3 rounded-lg border border-muted bg-default p-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto_auto]"
           >

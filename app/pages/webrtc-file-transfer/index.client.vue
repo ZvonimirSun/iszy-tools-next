@@ -165,6 +165,7 @@ function formatFileSize(size: number) {
     <div v-if="activeTab === 'send'" class="grid gap-4 lg:grid-cols-[1fr_18rem]">
       <div class="flex flex-col gap-4">
         <ContainerToolItem label="选择文件" content-class="flex flex-col gap-3">
+          <!-- @vue-generic {true, File} -->
           <UFileUpload v-slot="{ open }" :model-value="[]" :reset="true" multiple @update:model-value="addFiles">
             <div
               class="flex min-h-36 w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-muted bg-muted/30 p-6 text-center transition-colors hover:bg-elevated/50"

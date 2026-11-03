@@ -240,6 +240,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="h-full overflow-auto flex flex-col gap-4">
     <ContainerToolItem label="上传图片" content-class="flex flex-col gap-3">
+      <!-- @vue-generic {false, File} -->
       <UFileUpload v-slot="{ open }" :model-value="undefined" :reset="true" :multiple="false" accept="image/*" @update:model-value="onUpload">
         <div
           class="w-full p-8 border-2 border-dashed border-muted rounded-lg text-center cursor-pointer transition-colors hover:bg-elevated/50"

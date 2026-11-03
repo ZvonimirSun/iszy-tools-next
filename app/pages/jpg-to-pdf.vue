@@ -122,6 +122,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="w-full h-full flex flex-col items-start gap-4">
     <div class="flex gap-2">
+      <!-- @vue-generic {true, File} -->
       <UFileUpload v-slot="{ open }" :model-value="[]" :reset="true" multiple accept="image/jpeg,image/png,image/webp" @update:model-value="addFiles">
         <UButton @click="open()">
           选择图片
