@@ -34,6 +34,7 @@ export default defineNuxtConfig({
       image: '',
       cdnOrigin: '',
       apiOrigin: '',
+      geojsOrigin: 'https://get.geojs.io',
       shortUrlOrigin: '',
       adminOrigin: '',
       favicon: {

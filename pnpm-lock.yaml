@@ -286,8 +286,8 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2
       '@zvonimirsun/iszy-nuxt-auth-layer':
-        specifier: ^0.5.0
-        version: 0.5.0(b64cc49411b1544943894936ef6b6a95)
+        specifier: ^0.6.0
+        version: 0.6.0(b64cc49411b1544943894936ef6b6a95)
       '@zvonimirsun/leaflet-geoman':
         specifier: ^1.2.2
         version: 1.2.2(leaflet@1.9.4)
@@ -4306,6 +4306,7 @@ packages:
 
   '@tiptap/y-tiptap@3.0.12':
     resolution: {integrity: sha512-MlmBpmm4xiRDZmk4hiwnjScOrUtiEBYwqeJBvrDil30Eq1GqrZEox1mciBpOnnpfN731fH07OPeGS7uHryPX0g==}
+    deprecated: Persistent position migrations can cause excessive collaborative document growth. Upgrade all collaborating clients to 3.1.0 or later.
     peerDependencies:
       prosemirror-model: ^1.7.1
       prosemirror-state: ^1.2.3
@@ -5749,8 +5750,8 @@ packages:
   '@zvonimirsun/iszy-common@1.2.2':
     resolution: {integrity: sha512-YL+IljwrgUCpZlSZj8vFd/wZOfZSbQGsrXdsD+NKp3WGIjVCUdpVxjfgm3mCtul2Cu7bHxYBUpw0l6g5myWEiA==}
 
-  '@zvonimirsun/iszy-nuxt-auth-layer@0.5.0':
-    resolution: {integrity: sha512-axh0ANs06fE2sBzpMzYW7K25/hZhL9MjmB2xsGGzV6TaXzw6cU6KNif9cSzkYx4WPypXEiSTiHIs9pGMnpeaGg==}
+  '@zvonimirsun/iszy-nuxt-auth-layer@0.6.0':
+    resolution: {integrity: sha512-84tZ41+8DbOp1+nWpcxnQYEfItO53mx0pptMf8P3kKEHgBSEQNVmXcrU9abjnN+Ue/hugYU5O5WY0gGEbgS5xQ==}
     peerDependencies:
       '@nuxt/ui': '>=4.0.0'
       '@pinia/nuxt': '>=0.11.0'
@@ -7829,6 +7830,10 @@ packages:
   ioredis@6.0.0:
     resolution: {integrity: sha512-f+Dtubxfpf6KYFq7WVXJoOLn0bk4TJrMrN9SzeE+jrWrCWj7XX3fA6vkryafhADX+GMymRxgDJDOI33COkJc0w==}
     engines: {node: '>=20.0.0'}
+
+  ipaddr.js@2.5.0:
+    resolution: {integrity: sha512-aq+t5NAc+cS6rZQQVWC2x98CPqGtKKTMDd4Gaodv0wShnItdKg/51djkGJ1hqH+Oy0ivDftCbSLCQob8zso01w==}
+    engines: {node: '>= 10'}
 
   iron-webcrypto@1.2.1:
     resolution: {integrity: sha512-feOM6FaSr6rEABp/eDfVseKyTMDt+KGpeB35SkVn9Tyn0CqvVsY3EwI0v5i8nMHyJnzCIQf7nsy3p41TPkJZhg==}
@@ -18455,11 +18460,12 @@ snapshots:
     dependencies:
       uuid: 14.0.3
 
-  '@zvonimirsun/iszy-nuxt-auth-layer@0.5.0(b64cc49411b1544943894936ef6b6a95)':
+  '@zvonimirsun/iszy-nuxt-auth-layer@0.6.0(b64cc49411b1544943894936ef6b6a95)':
     dependencies:
       '@nuxt/ui': 4.12.0(ba369f7299283d4cf8d619f3329b5c38)
       '@pinia/nuxt': 0.11.3(@nuxt/schema@4.6.3)(confbox@0.3.2)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.5)(mlly@1.8.2)(oxc-parser@0.153.0)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.44(typescript@6.0.3)))(rolldown@1.2.16)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.16)(rollup@4.67.4)(vite@8.3.5))
       '@zvonimirsun/iszy-common': 1.2.2
+      ipaddr.js: 2.5.0
       mitt: 3.0.1
       ms: 2.1.3
       nuxt: 4.6.3(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7(supports-color@10.2.2)))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7(supports-color@10.2.2)))(@oxc-project/types@0.156.0)(@parcel/watcher@2.6.0)(@types/node@26.6.6)(@vitejs/devtools-kit@0.7.6(@devframes/agentic@1.3.2)(cac@7.1.0)(crossws@0.4.17(srvx@1.0.8))(srvx@1.0.8)(vite@8.3.5))(@vitejs/devtools@0.8.0)(@vue/compiler-sfc@3.5.44)(acorn@8.19.0)(confbox@0.3.2)(db0@0.3.4)(dotenv@17.4.2)(esbuild@0.28.2)(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(giget@3.3.1)(idb-keyval@6.3.0)(ioredis@6.0.0(supports-color@10.2.2))(lightningcss@1.33.0)(mlly@1.8.2)(optionator@0.9.4)(oxc-parser@0.153.0)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.44(typescript@6.0.3)))(rolldown@1.2.16)(rollup-plugin-visualizer@7.1.1(rolldown@1.2.16)(rollup@4.67.4))(rollup@4.67.4)(sass@1.107.1)(srvx@1.0.8)(supports-color@10.2.2)(terser@5.51.2)(typescript@6.0.3)(vite@8.3.5)(vue-tsc@3.3.14(typescript@6.0.3))(yaml@2.9.1)
@@ -20845,6 +20851,8 @@ snapshots:
       standard-as-callback: 2.1.0
     transitivePeerDependencies:
       - supports-color
+
+  ipaddr.js@2.5.0: {}
 
   iron-webcrypto@1.2.1: {}
 
