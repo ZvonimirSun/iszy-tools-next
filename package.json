@@ -1,7 +1,7 @@
 {
   "name": "iszy-tools-next",
   "type": "module",
-  "version": "1.54.5",
+  "version": "1.54.6",
   "private": true,
   "packageManager": "pnpm@12.14.0",
   "author": "ZvonimirSun",
